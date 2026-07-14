@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" role="img" aria-label="Germany flag">
+  <defs>
+    <clipPath id="circle"><circle cx="30" cy="30" r="30"/></clipPath>
+  </defs>
+  <g clip-path="url(#circle)">
+    <path fill="#000" d="M0 0h60v20H0z"/>
+    <path fill="#dd0000" d="M0 20h60v20H0z"/>
+    <path fill="#ffce00" d="M0 40h60v20H0z"/>
+  </g>
+</svg>

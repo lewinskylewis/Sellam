@@ -1,0 +1,235 @@
+body.enquiry-modal-open {
+  overflow: hidden;
+}
+
+.enquiry-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: clamp(18px, 3vw, 46px);
+  background: rgba(0, 18, 25, 0.34);
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 260ms ease, visibility 260ms ease;
+}
+
+.enquiry-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.enquiry-dialog {
+  position: relative;
+  width: clamp(390px, 35vw, 590px);
+  max-height: calc(100svh - 44px);
+  padding: clamp(28px, 2.7vw, 44px) clamp(26px, 3vw, 46px);
+  border-radius: clamp(22px, 2vw, 34px);
+  color: var(--white, #fff);
+  background: var(--ink-deep, #003546);
+  box-shadow: 0 34px 90px rgba(0, 18, 25, 0.42);
+  overflow: hidden;
+  transform: translateY(18px) scale(0.985);
+  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.enquiry-modal.is-open .enquiry-dialog {
+  transform: translateY(0) scale(1);
+}
+
+.enquiry-close {
+  position: absolute;
+  top: 32px;
+  right: 32px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 50%;
+  color: var(--white, #fff);
+  background: transparent;
+  transition: color 220ms ease, border-color 220ms ease, transform 220ms ease;
+}
+
+.enquiry-close svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.enquiry-close:hover,
+.enquiry-close:focus-visible {
+  color: var(--gold, #d3a23b);
+  border-color: currentColor;
+  transform: rotate(90deg);
+}
+
+.modal-enquiry-form {
+  display: grid;
+  gap: clamp(13px, 1.35vw, 20px);
+}
+
+.modal-enquiry-form h2 {
+  margin: 0 0 clamp(8px, 1vw, 16px);
+  color: var(--white, #fff);
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+  font-size: clamp(24px, 0.8vw, 34px);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  font-weight: 600;
+}
+
+.modal-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(12px, 1.35vw, 20px);
+}
+
+.modal-enquiry-form label {
+  display: grid;
+  gap: 8px;
+}
+
+.modal-enquiry-form span {
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 16px;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.modal-enquiry-form input,
+.modal-enquiry-form textarea {
+  width: 100%;
+  border: 0;
+  color: var(--ink, #063545);
+  background: rgba(219, 230, 234, 0.76);
+  outline: none;
+  transition: background 220ms ease, box-shadow 220ms ease;
+}
+
+.modal-enquiry-form input {
+  height: clamp(40px, 3vw, 52px);
+  padding: 0 clamp(18px, 1.9vw, 28px);
+  border-radius: 999px;
+  font-size: clamp(14px, 0.9vw, 16px);
+}
+
+.modal-enquiry-form textarea {
+  min-height: clamp(92px, 13vh, 138px);
+  padding: clamp(16px, 1.8vw, 24px);
+  border: 2px solid rgba(255, 255, 255, 0.84);
+  border-radius: clamp(18px, 1.8vw, 26px);
+  color: var(--white, #fff);
+  background: transparent;
+  font-size: clamp(14px, 0.9vw, 16px);
+  resize: vertical;
+}
+
+.modal-enquiry-form input::placeholder,
+.modal-enquiry-form textarea::placeholder {
+  color: rgba(255, 255, 255, 0.48);
+  font-style: italic;
+}
+
+.modal-enquiry-form input::placeholder {
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.modal-enquiry-form input:focus,
+.modal-enquiry-form textarea:focus {
+  background: rgba(244, 235, 233, 0.88);
+  box-shadow: 0 0 0 3px rgba(211, 162, 59, 0.32);
+}
+
+.modal-enquiry-form textarea:focus {
+  color: var(--ink, #063545);
+}
+
+.modal-enquiry-submit {
+  justify-self: center;
+  width: min(220px, 72%);
+  min-height: 48px;
+  margin-top: clamp(6px, 1.1vw, 16px);
+  border: 0;
+  border-radius: 999px;
+  color: var(--white, #fff);
+  background: #104d63;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background 240ms ease, box-shadow 240ms ease, transform 240ms ease;
+}
+
+.modal-enquiry-submit:hover,
+.modal-enquiry-submit:focus-visible {
+  background: var(--gold, #d3a23b);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.22);
+  transform: translateY(-2px);
+}
+
+.modal-enquiry-submit:disabled {
+  cursor: wait;
+  opacity: 0.72;
+  transform: none;
+}
+
+.enquiry-status {
+  min-height: 18px;
+  margin: -4px 0 0;
+  color: rgba(255, 255, 255, 0.84);
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.enquiry-status.is-error {
+  color: #ffd4c7;
+}
+
+.enquiry-status.is-success {
+  color: #e6f7e8;
+}
+
+@media (max-width: 1024px) {
+  .enquiry-dialog {
+    width: min(68vw, 560px);
+  }
+}
+
+@media (max-width: 720px) {
+  .enquiry-modal {
+    padding: 16px;
+  }
+
+  .enquiry-dialog {
+    width: min(92vw, 460px);
+    max-height: calc(100svh - 28px);
+    padding: 36px 22px 28px;
+    border-radius: 24px;
+  }
+
+  .modal-field-row {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-enquiry-form input {
+    height: 46px;
+  }
+
+  .modal-enquiry-form textarea {
+    min-height: 104px;
+  }
+
+  .modal-enquiry-submit {
+    width: 100%;
+    min-height: 48px;
+  }
+}
