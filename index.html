@@ -18,7 +18,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gabriela&display=swap" rel="stylesheet">
-<link href="Fonts/Optima Medium.ttf" rel="stylesheet">
+<link rel="preload" href="Fonts/Optima%20Medium.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="Fonts/OPTIMA_B.TTF" as="font" type="font/ttf" crossorigin>
   </head>
   <body>
     <header class="site-header" aria-label="Primary navigation">
@@ -88,7 +89,7 @@
 
         <div class="hero-inner page-shell">
           <div class="hero-copy reveal">
-            <h1>Connecting<br>People With<br>Property</h1>
+            <h1><span>Connecting People</span><span>With Property</span></h1>
             <p>
              Connecting clients to exceptional property opportunities across Kenya and international markets.
             </p>
@@ -160,6 +161,11 @@
               <span class="chevron"></span>
             </button>
             <div class="filter-menu checklist-menu" role="group" aria-label="Bedroom options">
+                <label class="filter-option">
+                <input type="checkbox" name="bedrooms" value="1">
+                <span class="checkmark"></span>
+                <span>Studio Apt.</span>
+              </label>
               <label class="filter-option">
                 <input type="checkbox" name="bedrooms" value="1">
                 <span class="checkmark"></span>
@@ -201,42 +207,39 @@
               <span>Price Range</span>
               <span class="chevron"></span>
             </button>
-            <div class="filter-menu checklist-menu" role="group" aria-label="Price range options">
-              <label class="filter-option">
-                <input type="checkbox" name="price_range" value="100k_250k">
-                <span class="checkmark"></span>
-                <span>KES 10M - 30M</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="price_range" value="250k_500k">
-                <span class="checkmark"></span>
-                <span>KES 30M - 50M</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="price_range" value="500k_plus">
-                <span class="checkmark"></span>
-                <span>KES 50M - 80M</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="price_range" value="500k_plus">
-                <span class="checkmark"></span>
-                <span>KES 80M - 100M</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="price_range" value="500k_plus">
-                <span class="checkmark"></span>
-                <span>KES 100M - 140M</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="price_range" value="500k_plus">
-                <span class="checkmark"></span>
-                <span>KES 140M - 180M</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="price_range" value="500k_plus">
-                <span class="checkmark"></span>
-                <span>KES 180M+</span>
-              </label>
+            <div class="filter-menu price-range-menu" role="group" aria-label="Price range options">
+              <div class="price-range-fields">
+                <label class="price-field">
+                  <span>Min Price (KES)</span>
+                  <select name="min_price" data-price-min>
+                    <option value="">0</option>
+                    <option value="10000000">10,000,000</option>
+                    <option value="30000000">30,000,000</option>
+                    <option value="50000000">50,000,000</option>
+                    <option value="80000000">80,000,000</option>
+                    <option value="100000000">100,000,000</option>
+                    <option value="140000000">140,000,000</option>
+                    <option value="180000000">180,000,000</option>
+                    <option value="350000000">350,000,000</option>
+                  </select>
+                </label>
+                <span class="price-range-separator">To</span>
+                <label class="price-field">
+                  <span>Max Price (KES)</span>
+                  <select name="max_price" data-price-max>
+                    <option value="">No Max</option>
+                    <option value="10000000">10,000,000</option>
+                    <option value="30000000">30,000,000</option>
+                    <option value="50000000">50,000,000</option>
+                    <option value="80000000">80,000,000</option>
+                    <option value="100000000">100,000,000</option>
+                    <option value="140000000">140,000,000</option>
+                    <option value="180000000">180,000,000</option>
+                    <option value="350000000">350,000,000</option>
+                  </select>
+                </label>
+              </div>
+              <button class="clear-selection" type="button">Clear Selection</button>
             </div>
           </div>
 
@@ -248,7 +251,7 @@
               <span>Communities</span>
               <span class="chevron"></span>
             </button>
-            <div class="filter-menu checklist-menu" role="group" aria-label="Community options">
+            <div class="filter-menu checklist-menu community-filter-menu" role="group" aria-label="Community options">
               <label class="filter-option">
                 <input type="checkbox" name="communities" value="runda">
                 <span class="checkmark"></span>
@@ -287,7 +290,7 @@
               <label class="filter-option">
                 <input type="checkbox" name="communities" value="kilimani">
                 <span class="checkmark"></span>
-                <span>Loresho</span>
+                <span>Kilimani</span>
               </label>
               <label class="filter-option">
                 <input type="checkbox" name="communities" value="westlands">
@@ -324,6 +327,41 @@
                 <span class="checkmark"></span>
                 <span>Muthangari</span>
               </label>
+              <label class="filter-option">
+                <input type="checkbox" name="communities" value="gigiri">
+                <span class="checkmark"></span>
+                <span>Kitisuru</span>
+              </label>
+              <label class="filter-option">
+                <input type="checkbox" name="communities" value="gigiri">
+                <span class="checkmark"></span>
+                <span>Spring Valley</span>
+              </label>
+                <label class="filter-option">
+                <input type="checkbox" name="communities" value="gigiri">
+                <span class="checkmark"></span>
+                <span>Loresho</span>
+              </label>
+                <label class="filter-option">
+                <input type="checkbox" name="communities" value="gigiri">
+                <span class="checkmark"></span>
+                <span>Lower Kabete</span>
+              </label>
+                  <label class="filter-option">
+                <input type="checkbox" name="communities" value="gigiri">
+                <span class="checkmark"></span>
+                <span>Riverside</span>
+              </label>
+                  <label class="filter-option">
+                <input type="checkbox" name="communities" value="gigiri">
+                <span class="checkmark"></span>
+                <span>Nyali</span>
+              </label>
+                  <label class="filter-option">
+                <input type="checkbox" name="communities" value="gigiri">
+                <span class="checkmark"></span>
+                <span>Vipingo</span>
+              </label>
             </div>
           </div>
 
@@ -335,13 +373,11 @@
         <div class="page-shell property-layout premium-layout">
           <div class="section-copy reveal reveal-from-right">
             <div class="section-kicker">Properties<span></span></div>
-            <h2>Premium Properties</h2>
+            <h2>Featured Properties</h2>
             <p>
-              SELLAM offers a curated portfolio of exclusive properties in Kenya's most desirable locations, blending elegant design, modern finishes, and seamless management.
+              SELLAM offers residential, commercial and investment properties across local and international markets. Working closely with property owners and leading developers, we connect buyers, tenants, investors and institutions with property opportunities that meet the highest standards of quality, location and long-term value.
             </p>
-            <p>
-              As a trusted leader in sales, leasing, and management, we provide more than homes - we deliver exclusive listings and off-market opportunities for investors, high-net-worth individuals, and discerning buyers. With expertise, excellence, and bespoke solutions, SELLAM empowers clients to Achieve More through premium investments and exceptional living experiences.
-            </p>
+           
             <a class="pill-button" href="premium-properties.html">View All Properties</a>
           </div>
 
@@ -367,11 +403,13 @@
               <span>5 Bedroom Mansion, Lower Kabete</span>
             </a>
           </div>
+
+          <a class="pill-button section-mobile-button" href="premium-properties.html">View All Properties</a>
         </div>
       </section>
 
       <section class="partners" aria-label="Our partners">
-        <div class="page-shell partners-inner">
+        <div class="page-shell partners-inner reveal">
           <h2>Our Patners:</h2>
           <div class="partner-marquee" aria-hidden="true">
             <div class="partner-track">
@@ -411,13 +449,13 @@
             <div class="section-kicker">Properties<span></span></div>
             <h2>Exclusive Properties</h2>
             <p>
-              SELLAM presents a carefully curated portfolio of rare, premium properties reserved for discerning investors and selective homeowners. Situated in Kenya's most prestigious neighborhoods and growth corridors, these exclusive listings combine timeless architecture, refined interiors, and exceptional privacy.
+              Properties exclusively represented by SELLAM, providing buyers, tenants, and investors with trusted access to carefully selected real estate opportunities.
             </p>
-            <p>
-              Owning an exclusively listed property with SELLAM offers unmatched advantages, from access to rare opportunities and off-market deals to long-term value growth in high-demand locations. Our portfolio features everything from elegant city apartments with panoramic views to modern townhouses in sought-after suburbs, each meeting the highest standards of design, comfort, and investment potential.
-            </p>
+            
             <a class="pill-button" href="exclusive-properties.html">View All Properties</a>
           </div>
+
+          <a class="pill-button section-mobile-button" href="exclusive-properties.html">View All Properties</a>
         </div>
       </section>
 
@@ -427,11 +465,9 @@
             <div class="section-kicker">Communities<span></span></div>
             <h2>Featured Communities</h2>
             <p>
-              SELLAM showcases a selection of premier communities that define modern living and investment excellence. Each neighborhood is carefully chosen for its prime location, superior infrastructure, and long-term value potential. From vibrant urban hubs to serene residential enclaves, our featured communities offer elegant apartments, modern townhouses, and exclusive amenities designed for comfort, convenience, and lifestyle.
+              Every community offers a unique way of living and investing. Explore properties across Kenya's most sought-after neighbourhoods and discover the location that best matches your lifestyle, business or investment objectives.
             </p>
-            <p>
-              With SELLAM's expertise and bespoke advisory, clients gain access to properties in Kenya's most desirable addresses, communities where prestige, security, and opportunity converge.
-            </p>
+            
           </div>
 
           <div class="community-carousel reveal" aria-label="Featured communities carousel">
@@ -512,12 +548,108 @@
                   <a class="community-button" href="communities/westlands.html">View Community</a>
                 </article>
                 <article class="community-card">
-                  <a class="image-frame" href="communities/gigiri.html">
-                    <img src="assets/images/diaspora-new-york.webp" alt="Gigiri serene residential estate">
+                  <a class="image-frame" href="communities/thigiri.html">
+                    <img src="assets/images/diaspora-new-york.webp" alt="Thigiri serene residential estate">
                   </a>
-                  <h3><a href="communities/gigiri.html">Gigiri</a></h3>
-                  <p>Gigiri offers serene living, diplomatic proximity, refined homes, privacy, and a polished international residential feel.</p>
-                  <a class="community-button" href="communities/gigiri.html">View Community</a>
+                  <h3><a href="communities/thigiri.html">Thigiri</a></h3>
+                  <p>Quiet streets, mature greenery, and diplomatic convenience make Thigiri a composed address for private family living.</p>
+                  <a class="community-button" href="communities/thigiri.html">View Community</a>
+                </article>
+                <article class="community-card">
+                  <a class="image-frame" href="communities/rosslyn.html">
+                    <img src="assets/images/hero-runda.webp" alt="Rosslyn premium residential greenery">
+                  </a>
+                  <h3><a href="communities/rosslyn.html">Rosslyn</a></h3>
+                  <p>Rosslyn blends generous homes, secure compounds, embassy proximity, and easy access to schools, malls, and diplomatic hubs.</p>
+                  <a class="community-button" href="communities/rosslyn.html">View Community</a>
+                </article>
+                <article class="community-card">
+                  <a class="image-frame" href="communities/parklands.html">
+                    <img src="assets/images/Kile.png" alt="Parklands urban apartment community">
+                  </a>
+                  <h3><a href="communities/parklands.html">Parklands</a></h3>
+                  <p>Parklands offers connected apartment living near commerce, education, healthcare, and Nairobi's established urban corridors.</p>
+                  <a class="community-button" href="communities/parklands.html">View Community</a>
+                </article>
+                <article class="community-card">
+                  <a class="image-frame" href="communities/lower-kabete.html">
+                    <img src="assets/images/Premium properties/Lower Kabete 5 Bedroom (2).jpeg" alt="Lower Kabete premium family residence">
+                  </a>
+                  <h3><a href="communities/lower-kabete.html">Lower Kabete</a></h3>
+                  <p>Lower Kabete is known for spacious homes, leafy privacy, school access, and calm residential streets close to key city routes.</p>
+                  <a class="community-button" href="communities/lower-kabete.html">View Community</a>
+                </article>
+                <article class="community-card">
+                  <a class="image-frame" href="communities/kilimani.html">
+                    <img src="assets/images/Kileout.png" alt="Kilimani contemporary apartment tower">
+                  </a>
+                  <h3><a href="communities/kilimani.html">Kilimani</a></h3>
+                  <p>Kilimani combines high-demand apartment living, restaurants, retail, business links, and strong rental appeal for investors.</p>
+                  <a class="community-button" href="communities/kilimani.html">View Community</a>
+                </article>
+                <article class="community-card">
+                  <a class="image-frame" href="communities/muthangari.html">
+                    <img src="assets/images/premium-page-grosvenor-towers.jpg" alt="Muthangari refined residential tower">
+                  </a>
+                  <h3><a href="communities/muthangari.html">Muthangari</a></h3>
+                  <p>Muthangari offers a polished residential setting near Westlands, with apartments, townhomes, and excellent urban access.</p>
+                  <a class="community-button" href="communities/muthangari.html">View Community</a>
+                </article>
+                <article class="community-card">
+                  <a class="image-frame" href="communities/kitisuru.html">
+                    <img src="assets/images/hero-moon-valley.webp" alt="Kitisuru serene green residential area">
+                  </a>
+                  <h3><a href="communities/kitisuru.html">Kitisuru</a></h3>
+                  <p>Kitisuru brings quiet prestige, generous plots, private residences, and easy reach to schools, shopping, and diplomatic zones.</p>
+                  <a class="community-button" href="communities/kitisuru.html">View Community</a>
+                </article>
+                <article class="community-card">
+                  <a class="image-frame" href="communities/spring-valley.html">
+                    <img src="assets/images/property-detail-arrival.jpg" alt="Spring Valley refined residential entry">
+                  </a>
+                  <h3><a href="communities/spring-valley.html">Spring Valley</a></h3>
+                  <p>Spring Valley offers understated prestige, green compounds, quiet roads, and convenient access to Westlands and diplomatic areas.</p>
+                  <a class="community-button" href="communities/spring-valley.html">View Community</a>
+                </article>
+                <article class="community-card">
+                  <a class="image-frame" href="communities/loresho.html">
+                    <img src="assets/images/Premium properties/Loresho 4 Bedroom Villas (10).jpeg" alt="Loresho premium villa community">
+                  </a>
+                  <h3><a href="communities/loresho.html">Loresho</a></h3>
+                  <p>Loresho is a calm villa neighborhood with family homes, green surroundings, privacy, and quick access to Westlands corridors.</p>
+                  <a class="community-button" href="communities/loresho.html">View Community</a>
+                </article>
+                <article class="community-card">
+                  <a class="image-frame" href="communities/lower-kabete.html">
+                    <img src="assets/images/Premium properties/Lower Kabete 5 Bedroom (7).jpeg" alt="Lower Kabete leafy premium residence">
+                  </a>
+                  <h3><a href="communities/lower-kabete.html">Lower Kabete</a></h3>
+                  <p>Lower Kabete also offers elevated family estates, secure compounds, and a quiet premium setting close to established amenities.</p>
+                  <a class="community-button" href="communities/lower-kabete.html">View Community</a>
+                </article>
+                <article class="community-card">
+                  <a class="image-frame" href="communities/riverside.html">
+                    <img src="assets/images/grosvenor.jpg" alt="Riverside modern residential tower">
+                  </a>
+                  <h3><a href="communities/riverside.html">Riverside</a></h3>
+                  <p>Riverside blends apartment convenience, embassies, offices, dining, and central access in one of Nairobi's strongest addresses.</p>
+                  <a class="community-button" href="communities/riverside.html">View Community</a>
+                </article>
+                <article class="community-card">
+                  <a class="image-frame" href="communities/nyali.html">
+                    <img src="assets/images/premium-page-seaview-tower.jpg" alt="Nyali coastal residential tower">
+                  </a>
+                  <h3><a href="communities/nyali.html">Nyali</a></h3>
+                  <p>Nyali offers coastal apartments and homes close to beaches, shopping, schools, hospitality, and Mombasa's leisure lifestyle.</p>
+                  <a class="community-button" href="communities/nyali.html">View Community</a>
+                </article>
+                <article class="community-card">
+                  <a class="image-frame" href="communities/vipingo.html">
+                    <img src="assets/images/diaspora-miami.webp" alt="Vipingo coastal resort-style residence">
+                  </a>
+                  <h3><a href="communities/vipingo.html">Vipingo</a></h3>
+                  <p>Vipingo is shaped by coastal calm, resort-style living, golf, beaches, and long-term lifestyle investment appeal.</p>
+                  <a class="community-button" href="communities/vipingo.html">View Community</a>
                 </article>
               </div>
             </div>
@@ -558,11 +690,9 @@
 
           <div class="diaspora-copy reveal">
             <p>
-              SELLAM showcases a selection of premier communities that define modern living and investment excellence. Each neighborhood is carefully chosen for its prime location, superior infrastructure, and long-term value potential. From vibrant urban hubs to serene residential enclaves, our featured communities offer elegant apartments, modern townhouses, and exclusive amenities designed for comfort, convenience, and lifestyle.
+              Explore our selected residential, commercial and investment properties across leading international markets. Through trusted partnerships with reputable developers and property owners, SELLAM connects buyers and investors with opportunities defined by quality, location and long-term value.
             </p>
-            <p>
-              With SELLAM's expertise and bespoke advisory, clients gain access to properties in Kenya's most desirable addresses, communities where prestige, security, and opportunity converge.
-            </p>
+            
           </div>
 
           <div class="diaspora-grid reveal" aria-live="polite">
@@ -689,16 +819,16 @@
     </main>
 
     <footer class="site-footer">
-      <div class="page-shell footer-grid">
+      <div class="page-shell footer-grid reveal">
         <div class="footer-contact">
           <h2>Sellam</h2>
           <address>
             Porshattam Towers<br>
             P.O Box 50023 - 00100<br>
             Nairobi, Kenya<br>
-            +254 708 600 002
+            0700435000
           </address>
-          <a href="mailto:office@sellamc.com">office@sellamc.com</a>
+          <a href="mailto: office@sellamre.com"> office@sellamre.com</a>
         </div>
 
         <div class="footer-subscribe">

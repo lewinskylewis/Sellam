@@ -9,7 +9,7 @@ const heroSlides = [
     title: "Luxury Mansion",
     meta: "Runda | 4 Bedroom Luxury Mansion | Starting KES 350,000,000",
     tile: "assets/images/Premium properties/RundaMansion3.jpeg",
-    background: "assets/images/Premium properties/RundaMansion2.jpeg"
+    background: "assets/images/grosvenor.jpg"
   },
   {
     title: "Ostrea Villas",
@@ -171,13 +171,58 @@ function setupSearchFilters() {
     const label = trigger?.querySelector("span:nth-child(2)");
     const menu = filter.querySelector(".filter-menu");
     const checkboxes = filter.querySelectorAll(".filter-menu input[type='checkbox']");
+    const selects = filter.querySelectorAll(".filter-menu select");
+    const minPriceSelect = filter.querySelector("[data-price-min]");
+    const maxPriceSelect = filter.querySelector("[data-price-max]");
 
     if (label && !label.dataset.defaultLabel) {
       label.dataset.defaultLabel = label.textContent.trim();
     }
 
+    const getSelectDefaultValue = (select) => {
+      if (Object.prototype.hasOwnProperty.call(select.dataset, "defaultValue")) {
+        return select.dataset.defaultValue;
+      }
+
+      return select.options[0]?.value || "";
+    };
+
+    const updatePriceOptionState = () => {
+      if (!minPriceSelect || !maxPriceSelect) return;
+
+      const minValue = minPriceSelect.value ? Number(minPriceSelect.value) : 0;
+      const maxValue = maxPriceSelect.value ? Number(maxPriceSelect.value) : Infinity;
+
+      Array.from(maxPriceSelect.options).forEach((option) => {
+        option.disabled = Boolean(option.value) && Number(option.value) < minValue;
+      });
+
+      Array.from(minPriceSelect.options).forEach((option) => {
+        option.disabled = Boolean(option.value) && Number(option.value) > maxValue;
+      });
+    };
+
+    const syncPriceRange = (changedSelect) => {
+      if (!minPriceSelect || !maxPriceSelect) return;
+
+      const minValue = minPriceSelect.value ? Number(minPriceSelect.value) : 0;
+      const maxValue = maxPriceSelect.value ? Number(maxPriceSelect.value) : Infinity;
+
+      if (minPriceSelect.value && maxPriceSelect.value && minValue > maxValue) {
+        if (changedSelect === maxPriceSelect) {
+          minPriceSelect.value = maxPriceSelect.value;
+        } else {
+          maxPriceSelect.value = minPriceSelect.value;
+        }
+      }
+
+      updatePriceOptionState();
+    };
+
     const updateLabel = () => {
-      const selectedCount = Array.from(checkboxes).filter((checkbox) => checkbox.checked).length;
+      const selectedCheckboxCount = Array.from(checkboxes).filter((checkbox) => checkbox.checked).length;
+      const selectedSelectCount = Array.from(selects).filter((select) => select.value !== getSelectDefaultValue(select)).length;
+      const selectedCount = selectedCheckboxCount + selectedSelectCount;
       if (label) label.textContent = label.dataset.defaultLabel;
       trigger?.classList.toggle("has-selection", selectedCount > 0);
     };
@@ -192,20 +237,35 @@ function setupSearchFilters() {
       checkbox.addEventListener("change", updateLabel);
     });
 
-    if (menu && !menu.querySelector(".clear-selection")) {
-      const clearButton = document.createElement("button");
+    selects.forEach((select) => {
+      select.addEventListener("change", () => {
+        syncPriceRange(select);
+        updateLabel();
+      });
+    });
+
+    let clearButton = menu?.querySelector(".clear-selection");
+
+    if (menu && !clearButton) {
+      clearButton = document.createElement("button");
       clearButton.type = "button";
       clearButton.className = "clear-selection";
       clearButton.textContent = "Clear selection";
-      clearButton.addEventListener("click", () => {
-        checkboxes.forEach((checkbox) => {
-          checkbox.checked = false;
-        });
-        updateLabel();
-      });
       menu.append(clearButton);
     }
 
+    clearButton?.addEventListener("click", () => {
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+      selects.forEach((select) => {
+        select.value = getSelectDefaultValue(select);
+      });
+      syncPriceRange();
+      updateLabel();
+    });
+
+    syncPriceRange();
     updateLabel();
   });
 
@@ -428,25 +488,9 @@ function setupCommunityCarousel() {
 }
 
 function setupRevealAnimations() {
-  const revealItems = document.querySelectorAll(".reveal");
-
-  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
-    revealItems.forEach((item) => item.classList.add("is-visible"));
-    return;
-  }
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      });
-    },
-    { threshold: 0.18, rootMargin: "0px 0px -60px 0px" }
-  );
-
-  revealItems.forEach((item) => observer.observe(item));
+  document.querySelectorAll(".reveal").forEach((item) => {
+    item.classList.add("is-visible");
+  });
 }
 
 function setupForms() {
