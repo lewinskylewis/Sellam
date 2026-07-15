@@ -2,32 +2,32 @@ const heroSlides = [
   {
     title: "Loresho Villas",
     meta: "Loresho | 4 Bedroom Villas | Starting KES 96,000,000",
-    tile: "assets/images/Premium properties/Loresho 4 Bedroom Villas (3).webp",
-    background: "assets/images/Premium properties/Loresho 4 Bedroom Villas (11).webp"
+    tile: "assets/images/Premium properties/Loresho 4 Bedroom Villas (3).jpeg",
+    background: "assets/images/Premium properties/Loresho 4 Bedroom Villas (11).jpeg"
   },
   {
     title: "Luxury Mansion",
     meta: "Runda | 4 Bedroom Luxury Mansion | Starting KES 350,000,000",
-    tile: "assets/images/Premium properties/RundaMansion3.webp",
-    background: "assets/images/grosvenor.webp"
+    tile: "assets/images/Premium properties/RundaMansion3.jpeg",
+    background: "assets/images/grosvenor.jpg"
   },
   {
     title: "Ostrea Villas",
     meta: "Karen | Signature Villas | Starting KES 165,000,000",
-    tile: "assets/images/Premium properties/OSTREA Karen Villas (2).webp",
-    background: "assets/images/Premium properties/OSTREA Karen Villas.webp"
+    tile: "assets/images/Premium properties/OSTREA Karen Villas (2).jpeg",
+    background: "assets/images/Premium properties/OSTREA Karen Villas.jpeg"
   },
   {
     title: "Runda Gardens",
     meta: "Runda | Private Villas | Bespoke Family Living",
     tile: "assets/images/hero-runda.webp",
-    background: "assets/images/grosout.webp"
+    background: "assets/images/grosout.JPG"
   },
   {
     title: "Nyari Crest",
     meta: "Nyari | Exclusive Off-Market Homes | Viewing By Appointment",
     tile: "assets/images/hero-moon-valley.webp",
-    background: "assets/images/aumout.webp"
+    background: "assets/images/aumout.jpeg"
   }
 ];
 
