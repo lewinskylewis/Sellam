@@ -20,6 +20,79 @@
 <link href="https://fonts.googleapis.com/css2?family=Gabriela&display=swap" rel="stylesheet">
 <link rel="preload" href="Fonts/Optima%20Medium.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preload" href="Fonts/OPTIMA_B.TTF" as="font" type="font/ttf" crossorigin>
+    <script>
+      /* Motion bootstrap — Wix-style scroll reveals for the homepage.
+         Runs before first paint so hidden sections never flash in. It only engages
+         when IntersectionObserver is available and the visitor has not requested
+         reduced motion; otherwise the CSS fail-safe leaves everything visible.
+         The hero and the search bar are intentionally excluded — motion starts at
+         the featured properties section. */
+      (function () {
+        var root = document.documentElement;
+        var mq = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
+        if ((mq && mq.matches) || !("IntersectionObserver" in window)) {
+          return; // leave content in its final, visible state
+        }
+        root.classList.add("motion-ready");
+
+        function reveal(el) {
+          el.classList.add("is-visible");
+          var items = el.querySelectorAll(
+            ".image-card, .community-card, .diaspora-card, .feature-tile"
+          );
+          for (var i = 0; i < items.length; i++) {
+            items[i].classList.add("motion-item-visible");
+          }
+        }
+
+        function start() {
+          try {
+            var nodes = document.querySelectorAll(".reveal");
+            var targets = [];
+            for (var i = 0; i < nodes.length; i++) {
+              var el = nodes[i];
+              if (el.closest(".hero") || el.classList.contains("search-bar")) continue;
+              targets.push(el);
+            }
+            var io = new IntersectionObserver(
+              function (entries, obs) {
+                for (var j = 0; j < entries.length; j++) {
+                  if (entries[j].isIntersecting) {
+                    reveal(entries[j].target);
+                    obs.unobserve(entries[j].target);
+                  }
+                }
+              },
+              { rootMargin: "0px 0px -10% 0px", threshold: 0.12 }
+            );
+            for (var k = 0; k < targets.length; k++) io.observe(targets[k]);
+
+            /* Safety sweep after full load: reveal anything already in view that the
+               observer hasn't caught, so content can never be stuck hidden. */
+            window.addEventListener("load", function () {
+              var vh = window.innerHeight || root.clientHeight;
+              for (var m = 0; m < targets.length; m++) {
+                var t = targets[m];
+                if (t.classList.contains("is-visible")) continue;
+                var r = t.getBoundingClientRect();
+                if (r.top < vh && r.bottom > 0) {
+                  reveal(t);
+                  io.unobserve(t);
+                }
+              }
+            });
+          } catch (err) {
+            root.classList.remove("motion-ready"); // total fallback: CSS shows everything
+          }
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", start);
+        } else {
+          start();
+        }
+      })();
+    </script>
   </head>
   <body>
     <header class="site-header" aria-label="Primary navigation">
@@ -29,11 +102,11 @@
         </a>
 
         <ul class="desktop-nav" aria-label="Main menu">
-          <li><a href="#buy">Buy</a></li>
-          <li><a href="#rent">Rent</a></li>
+          <li><a href="buy.html">Buy</a></li>
+          <li><a href="rent.html">Rent</a></li>
           <li><a href="#leasing">Leasing</a></li>
           <li><a href="#off-plan">Off-plan</a></li>
-          <li><a href="#services">Services</a></li>
+          <li><a href="services.html">Services</a></li>
         </ul>
 
         <a class="whatsapp desktop-whatsapp" href="https://wa.me/254700435000" aria-label="Contact Sellam on WhatsApp">
@@ -63,11 +136,11 @@
           </div>
 
           <ul class="mobile-nav-list">
-            <li><a href="#buy">Buy</a></li>
-            <li><a href="#rent">Rent</a></li>
+            <li><a href="buy.html">Buy</a></li>
+            <li><a href="rent.html">Rent</a></li>
             <li><a href="#leasing">Leasing</a></li>
             <li><a href="#off-plan">Off-plan</a></li>
-            <li><a href="#services">Services</a></li>
+            <li><a href="services.html">Services</a></li>
             <li>
               <a class="mobile-whatsapp" href="https://wa.me/254700435000">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -413,6 +486,18 @@
           <h2>Our Patners:</h2>
           <div class="partner-marquee" aria-hidden="true">
             <div class="partner-track">
+              <!-- Half 1 -->
+              <img src="assets/logos/partner-emaar.png" alt="">
+              <img src="assets/logos/partner-remax.png" alt="">
+              <img src="assets/logos/partner-socalliving.png" alt="">
+              <img src="assets/logos/partner-delhi.png" alt="">
+              <img src="assets/logos/partner-emaar.png" alt="">
+              <img src="assets/logos/partner-remax.png" alt="">
+              <img src="assets/logos/partner-emaar.png" alt="">
+              <img src="assets/logos/partner-socalliving.png" alt="">
+              <img src="assets/logos/partner-delhi.png" alt="">
+              <img src="assets/logos/partner-emaar.png" alt="">
+              <!-- Half 2: identical duplicate so the -50% loop is seamless -->
               <img src="assets/logos/partner-emaar.png" alt="">
               <img src="assets/logos/partner-remax.png" alt="">
               <img src="assets/logos/partner-socalliving.png" alt="">
@@ -855,7 +940,7 @@
         <div class="footer-links">
           <h2>Company</h2>
           <ul>
-            <li><a href="#services">Services</a></li>
+            <li><a href="services.html">Services</a></li>
             <li><a href="news.html">Sellam News</a></li>
             <li><a href="contact.html">Get In Touch</a></li>
             <li><a href="privacy.html">Privacy Policy</a></li>

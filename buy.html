@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sellam | Buy</title>
+    <meta
+      name="description"
+      content="Buy property with SELLAM — explore commercial, land, residential and development opportunities across Kenya."
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    >
+    <link href="https://fonts.googleapis.com/css2?family=Gabriela&display=swap" rel="stylesheet">
+    <link rel="preload" href="Fonts/Optima%20Medium.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="Fonts/OPTIMA_B.TTF" as="font" type="font/ttf" crossorigin>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="buy.css">
+    <script>
+      /* Motion bootstrap — same scroll-reveal engine as the homepage. Runs before
+         first paint so cards never flash in. Only engages when IntersectionObserver
+         is available and reduced motion is not requested; otherwise the CSS fail-safe
+         leaves everything visible. */
+      (function () {
+        var root = document.documentElement;
+        var mq = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
+        if ((mq && mq.matches) || !("IntersectionObserver" in window)) {
+          return;
+        }
+        root.classList.add("motion-ready");
+
+        function reveal(el) {
+          el.classList.add("is-visible");
+          var items = el.querySelectorAll(
+            ".image-card, .community-card, .diaspora-card, .feature-tile, .category-card"
+          );
+          for (var i = 0; i < items.length; i++) {
+            items[i].classList.add("motion-item-visible");
+          }
+        }
+
+        function start() {
+          try {
+            var nodes = document.querySelectorAll(".reveal");
+            var targets = [];
+            for (var i = 0; i < nodes.length; i++) {
+              var el = nodes[i];
+              if (el.closest(".hero") || el.classList.contains("search-bar")) continue;
+              targets.push(el);
+            }
+            var io = new IntersectionObserver(
+              function (entries, obs) {
+                for (var j = 0; j < entries.length; j++) {
+                  if (entries[j].isIntersecting) {
+                    reveal(entries[j].target);
+                    obs.unobserve(entries[j].target);
+                  }
+                }
+              },
+              { rootMargin: "0px 0px -10% 0px", threshold: 0.12 }
+            );
+            for (var k = 0; k < targets.length; k++) io.observe(targets[k]);
+
+            window.addEventListener("load", function () {
+              var vh = window.innerHeight || root.clientHeight;
+              for (var m = 0; m < targets.length; m++) {
+                var t = targets[m];
+                if (t.classList.contains("is-visible")) continue;
+                var r = t.getBoundingClientRect();
+                if (r.top < vh && r.bottom > 0) {
+                  reveal(t);
+                  io.unobserve(t);
+                }
+              }
+            });
+          } catch (err) {
+            root.classList.remove("motion-ready");
+          }
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", start);
+        } else {
+          start();
+        }
+      })();
+    </script>
+  </head>
+  <body class="buy-page">
+    <header class="site-header" aria-label="Primary navigation">
+      <nav class="nav-shell">
+        <a class="brand" href="index.html" aria-label="Sellam home">
+          <img src="assets/logos/sellam-logo.png" alt="SELLAM">
+        </a>
+
+        <ul class="desktop-nav" aria-label="Main menu">
+          <li><a href="buy.html">Buy</a></li>
+          <li><a href="rent.html">Rent</a></li>
+          <li><a href="index.html#leasing">Leasing</a></li>
+          <li><a href="index.html#off-plan">Off-plan</a></li>
+          <li><a href="services.html">Services</a></li>
+        </ul>
+
+        <a class="whatsapp desktop-whatsapp" href="https://wa.me/254700435000" aria-label="Contact Sellam on WhatsApp">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12.04 2.25a9.63 9.63 0 0 0-8.22 14.62L2.75 21.75l4.99-1.04a9.62 9.62 0 1 0 4.3-18.46Zm0 1.88a7.74 7.74 0 0 1 6.45 12.02 7.71 7.71 0 0 1-9.04 2.63l-.36-.16-3.82.8.82-3.72-.2-.39a7.74 7.74 0 0 1 6.15-11.18Zm-3.12 3.9c-.17 0-.43.06-.66.31-.22.25-.86.84-.86 2.06 0 1.21.88 2.38 1 2.54.13.16 1.7 2.73 4.22 3.72 2.09.82 2.52.66 2.98.62.45-.04 1.46-.6 1.67-1.18.2-.58.2-1.08.14-1.18-.06-.11-.23-.17-.48-.3-.26-.13-1.51-.75-1.74-.83-.23-.09-.4-.13-.57.13-.17.25-.65.83-.8 1-.15.17-.3.19-.55.06-.26-.13-1.08-.4-2.05-1.26-.76-.68-1.27-1.52-1.42-1.77-.15-.26-.02-.4.11-.52.12-.12.26-.3.39-.45.13-.15.17-.25.26-.42.08-.17.04-.32-.02-.45-.06-.13-.57-1.37-.78-1.88-.2-.49-.41-.42-.57-.43h-.47Z"/>
+          </svg>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </nav>
+
+      <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <div class="mobile-menu-panel">
+          <div class="mobile-menu-top">
+            <a class="mobile-brand" href="index.html" aria-label="Sellam home">
+              <img src="assets/logos/sellam-logo.png" alt="SELLAM">
+            </a>
+            <button class="menu-close" type="button" aria-label="Close menu">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m6.34 5 12.66 12.66-1.34 1.34L5 6.34 6.34 5Zm12.66 1.34L6.34 19 5 17.66 17.66 5 19 6.34Z"/>
+              </svg>
+            </button>
+          </div>
+
+          <ul class="mobile-nav-list">
+            <li><a href="buy.html">Buy</a></li>
+            <li><a href="rent.html">Rent</a></li>
+            <li><a href="index.html#leasing">Leasing</a></li>
+            <li><a href="index.html#off-plan">Off-plan</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li>
+              <a class="mobile-whatsapp" href="https://wa.me/254700435000">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12.04 2.25a9.63 9.63 0 0 0-8.22 14.62L2.75 21.75l4.99-1.04a9.62 9.62 0 1 0 4.3-18.46Zm0 1.88a7.74 7.74 0 0 1 6.45 12.02 7.71 7.71 0 0 1-9.04 2.63l-.36-.16-3.82.8.82-3.72-.2-.39a7.74 7.74 0 0 1 6.15-11.18Z"/>
+                </svg>
+                WhatsApp Us
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="buy-categories" aria-label="Browse property categories">
+        <div class="page-shell">
+          <div class="category-grid reveal">
+            <article class="category-card">
+              <a class="category-image" href="premium-properties.html" aria-label="Commercial properties">
+                <img src="assets/images/buy/commercial.jpg" alt="Commercial development tower">
+              </a>
+              <h2>Commercial</h2>
+              <p>A community designed for tomorrow<br>1 &amp; 2 bedroom apartments</p>
+              <a class="pill-button category-button" href="premium-properties.html">Take Me There</a>
+            </article>
+
+            <article class="category-card">
+              <a class="category-image" href="premium-properties.html" aria-label="Land properties">
+                <img src="assets/images/buy/land.jpg" alt="Aerial view of land plots">
+              </a>
+              <h2>Land</h2>
+              <p>A community designed for tomorrow<br>1 &amp; 2 bedroom apartments</p>
+              <a class="pill-button category-button" href="premium-properties.html">Take Me There</a>
+            </article>
+
+            <article class="category-card">
+              <a class="category-image" href="premium-properties.html" aria-label="Residential properties">
+                <img src="assets/images/buy/residential.jpg" alt="Residential apartment tower">
+              </a>
+              <h2>Residential</h2>
+              <p>A community designed for tomorrow<br>1 &amp; 2 bedroom apartments</p>
+              <a class="pill-button category-button" href="premium-properties.html">Take Me There</a>
+            </article>
+
+            <article class="category-card">
+              <a class="category-image" href="exclusive-properties.html" aria-label="Development properties">
+                <img src="assets/images/buy/developments.jpg" alt="Resort-style development with pool">
+              </a>
+              <h2>Developments</h2>
+              <p>A community designed for tomorrow<br>1 &amp; 2 bedroom apartments</p>
+              <a class="pill-button category-button" href="exclusive-properties.html">Take Me There</a>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="page-shell footer-grid">
+        <div class="footer-contact">
+          <h2>Sellam Real Estate</h2>
+          <address>
+            ABC Place Waiyaki Way<br>
+            P.O Box 14090 - 00800<br>
+            Nairobi, Kenya<br>
+            +254 709 479 000
+          </address>
+          <a href="mailto:SellamRe@gmail.com">SellamRe@gmail.com</a>
+        </div>
+
+        <div class="footer-subscribe">
+          <h2>Subscribe</h2>
+          <form action="#" method="post">
+            <label class="visually-hidden" for="email">Email address</label>
+            <input id="email" type="email" placeholder="Enter Your Email Here*" required>
+            <button type="submit">Submit</button>
+          </form>
+          <h3>Socials</h3>
+          <ul class="socials" aria-label="Social links">
+            <li><a href="#" aria-label="Facebook">f</a></li>
+            <li><a href="#" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm5.3-2.75a1.05 1.05 0 1 1 0 2.1 1.05 1.05 0 0 1 0-2.1Z"/></svg>
+            </a></li>
+            <li><a href="#" aria-label="LinkedIn">in</a></li>
+            <li><a href="#" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 7.2s-.19-1.36-.78-1.96c-.75-.79-1.58-.79-1.96-.84C16.12 4.2 12 4.2 12 4.2h-.01s-4.12 0-6.86.2c-.38.05-1.21.05-1.96.84-.59.6-.78 1.96-.78 1.96S2.2 8.8 2.2 10.4v1.5c0 1.6.19 3.2.19 3.2s.19 1.36.78 1.96c.75.79 1.73.76 2.17.85 1.58.15 6.66.2 6.66.2s4.12-.01 6.86-.21c.38-.05 1.21-.05 1.96-.84.59-.6.78-1.96.78-1.96s.2-1.6.2-3.2v-1.5c0-1.6-.2-3.2-.2-3.2ZM9.98 13.73V8.18l5.3 2.79-5.3 2.76Z"/></svg>
+            </a></li>
+            <li><a href="#" aria-label="X">X</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h2>Company</h2>
+          <ul>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="news.html">Sellam News</a></li>
+            <li><a href="contact.html">Get In Touch</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h2>Explore</h2>
+          <ul>
+            <li><a href="index.html">Sellam Home</a></li>
+            <li><a href="property-for-sale.html">Property For Sale</a></li>
+            <li><a href="property-to-let.html">Property To Let</a></li>
+            <li><a href="developments.html">Developments</a></li>
+            <li><a href="sellam-index.html">Sellam Index</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <script src="buy.js"></script>
+  </body>
+</html>

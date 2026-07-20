@@ -1,0 +1,180 @@
+/* ============ Services page ============ */
+
+.services-page {
+  background: #ffffff;
+}
+
+/* ---- Hero banner. The homepage floating navbar sits over it, so the media
+   spans the full viewport width and the statement clears the navbar. ---- */
+.services-hero {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: clamp(430px, 47vw, 560px);
+  display: grid;
+  place-items: center;
+  padding: clamp(150px, 16vw, 200px) 0 clamp(46px, 6vw, 74px);
+  overflow: hidden;
+  color: var(--white);
+  text-align: center;
+  border: 2px solid #1c9fd6; /* blue frame from the design */
+  border-bottom: 0;
+}
+
+.services-hero-media {
+  position: absolute;
+  inset: 0;
+  background: #0a1e2e url("assets/images/buy/commercial.jpg") center 28% / cover no-repeat;
+}
+
+.services-hero-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(4, 22, 38, 0.55), rgba(4, 22, 38, 0.66));
+}
+
+.services-hero-inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* Statement — Inter (the homepage body font), a touch larger and bold. */
+.services-hero-statement {
+  max-width: 620px;
+  margin: 0 auto;
+  font-size: clamp(17px, 1.62vw, 21px);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* ---- Intro lead paragraph — homepage body size (15.3px) ---- */
+.services-intro {
+  padding-top: clamp(34px, 4vw, 58px);
+}
+
+.services-intro p {
+  margin: 0;
+  font-size: var(--section-copy-size);
+  line-height: 1.6;
+  font-weight: 500;
+  color: var(--black);
+}
+
+/* ---- Services grid (3 columns) ---- */
+.services-grid-section {
+  padding-top: clamp(42px, 5vw, 72px);
+  padding-bottom: clamp(50px, 6vw, 92px);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(38px, 5vw, 88px);
+  row-gap: clamp(46px, 5vw, 76px);
+  align-items: stretch;
+}
+
+.service-card {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #d3d8da;
+  padding-top: clamp(20px, 2vw, 30px);
+}
+
+/* Heading — homepage serif (Cormorant), title case */
+.service-card h2 {
+  margin: 0 0 clamp(16px, 1.6vw, 22px);
+  font-family: var(--font-serif);
+  font-size: clamp(22px, 1.55vw, 27px);
+  line-height: 1.1;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Body — homepage body size (15.3px) */
+.service-card p {
+  margin: 0 0 clamp(22px, 2.2vw, 30px);
+  font-size: var(--section-copy-size);
+  line-height: 1.55;
+  color: #3d4a4f;
+  flex: 1 0 auto;
+}
+
+.service-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: gap 0.28s ease, opacity 0.28s ease;
+}
+
+.service-link:hover,
+.service-link:focus-visible {
+  gap: 18px;
+  opacity: 0.82;
+}
+
+.service-arrow {
+  width: 38px;
+  height: 12px;
+  flex: none;
+  color: var(--gold);
+}
+
+/* ---- Homepage-style scroll reveal for the service cards ---- */
+.services-grid.reveal,
+.services-grid.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+.services-grid.reveal .service-card {
+  --motion-translate-x: 0px;
+  --motion-translate-y: 42px;
+  --svc-delay: 0s;
+  opacity: 0;
+  transform: none;
+  backface-visibility: hidden;
+}
+
+.services-grid.reveal .service-card:nth-child(2) { --svc-delay: 0.07s; }
+.services-grid.reveal .service-card:nth-child(3) { --svc-delay: 0.14s; }
+.services-grid.reveal .service-card:nth-child(4) { --svc-delay: 0.05s; }
+.services-grid.reveal .service-card:nth-child(5) { --svc-delay: 0.12s; }
+.services-grid.reveal .service-card:nth-child(6) { --svc-delay: 0.19s; }
+
+.services-grid.reveal .service-card.motion-item-visible {
+  opacity: 1;
+  transform: none;
+  animation: motion-floatIn 1.1s cubic-bezier(0.445, 0.05, 0.55, 0.95)
+    calc(var(--svc-delay, 0s) + 0.001s) backwards;
+}
+
+/* Fail-safe: never leave a card hidden if motion is disabled. */
+html:not(.motion-ready) .services-grid.reveal .service-card {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .services-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(28px, 4vw, 48px);
+    row-gap: 46px;
+  }
+}
+
+@media (max-width: 560px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+    row-gap: 40px;
+  }
+}

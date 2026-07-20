@@ -1,0 +1,216 @@
+/* ============ Service detail page (e.g. Property Sales) ============ */
+
+.service-detail-page {
+  background: #ffffff;
+}
+
+/* The homepage floating navbar sits over the top, so the content clears it.
+   Top offset matches the navbar's occupied height at each breakpoint
+   (styles.css: 62+72=134, 28+72=100, 22+68=90, 16+64=80) plus a gap. */
+.service-detail {
+  padding-top: 160px;
+  padding-bottom: clamp(70px, 9vw, 140px);
+}
+
+/* Page title — homepage serif (Cormorant), title case, gold accent (per design) */
+.service-detail-title {
+  margin: 0 0 clamp(26px, 3vw, 46px);
+  font-family: var(--font-serif);
+  font-size: clamp(30px, 2.5vw, 46px);
+  line-height: 1.04;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+/* Body copy — homepage body size (15.3px) */
+.service-detail-content > p {
+  margin: 0 0 clamp(18px, 1.9vw, 28px);
+  font-size: var(--section-copy-size);
+  line-height: 1.62;
+  color: var(--black);
+}
+
+.service-detail-content > p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- Homepage-style reveal: title + paragraphs float up, staggered ---- */
+.service-detail-content.reveal,
+.service-detail-content.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+.service-detail-content.reveal > * {
+  --motion-translate-x: 0px;
+  --motion-translate-y: 34px;
+  --sd-delay: 0s;
+  opacity: 0;
+  transform: none;
+  backface-visibility: hidden;
+}
+
+.service-detail-content.reveal > :nth-child(2) { --sd-delay: 0.08s; }
+.service-detail-content.reveal > :nth-child(3) { --sd-delay: 0.16s; }
+.service-detail-content.reveal > :nth-child(4) { --sd-delay: 0.24s; }
+.service-detail-content.reveal > :nth-child(5) { --sd-delay: 0.32s; }
+
+.service-detail-content.reveal.is-visible > * {
+  opacity: 1;
+  animation: motion-floatIn 1s cubic-bezier(0.445, 0.05, 0.55, 0.95)
+    calc(var(--sd-delay, 0s) + 0.001s) backwards;
+}
+
+/* Fail-safe: never leave content hidden if motion is disabled. */
+html:not(.motion-ready) .service-detail-content.reveal > * {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+/* ---- Responsive top offset (matches the navbar breakpoints) ---- */
+@media (max-width: 1280px) {
+  .service-detail { padding-top: 124px; }
+}
+
+@media (max-width: 1024px) {
+  .service-detail { padding-top: 112px; }
+}
+
+@media (max-width: 760px) {
+  .service-detail { padding-top: 100px; }
+}
+
+/* ---- Underlined title variant (e.g. Leasing) ---- */
+.service-detail-title.has-underline {
+  display: inline-block;
+  padding-bottom: 6px;
+  border-bottom: 3px solid var(--gold);
+}
+
+/* ---- "Explore Our Services" subsection + sub-service grid ---- */
+.service-subsection {
+  margin-top: clamp(42px, 5vw, 76px);
+}
+
+.service-subsection-title {
+  margin: 0 0 clamp(28px, 3vw, 48px);
+  font-family: var(--font-serif);
+  font-size: clamp(26px, 2vw, 34px);
+  line-height: 1.05;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.service-sub-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(40px, 6vw, 112px);
+  row-gap: clamp(40px, 5vw, 66px);
+  align-items: start;
+}
+
+/* Sub-service heading — gold serif, homepage card-title scale */
+.sub-service h3 {
+  margin: 0 0 clamp(12px, 1.4vw, 18px);
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 1.5vw, 25px);
+  line-height: 1.12;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+/* Sub-service body — homepage body size (15.3px) */
+.sub-service p {
+  margin: 0 0 clamp(14px, 1.5vw, 20px);
+  font-size: var(--section-copy-size);
+  line-height: 1.55;
+  color: var(--black);
+}
+
+.sub-service p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- Reveal for the subsection (title + sub-services float up, staggered) ---- */
+.service-subsection.reveal,
+.service-subsection.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+.service-subsection.reveal .service-subsection-title,
+.service-subsection.reveal .sub-service {
+  --motion-translate-x: 0px;
+  --motion-translate-y: 34px;
+  --ss-delay: 0s;
+  opacity: 0;
+  transform: none;
+  backface-visibility: hidden;
+}
+
+.service-subsection.reveal .sub-service:nth-child(1) { --ss-delay: 0.08s; }
+.service-subsection.reveal .sub-service:nth-child(2) { --ss-delay: 0.15s; }
+.service-subsection.reveal .sub-service:nth-child(3) { --ss-delay: 0.22s; }
+.service-subsection.reveal .sub-service:nth-child(4) { --ss-delay: 0.29s; }
+.service-subsection.reveal .sub-service:nth-child(5) { --ss-delay: 0.36s; }
+.service-subsection.reveal .sub-service:nth-child(6) { --ss-delay: 0.43s; }
+
+.service-subsection.reveal.is-visible .service-subsection-title,
+.service-subsection.reveal.is-visible .sub-service {
+  opacity: 1;
+  animation: motion-floatIn 1s cubic-bezier(0.445, 0.05, 0.55, 0.95)
+    calc(var(--ss-delay, 0s) + 0.001s) backwards;
+}
+
+html:not(.motion-ready) .service-subsection.reveal .service-subsection-title,
+html:not(.motion-ready) .service-subsection.reveal .sub-service {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+/* ---- Responsive: sub-grid stacks ---- */
+@media (max-width: 720px) {
+  .service-sub-grid {
+    grid-template-columns: 1fr;
+    row-gap: 40px;
+  }
+}
+
+/* ---- Operations & Management: asymmetric 3-column layout.
+   Source order is 1..6 (logical reading order); explicit placement puts
+   items 4/5/6 where the design has them (col1 row2, col3 row2, col1 row3),
+   leaving column 2 open below the first row. ---- */
+.ops-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(38px, 5vw, 88px);
+  row-gap: clamp(46px, 5vw, 74px);
+  align-items: start;
+}
+
+.ops-grid > :nth-child(1) { grid-column: 1; grid-row: 1; }
+.ops-grid > :nth-child(2) { grid-column: 2; grid-row: 1; }
+.ops-grid > :nth-child(3) { grid-column: 3; grid-row: 1; }
+.ops-grid > :nth-child(4) { grid-column: 1; grid-row: 2; }
+.ops-grid > :nth-child(5) { grid-column: 3; grid-row: 2; }
+.ops-grid > :nth-child(6) { grid-column: 1; grid-row: 3; }
+
+@media (max-width: 900px) {
+  .ops-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ops-grid > :nth-child(n) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .ops-grid {
+    grid-template-columns: 1fr;
+  }
+}

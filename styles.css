@@ -880,6 +880,17 @@ section {
 .diaspora-card:active,
 .diaspora-card.is-active {
   z-index: 3;
+  transform: translateY(-8px);
+}
+
+/* Community and international cards sit flush against a clipping horizontal
+   scroller, so the extra card scale made the first card's edge get cropped.
+   They keep the lift above plus the image zoom below. Only the featured/exclusive
+   image-cards — which are in a non-clipping grid — keep the subtle card scale. */
+.image-card:hover,
+.image-card:focus-visible,
+.image-card:active,
+.image-card.is-active {
   transform: translateY(-8px) scale(1.025);
 }
 
@@ -939,6 +950,17 @@ section {
   flex: 1 1 auto;
 }
 
+/* Exclusive gallery alignment: the tall image (DG JKIA) uses a wider intrinsic
+   image than Featured's, which inflated the two grid rows (247px vs the 220px the
+   Crestpoint / DG West cards need), pushing the tall image ~26px below the stack.
+   Taking the tall image out of flow stops it from sizing the rows, so the rows are
+   driven by the regular cards and the tall lines up exactly with the stack —
+   matching the Featured grid. */
+.exclusive-layout .image-card-tall .image-frame img {
+  position: absolute;
+  inset: 0;
+}
+
 .image-frame img {
   width: 100%;
   height: 100%;
@@ -990,7 +1012,7 @@ section {
   width: max-content;
   align-items: center;
   gap: clamp(96px, 10vw, 220px);
-  padding-left: 100vw;
+  padding-right: clamp(96px, 10vw, 220px);
   animation: partner-marquee 46s linear infinite;
   will-change: transform;
 }
@@ -1009,7 +1031,9 @@ section {
     transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translate3d(calc(-100vw - 50%), 0, 0);
+    /* Track holds two identical halves; shifting by exactly one half loops
+       seamlessly. padding-right equals one gap so -50% lands pixel-perfect. */
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
@@ -1027,12 +1051,12 @@ section {
 
 .community-carousel {
   position: relative;
-  margin-top: 56px;
+  margin-top: 36px;
   display: grid;
   grid-template-columns: 64px minmax(0, 1fr) 64px;
   align-items: start;
   column-gap: 24px;
-  --community-arrow-top: 190px;
+  --community-arrow-top: 210px;
 }
 
 .community-viewport {
@@ -1044,6 +1068,8 @@ section {
   display: flex;
   gap: 30px;
   align-items: stretch;
+  padding-top: 20px;
+  padding-bottom: 12px;
   overflow-x: auto;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
@@ -1111,7 +1137,7 @@ section {
 }
 
 .slider-arrow.next {
-  margin-left: 52px;
+  margin-left: 0;
   transform: none;
 }
 
@@ -1138,7 +1164,15 @@ section {
 }
 
 .slider-arrow.next {
-  justify-self: start;
+  justify-self: center;
+}
+
+/* Make the next arrow a true mirror of the (known-good) prev arrow: give it prev's
+   exact chevron and flip it horizontally. Flipping about the span centre keeps the
+   same tidy chevron-inside-box relationship, so the click box lands on the visible
+   arrow just like prev — instead of the old geometry that threw it into the margin. */
+.slider-arrow.next span {
+  transform: scaleX(-1);
 }
 
 .slider-arrow:disabled {
@@ -1154,12 +1188,14 @@ section {
   transform: translate(-50%, -50%) rotate(45deg);
 }
 
+/* Same chevron as prev; the scaleX(-1) on `.slider-arrow.next span` flips it to
+   point right, keeping the arrow centred in its click box. */
 .slider-arrow.next span::before {
-  transform: translate(-50%, -50%) rotate(135deg);
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .slider-arrow.next span::after {
-  transform: translate(-50%, -50%) rotate(-135deg);
+  transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .community-dots,
@@ -1271,7 +1307,9 @@ section {
 .diaspora-grid {
   display: flex;
   gap: 30px;
-  margin-top: 56px;
+  margin-top: 36px;
+  padding-top: 20px;
+  padding-bottom: 12px;
   overflow-x: auto;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
@@ -1400,12 +1438,15 @@ section {
   position: absolute;
   left: 50%;
   top: 50%;
+  right: auto;
+  bottom: auto;
+  width: 100%;
   z-index: 2;
   display: block;
   padding: 0 22px;
   color: var(--gold);
   font-family: "Gabriela", "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(17px, 1.5vw, 29px);
+  font-size: clamp(38.25px, 3.375vw, 65.25px);
   line-height: 1.12;
   font-weight: 500;
   text-align: center;
@@ -1424,7 +1465,7 @@ section {
 }
 
 .site-footer {
-  padding-block: var(--section-gap);
+  padding-block: 41px;
   color: var(--white);
   background: #003546;
 }
@@ -1445,12 +1486,12 @@ section {
 }
 
 .footer-contact address {
-  margin: 46px 0 56px;
+  margin: 26px 0 32px;
   color: rgba(255, 255, 255, 0.9);
   font-style: normal;
   text-transform: uppercase;
   font-size: 14px;
-  line-height: 1.7;
+  line-height: 1.45;
 }
 
 .footer-contact a {
@@ -1464,12 +1505,12 @@ section {
   grid-template-columns: minmax(260px, 410px) max-content;
   align-items: center;
   gap: 34px;
-  margin: 46px 0 42px;
+  margin: 26px 0 26px;
 }
 
 .footer-subscribe input,
 .footer-subscribe button {
-  height: 60px;
+  height: 46px;
   border: 0;
 }
 
@@ -1495,7 +1536,7 @@ section {
 }
 
 .footer-subscribe h3 {
-  margin-bottom: 24px;
+  margin-bottom: 15px;
 }
 
 .socials {
@@ -1526,10 +1567,11 @@ section {
 
 .footer-links ul {
   display: grid;
-  gap: 14px;
-  margin: 46px 0 0;
+  gap: 7px;
+  margin: 22px 0 0;
   padding: 0;
   list-style: none;
+  line-height: 1.2;
 }
 
 .footer-links a {
@@ -1785,6 +1827,73 @@ section {
   --motion-delay: calc(var(--item-delay, 0s) + 0.23s);
 }
 
+/* Settled-state fix. The card-grid reveal rules use `.motion-item-visible <child>`
+   (specificity 0,2,0), but the matching hidden rules are container-scoped
+   (`.community-carousel.reveal .community-card .image-frame`, up to 0,4,0). The
+   animation plays regardless of specificity, but once it ends the higher-specificity
+   hidden rule would win again and the content would vanish. These selectors mirror
+   the hidden rules plus `.motion-item-visible` on the card, so the resting state
+   outranks the hidden state. The animation itself is still declared on
+   `.motion-item-visible` and is untouched here. */
+.property-gallery.reveal .image-card.motion-item-visible .image-frame,
+.property-gallery.reveal .image-card.motion-item-visible span:last-child,
+.community-carousel.reveal .community-card.motion-item-visible .image-frame,
+.community-carousel.reveal .community-card.motion-item-visible h3,
+.community-carousel.reveal .community-card.motion-item-visible p,
+.community-carousel.reveal .community-card.motion-item-visible .community-button,
+.diaspora-grid.reveal .diaspora-card.motion-item-visible .diaspora-image,
+.diaspora-grid.reveal .diaspora-card.motion-item-visible h3,
+.diaspora-grid.reveal .diaspora-card.motion-item-visible .location,
+.diaspora-grid.reveal .diaspora-card.motion-item-visible p,
+.tile-grid.reveal .feature-tile.motion-item-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Blog / insight / testimonial tiles: take them out of the scroll-reveal path.
+   The reveal animation could leave a tile stuck hidden (backwards fill) and left
+   the hover name off-centre (its `transform: none` dropped the -50% X centering).
+   Keep each tile permanently visible, and keep the name a centred, hover-only
+   overlay — winning over the generic .motion-item-visible rules. */
+.tile-grid.reveal .feature-tile,
+.tile-grid.reveal .feature-tile.motion-item-visible {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+.tile-grid.reveal .feature-tile > img {
+  opacity: 1;
+  animation: none;
+}
+
+.tile-grid.reveal .feature-tile span,
+.tile-grid.reveal .feature-tile.motion-item-visible span {
+  opacity: 0;
+  transform: translate(-50%, -45%);
+  animation: none;
+}
+
+.tile-grid.reveal .feature-tile:hover span,
+.tile-grid.reveal .feature-tile:focus-visible span,
+.tile-grid.reveal .feature-tile.motion-item-visible:hover span,
+.tile-grid.reveal .feature-tile.motion-item-visible:focus-visible span {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+/* Partners marquee: the logos must span the full width immediately and let the
+   continuous loop be the only motion — no blank ribbon, no reveal slide-in.
+   The loop lives on `.partner-track`; this only cancels the container's reveal
+   entrance so the ribbon is never hidden or offset. The `Our Partners:` heading
+   keeps its normal reveal. */
+.partners-inner.reveal .partner-marquee,
+.partners-inner.reveal.is-visible .partner-marquee {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
 .hero .reveal,
 .hero .reveal.is-visible {
   opacity: 1;
@@ -1836,45 +1945,57 @@ section {
   }
 }
 
-/* Stability rollback: content must never depend on reveal animation to remain visible. */
-.reveal,
-.reveal.reveal-from-left,
-.reveal.reveal-from-right,
-.reveal.is-visible,
-.reveal.reveal-from-left.is-visible,
-.reveal.reveal-from-right.is-visible {
+/* Motion is gated behind `html.motion-ready`, which the head bootstrap in
+   index.html adds before first paint — only after confirming IntersectionObserver
+   support and no reduced-motion preference. Until then, and for no-JS / unsupported
+   browsers / reduced-motion, every reveal element is forced to its final visible
+   state so content can never be trapped hidden. This is the glitch/FOUC safety net. */
+html:not(.motion-ready) .reveal,
+html:not(.motion-ready) .reveal.reveal-from-left,
+html:not(.motion-ready) .reveal.reveal-from-right,
+html:not(.motion-ready) .reveal.is-visible,
+html:not(.motion-ready) .reveal.reveal-from-left.is-visible,
+html:not(.motion-ready) .reveal.reveal-from-right.is-visible {
   opacity: 1 !important;
   transform: none !important;
   animation: none !important;
 }
 
-.section-copy.reveal .section-kicker,
-.section-copy.reveal h2,
-.section-copy.reveal p,
-.section-copy.reveal .pill-button,
-.diaspora-head.reveal .section-kicker,
-.diaspora-head.reveal h2,
-.diaspora-head.reveal .country-filter,
-.diaspora-copy.reveal p,
-.partners-inner.reveal h2,
-.partners-inner.reveal .partner-marquee,
-.footer-grid.reveal > *,
-.property-gallery.reveal .image-card .image-frame,
-.property-gallery.reveal .image-card span:last-child,
-.community-carousel.reveal .community-card .image-frame,
-.community-carousel.reveal .community-card h3,
-.community-carousel.reveal .community-card p,
-.community-carousel.reveal .community-card .community-button,
-.diaspora-grid.reveal .diaspora-card .diaspora-image,
-.diaspora-grid.reveal .diaspora-card h3,
-.diaspora-grid.reveal .diaspora-card .location,
-.diaspora-grid.reveal .diaspora-card p,
-.tile-grid.reveal .feature-tile,
-.reveal .section-kicker span,
-.motion-item-visible {
+html:not(.motion-ready) .section-copy.reveal .section-kicker,
+html:not(.motion-ready) .section-copy.reveal h2,
+html:not(.motion-ready) .section-copy.reveal p,
+html:not(.motion-ready) .section-copy.reveal .pill-button,
+html:not(.motion-ready) .diaspora-head.reveal .section-kicker,
+html:not(.motion-ready) .diaspora-head.reveal h2,
+html:not(.motion-ready) .diaspora-head.reveal .country-filter,
+html:not(.motion-ready) .diaspora-copy.reveal p,
+html:not(.motion-ready) .partners-inner.reveal h2,
+html:not(.motion-ready) .partners-inner.reveal .partner-marquee,
+html:not(.motion-ready) .footer-grid.reveal > *,
+html:not(.motion-ready) .property-gallery.reveal .image-card .image-frame,
+html:not(.motion-ready) .property-gallery.reveal .image-card span:last-child,
+html:not(.motion-ready) .community-carousel.reveal .community-card .image-frame,
+html:not(.motion-ready) .community-carousel.reveal .community-card h3,
+html:not(.motion-ready) .community-carousel.reveal .community-card p,
+html:not(.motion-ready) .community-carousel.reveal .community-card .community-button,
+html:not(.motion-ready) .diaspora-grid.reveal .diaspora-card .diaspora-image,
+html:not(.motion-ready) .diaspora-grid.reveal .diaspora-card h3,
+html:not(.motion-ready) .diaspora-grid.reveal .diaspora-card .location,
+html:not(.motion-ready) .diaspora-grid.reveal .diaspora-card p,
+html:not(.motion-ready) .tile-grid.reveal .feature-tile,
+html:not(.motion-ready) .reveal .section-kicker span,
+html:not(.motion-ready) .motion-item-visible {
   opacity: 1 !important;
   transform: none !important;
   animation: none !important;
+}
+
+/* The search bar sits above the featured content. Per request, motion begins at
+   featured properties, so the search bar stays static even once motion is ready. */
+.search-bar.reveal {
+  opacity: 1;
+  transform: none;
+  animation: none;
 }
 
 .visually-hidden {
@@ -2567,7 +2688,7 @@ section {
   }
 
   .community-carousel {
-    margin-top: 34px;
+    margin-top: 14px;
     grid-template-columns: 1fr;
     row-gap: 18px;
   }
@@ -2613,7 +2734,7 @@ section {
 
   .diaspora-grid {
     gap: 22px;
-    margin-top: 34px;
+    margin-top: 14px;
   }
 
   .diaspora-card {

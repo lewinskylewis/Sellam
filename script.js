@@ -488,9 +488,10 @@ function setupCommunityCarousel() {
 }
 
 function setupRevealAnimations() {
-  document.querySelectorAll(".reveal").forEach((item) => {
-    item.classList.add("is-visible");
-  });
+  // Scroll-triggered reveals are owned by the motion bootstrap in index.html's
+  // <head> (IntersectionObserver, gated on `html.motion-ready`). When motion is
+  // disabled (reduced-motion / no IntersectionObserver), the CSS fail-safe keeps
+  // every section visible, so there is nothing to toggle here.
 }
 
 function setupForms() {

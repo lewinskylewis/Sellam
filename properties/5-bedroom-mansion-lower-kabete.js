@@ -1,11 +1,11 @@
 window.SELLAM_PROPERTY_PAGE = {
   title: "5 Bedroom Mansion",
   location: "Lower Kabete, Nairobi",
-  price: "Price on Application",
+  price: "Sale, 250Million | Rent, $10,000/month",
   hero: "assets/images/Premium properties/Lower Kabete 5 Bedroom (2).jpeg",
   heroAlt: "5 Bedroom Mansion in Lower Kabete",
   description:
-    "This 5 Bedroom Mansion in Lower Kabete offers a private, expansive home for buyers seeking scale, comfort, and an established residential setting. The property balances generous interiors with refined finishes and a calm address suitable for family living and entertaining.\n\nLower Kabete provides a composed environment with strong access to schools, shopping, diplomatic neighborhoods, and Nairobi's key residential corridors.",
+    "This 5 bed all en-suite, smart home has all the luxury a family needs for easy living. Large living room with curtain, light, security automation, which can be controlled from anywhere as long as you have WIFI connectivity in the house and on your smart gadget, for your peace of mind. outdoor jacuzzi for 8 people.",
   featureLocation: "Lower Kabete address with access to Westlands, schools, private clubs, and established family neighborhoods.",
   gallery: [
     { src: "assets/images/Premium properties/Lower Kabete 5 Bedroom (2).jpeg", alt: "5 Bedroom Mansion Lower Kabete exterior" },
