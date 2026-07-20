@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@100;300;400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     >
     <link rel="stylesheet" href="styles.css">
@@ -93,6 +93,7 @@
         }
       })();
     </script>
+    <script src="site-motion.js"></script>
   </head>
   <body>
     <header class="site-header" aria-label="Primary navigation">
@@ -208,19 +209,29 @@
                 <span>Villa</span>
               </label>
               <label class="filter-option">
-                <input type="checkbox" name="property_type" value="villa">
+                <input type="checkbox" name="property_type" value="mansion">
                 <span class="checkmark"></span>
-                <span>Offices</span>
+                <span>Mansion</span>
               </label>
               <label class="filter-option">
-                <input type="checkbox" name="property_type" value="villa">
+                <input type="checkbox" name="property_type" value="bungalow">
                 <span class="checkmark"></span>
-                <span>Commercial</span>
+                <span>Bungalow</span>
               </label>
               <label class="filter-option">
-                <input type="checkbox" name="property_type" value="villa">
+                <input type="checkbox" name="property_type" value="penthouse">
+                <span class="checkmark"></span>
+                <span>Penthouse</span>
+              </label>
+              <label class="filter-option">
+                <input type="checkbox" name="property_type" value="land">
                 <span class="checkmark"></span>
                 <span>Land</span>
+              </label>
+              <label class="filter-option">
+                <input type="checkbox" name="property_type" value="commercial">
+                <span class="checkmark"></span>
+                <span>Commercial</span>
               </label>
             </div>
           </div>
@@ -234,8 +245,8 @@
               <span class="chevron"></span>
             </button>
             <div class="filter-menu checklist-menu" role="group" aria-label="Bedroom options">
-                <label class="filter-option">
-                <input type="checkbox" name="bedrooms" value="1">
+              <label class="filter-option">
+                <input type="checkbox" name="bedrooms" value="0">
                 <span class="checkmark"></span>
                 <span>Studio Apt.</span>
               </label>
@@ -250,22 +261,22 @@
                 <span>2 Bedrooms</span>
               </label>
               <label class="filter-option">
-                <input type="checkbox" name="bedrooms" value="2">
+                <input type="checkbox" name="bedrooms" value="3">
                 <span class="checkmark"></span>
                 <span>3 Bedrooms</span>
               </label>
               <label class="filter-option">
-                <input type="checkbox" name="bedrooms" value="3_plus">
+                <input type="checkbox" name="bedrooms" value="4">
                 <span class="checkmark"></span>
                 <span>4 Bedrooms</span>
               </label>
               <label class="filter-option">
-                <input type="checkbox" name="bedrooms" value="2">
+                <input type="checkbox" name="bedrooms" value="5">
                 <span class="checkmark"></span>
                 <span>5 Bedrooms</span>
               </label>
               <label class="filter-option">
-                <input type="checkbox" name="bedrooms" value="2">
+                <input type="checkbox" name="bedrooms" value="6_plus">
                 <span class="checkmark"></span>
                 <span>6+ Bedrooms</span>
               </label>
@@ -371,75 +382,83 @@
                 <span>Westlands</span>
               </label>
               <label class="filter-option">
-                <input type="checkbox" name="communities" value="gigiri">
+                <input type="checkbox" name="communities" value="thigiri">
                 <span class="checkmark"></span>
                 <span>Thigiri</span>
               </label>
               <label class="filter-option">
-                <input type="checkbox" name="communities" value="gigiri">
+                <input type="checkbox" name="communities" value="rosslyn">
                 <span class="checkmark"></span>
                 <span>Rosslyn</span>
               </label>
               <label class="filter-option">
-                <input type="checkbox" name="communities" value="gigiri">
+                <input type="checkbox" name="communities" value="parklands">
                 <span class="checkmark"></span>
                 <span>Parklands</span>
               </label>
               <label class="filter-option">
-                <input type="checkbox" name="communities" value="gigiri">
+                <input type="checkbox" name="communities" value="lower-kabete">
                 <span class="checkmark"></span>
                 <span>Lower Kabete</span>
               </label>
               <label class="filter-option">
-                <input type="checkbox" name="communities" value="gigiri">
-                <span class="checkmark"></span>
-                <span>Kilimani</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="gigiri">
+                <input type="checkbox" name="communities" value="muthangari">
                 <span class="checkmark"></span>
                 <span>Muthangari</span>
               </label>
               <label class="filter-option">
-                <input type="checkbox" name="communities" value="gigiri">
+                <input type="checkbox" name="communities" value="kitisuru">
                 <span class="checkmark"></span>
                 <span>Kitisuru</span>
               </label>
               <label class="filter-option">
-                <input type="checkbox" name="communities" value="gigiri">
+                <input type="checkbox" name="communities" value="spring-valley">
                 <span class="checkmark"></span>
                 <span>Spring Valley</span>
               </label>
-                <label class="filter-option">
-                <input type="checkbox" name="communities" value="gigiri">
+              <label class="filter-option">
+                <input type="checkbox" name="communities" value="loresho">
                 <span class="checkmark"></span>
                 <span>Loresho</span>
               </label>
-                <label class="filter-option">
-                <input type="checkbox" name="communities" value="gigiri">
-                <span class="checkmark"></span>
-                <span>Lower Kabete</span>
-              </label>
-                  <label class="filter-option">
-                <input type="checkbox" name="communities" value="gigiri">
+              <label class="filter-option">
+                <input type="checkbox" name="communities" value="riverside">
                 <span class="checkmark"></span>
                 <span>Riverside</span>
               </label>
-                  <label class="filter-option">
-                <input type="checkbox" name="communities" value="gigiri">
+              <label class="filter-option">
+                <input type="checkbox" name="communities" value="nyali">
                 <span class="checkmark"></span>
                 <span>Nyali</span>
               </label>
-                  <label class="filter-option">
-                <input type="checkbox" name="communities" value="gigiri">
+              <label class="filter-option">
+                <input type="checkbox" name="communities" value="vipingo">
                 <span class="checkmark"></span>
                 <span>Vipingo</span>
+              </label>
+              <label class="filter-option">
+                <input type="checkbox" name="communities" value="ngong">
+                <span class="checkmark"></span>
+                <span>Ngong</span>
+              </label>
+              <label class="filter-option">
+                <input type="checkbox" name="communities" value="syokimau">
+                <span class="checkmark"></span>
+                <span>Syokimau</span>
               </label>
             </div>
           </div>
 
           <button class="search-submit" type="submit">Search</button>
         </form>
+
+        <div class="search-results" id="searchResults" hidden>
+          <div class="search-results-head">
+            <h2 class="search-results-count"></h2>
+            <button class="search-results-clear" type="button">Clear search</button>
+          </div>
+          <div class="search-results-grid"></div>
+        </div>
       </section>
 
       <section class="properties-section section-pad" id="rent">
@@ -961,6 +980,9 @@
       </div>
     </footer>
 
+    <script src="data/properties.js"></script>
+    <script src="property-search.js"></script>
     <script src="script.js"></script>
+    <script src="nav-active.js"></script>
   </body>
 </html>

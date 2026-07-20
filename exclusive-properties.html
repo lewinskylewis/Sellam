@@ -11,11 +11,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@100;300;400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     >
     <link rel="stylesheet" href="premium-properties.css">
     <link rel="stylesheet" href="enquiry-modal.css">
+    <script src="site-motion.js"></script>
   </head>
   <body>
     <header class="site-header" aria-label="Primary navigation">
@@ -25,7 +26,7 @@
         </a>
 
         <ul class="desktop-nav" aria-label="Main menu">
-          <li><a href="index.html#buy">Buy</a></li>
+          <li><a href="buy.html">Buy</a></li>
           <li><a href="index.html#rent">Rent</a></li>
           <li><a href="index.html#leasing">Leasing</a></li>
           <li><a href="index.html#off-plan">Off-plan</a></li>
@@ -59,7 +60,7 @@
           </div>
 
           <ul class="mobile-nav-list">
-            <li><a href="index.html#buy">Buy</a></li>
+            <li><a href="buy.html">Buy</a></li>
             <li><a href="index.html#rent">Rent</a></li>
             <li><a href="index.html#leasing">Leasing</a></li>
             <li><a href="index.html#off-plan">Off-plan</a></li>
@@ -124,214 +125,8 @@
       </section>
 
       <section class="properties-list" aria-label="Exclusive property listings">
-        <div class="page-shell property-rows" data-property-rows>
-          <div class="listing-row">
-            <article class="property-card reveal" id="exclusive-dg-jkia" data-card data-order="1" data-title="DG JKIA" data-location="Syokimau, Nairobi" data-bedrooms="4" data-bathrooms="3">
-              <a class="property-image" href="#exclusive-dg-jkia">
-                <img src="assets/images/premium-kitchen.webp" alt="DG JKIA exclusive kitchen and dining interior">
-              </a>
-              <div class="property-info">
-                <h2>DG JKIA</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Syokimau, Nairobi
-                </p>
-                <p class="summary">A private off-market residence shaped for discerning buyers seeking polished interiors, controlled access, refined amenities, and long-term investment strength near Nairobi's growing airport corridor.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>4 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>3 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Wifi</li><li>Swimming pool</li><li>Gym</li><li>Parking space</li><li>Security</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="property.html?id=exclusive-dg-jkia">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="DG JKIA" data-location="Syokimau, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-
-            <article class="property-card reveal" id="exclusive-crestpoint-karen" data-card data-order="2" data-title="Crestpoint" data-location="Karen, Nairobi" data-bedrooms="3" data-bathrooms="3">
-              <a class="property-image" href="#exclusive-crestpoint-karen">
-                <img src="assets/images/fax.jpeg" alt="Crestpoint Karen exclusive living room interior">
-              </a>
-              <div class="property-info">
-                <h2>Crestpoint</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Karen, Nairobi
-                </p>
-                <p class="summary">Crestpoint brings rare Karen privacy together with composed interiors, generous light, elegant finishes, and a setting designed for selective homeowners who value calm and discretion.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>3 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>3 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Wifi</li><li>Swimming pool</li><li>Gym</li><li>Parking space</li><li>Security</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="property.html?id=exclusive-crestpoint-karen">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="Crestpoint" data-location="Karen, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="listing-row">
-            <article class="property-card reveal" id="exclusive-dg-west" data-card data-order="3" data-title="DG West" data-location="Westlands, Nairobi" data-bedrooms="4" data-bathrooms="3">
-              <a class="property-image" href="#exclusive-dg-west">
-                <img src="assets/images/Fax2.jpg" alt="DG West exclusive living room interior">
-              </a>
-              <div class="property-info">
-                <h2>DG West</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Westlands, Nairobi
-                </p>
-                <p class="summary">DG West is positioned for clients seeking elevated city living, panoramic convenience, secure access, premium amenities, and an address with strong long-term demand.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>4 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>3 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Wifi</li><li>Swimming pool</li><li>Gym</li><li>Parking space</li><li>Security</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="property.html?id=exclusive-dg-west">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="DG West" data-location="Westlands, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-
-            <article class="property-card reveal" id="exclusive-aum-residence" data-card data-order="4" data-title="Aum Residence" data-location="Kileleshwa, Nairobi" data-bedrooms="3" data-bathrooms="3">
-              <a class="property-image" href="#exclusive-aum-residence">
-                <img src="assets/images/aumout.jpeg" alt="Aum Residence exclusive exterior">
-              </a>
-              <div class="property-info">
-                <h2>Aum Residence</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Kileleshwa, Nairobi
-                </p>
-                <p class="summary">Aum Residence combines sculptural architecture, refined apartment living, secure access, and a privileged Kileleshwa setting designed for buyers who want exclusivity without excess.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>3 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>3 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Wifi</li><li>Swimming pool</li><li>Gym</li><li>Parking space</li><li>Security</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="property.html?id=exclusive-aum-residence">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="Aum Residence" data-location="Kileleshwa, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="listing-row">
-            <article class="property-card reveal" id="exclusive-kileleshwa-heights" data-card data-order="5" data-title="Kileleshwa Heights" data-location="Kileleshwa, Nairobi" data-bedrooms="3" data-bathrooms="3">
-              <a class="property-image" href="#exclusive-kileleshwa-heights">
-                <img src="assets/images/Kileout.png" alt="Kileleshwa Heights exclusive exterior">
-              </a>
-              <div class="property-info">
-                <h2>Kileleshwa Heights</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Kileleshwa, Nairobi
-                </p>
-                <p class="summary">Kileleshwa Heights offers a limited collection of premium apartments with green surroundings, strong connectivity, modern amenities, and polished residential comfort.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>4 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>3 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Wifi</li><li>Swimming pool</li><li>Gym</li><li>Parking space</li><li>Security</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="property.html?id=exclusive-kileleshwa-heights">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="Kileleshwa Heights" data-location="Kileleshwa, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-
-            <article class="property-card reveal" id="exclusive-crystal-oak" data-card data-order="6" data-title="Crystal Oak" data-location="Runda, Nairobi" data-bedrooms="4" data-bathrooms="4">
-              <a class="property-image" href="#exclusive-crystal-oak">
-                <img src="assets/images/grosout.JPG" alt="Crystal Oak exclusive residence exterior">
-              </a>
-              <div class="property-info">
-                <h2>Crystal Oak</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Runda, Nairobi
-                </p>
-                <p class="summary">Crystal Oak is a discreet Runda address with generous space, refined detailing, privacy, and proximity to Nairobi's most established diplomatic and family neighborhoods.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>3 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>3 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Wifi</li><li>Swimming pool</li><li>Gym</li><li>Parking space</li><li>Security</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="property.html?id=exclusive-crystal-oak">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="Crystal Oak" data-location="Runda, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="listing-row">
-            <article class="property-card reveal" id="exclusive-moon-valley" data-card data-order="7" data-title="Moon Valley" data-location="Nyari, Nairobi" data-bedrooms="4" data-bathrooms="4">
-              <a class="property-image" href="#exclusive-moon-valley">
-                <img src="assets/images/hero-moon-valley.webp" alt="Moon Valley exclusive tower exterior">
-              </a>
-              <div class="property-info">
-                <h2>Moon Valley</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Nyari, Nairobi
-                </p>
-                <p class="summary">Moon Valley brings rare off-market homes to Nyari, pairing privacy, elegant architecture, strong security, and a carefully selected residential environment.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>4 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>3 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Wifi</li><li>Swimming pool</li><li>Gym</li><li>Parking space</li><li>Security</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="property.html?id=exclusive-moon-valley">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="Moon Valley" data-location="Nyari, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-
-            <article class="property-card reveal" id="exclusive-grosvenor" data-card data-order="8" data-title="Grosvenor" data-location="Westlands, Nairobi" data-bedrooms="3" data-bathrooms="3">
-              <a class="property-image" href="#exclusive-grosvenor">
-                <img src="assets/images/grosvenor.jpg" alt="Grosvenor exclusive residence exterior">
-              </a>
-              <div class="property-info">
-                <h2>Grosvenor</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Westlands, Nairobi
-                </p>
-                <p class="summary">Grosvenor is a premium city residence for buyers who want refined finishes, controlled access, central convenience, and the confidence of a high-demand Westlands address.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>3 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>3 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Wifi</li><li>Swimming pool</li><li>Gym</li><li>Parking space</li><li>Security</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="property.html?id=exclusive-grosvenor">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="Grosvenor" data-location="Westlands, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-          </div>
+        <div class="page-shell property-rows" data-property-rows data-listing="exclusive">
+          <!-- Cards are rendered from data/properties.js by listings.js -->
         </div>
       </section>
     </main>
@@ -394,8 +189,14 @@
       </div>
     </footer>
 
+    <!-- Central inventory + card renderer run first so the cards exist
+         before the other scripts initialise. -->
+    <script src="data/properties.js"></script>
+    <script src="listings.js"></script>
     <script src="enquiry-config.js"></script>
     <script src="enquiry-modal.js"></script>
     <script src="premium-properties.js"></script>
+    <script src="nav-active.js"></script>
+    <script src="nav-active.js"></script>
   </body>
 </html>

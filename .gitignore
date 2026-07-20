@@ -7,3 +7,9 @@ tmp/
 # OS / editor cruft
 .DS_Store
 Thumbs.db
+
+# Local/server secrets and Vercel project metadata
+.env
+.env.*
+!.env.example
+.vercel/

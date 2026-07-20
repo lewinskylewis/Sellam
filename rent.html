@@ -11,11 +11,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@100;300;400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     >
     <link rel="stylesheet" href="premium-properties.css">
     <link rel="stylesheet" href="enquiry-modal.css">
+    <script src="site-motion.js"></script>
   </head>
   <body>
     <header class="site-header" aria-label="Primary navigation">
@@ -25,7 +26,7 @@
         </a>
 
         <ul class="desktop-nav" aria-label="Main menu">
-          <li><a href="index.html#buy">Buy</a></li>
+          <li><a href="buy.html">Buy</a></li>
           <li><a href="rent.html">Rent</a></li>
           <li><a href="index.html#leasing">Leasing</a></li>
           <li><a href="index.html#off-plan">Off-plan</a></li>
@@ -59,7 +60,7 @@
           </div>
 
           <ul class="mobile-nav-list">
-            <li><a href="index.html#buy">Buy</a></li>
+            <li><a href="buy.html">Buy</a></li>
             <li><a href="rent.html">Rent</a></li>
             <li><a href="index.html#leasing">Leasing</a></li>
             <li><a href="index.html#off-plan">Off-plan</a></li>
@@ -80,398 +81,58 @@
     <main>
       <section class="premium-hero" aria-label="Premium properties hero">
         <div class="premium-hero-image" aria-hidden="true"></div>
-      </section>
-
-      <section class="properties-intro">
-        <div class="page-shell">
-          <p class="intro-copy reveal">
-            SELLAM offers a curated portfolio of exclusive properties in Kenya's most desirable locations, blending elegant design, modern finishes, and seamless management. As a trusted leader in sales, leasing, and management, we provide more than homes - we deliver exclusive listings and off-market opportunities for investors, high-net-worth individuals, and discerning buyers. With expertise, excellence, and bespoke solutions, SELLAM empowers clients to Achieve More through premium investments and exceptional living experiences. SELLAM offers a curated portfolio of exclusive properties in Kenya's most desirable locations, blending elegant design, modern finishes, and seamless management. As a trusted leader in sales, leasing, and management, we provide more than homes - we deliver exclusive listings and off-market opportunities for investors, high-net-worth individuals, and discerning buyers. With expertise, excellence, and bespoke solutions, SELLAM empowers clients to Achieve More through premium investments and exceptional living experiences.
-          </p>
-
-          <div class="listing-toolbar reveal">
-            <h1>13 Units available</h1>
-            <span class="toolbar-line" aria-hidden="true"></span>
-
-            <div class="toolbar-actions">
-              <div class="sort-select" data-sort-select>
-                <button class="sort-trigger" type="button" aria-expanded="false" aria-controls="sortMenu">
-                  <span>Sort by</span>
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="m6.7 8.75 5.3 5.3 5.3-5.3 1.4 1.4-6.7 6.7-6.7-6.7 1.4-1.4Z"/>
-                  </svg>
-                </button>
-                <div class="sort-menu" id="sortMenu">
-                  <button type="button" data-sort="name">Name</button>
-                  <button type="button" data-sort="bedrooms">No of Bedrooms</button>
-                  <button type="button" data-sort="bathrooms">No of Bathrooms</button>
+        <div class="rent-hero-content page-shell">
+          <p class="rent-hero-copy">Explore a dynamic collection of rental properties curated for every lifestyle. From stylish city apartments and refined family homes to exclusive luxury residences, each property is selected for its comfort, quality, and location—giving you the freedom to find a space that feels perfectly suited to the way you live.</p>
+          <form class="search-bar rent-search-bar" data-rent-filter aria-label="Filter rental properties">
+            <div class="search-filter" data-rent-filter-group>
+              <button class="filter-trigger" type="button" aria-expanded="false" aria-controls="rentPropertyTypeMenu">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V9h5V3h6v8h5v10H4Zm2-2h3v-3H6v3Zm0-5h3v-3H6v3Zm5 5h3v-3h-3v3Zm0-5h3v-3h-3v3Zm0-5h2V5h-2v4Zm5 10h2v-6h-2v6Zm0-8h2v-2h-2v2Z"/></svg>
+                <span data-filter-label>Property Type</span><span class="chevron" aria-hidden="true"></span>
+              </button>
+              <div class="filter-menu checklist-menu" id="rentPropertyTypeMenu" role="group" aria-label="Property type options">
+                <label class="filter-option"><input type="checkbox" name="property-type" value="Apartment"><span class="checkmark"></span><span>Apartment</span></label><label class="filter-option"><input type="checkbox" name="property-type" value="Villa"><span class="checkmark"></span><span>Villa</span></label><label class="filter-option"><input type="checkbox" name="property-type" value="Mansion"><span class="checkmark"></span><span>Mansion</span></label><label class="filter-option"><input type="checkbox" name="property-type" value="Bungalow"><span class="checkmark"></span><span>Bungalow</span></label><label class="filter-option"><input type="checkbox" name="property-type" value="Penthouse"><span class="checkmark"></span><span>Penthouse</span></label>
+              </div>
+            </div>
+            <div class="search-filter" data-rent-filter-group>
+              <button class="filter-trigger" type="button" aria-expanded="false" aria-controls="rentBedroomsMenu">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21V9.5A4.5 4.5 0 0 1 7.5 5H11a3 3 0 0 1 3 3v1h2.5A4.5 4.5 0 0 1 21 13.5V21h-2v-3H5v3H3Zm2-5h14v-2.5a2.5 2.5 0 0 0-2.5-2.5H5v5Zm2.5-7H12V8a1 1 0 0 0-1-1H7.5A2.5 2.5 0 0 0 5 9.5V9h2.5Z"/></svg>
+                <span data-filter-label>Bedrooms</span><span class="chevron" aria-hidden="true"></span>
+              </button>
+              <div class="filter-menu checklist-menu" id="rentBedroomsMenu" role="group" aria-label="Bedroom options">
+                <label class="filter-option"><input type="checkbox" name="bedrooms" value="1"><span class="checkmark"></span><span>1 Bedroom</span></label><label class="filter-option"><input type="checkbox" name="bedrooms" value="2"><span class="checkmark"></span><span>2 Bedrooms</span></label><label class="filter-option"><input type="checkbox" name="bedrooms" value="3"><span class="checkmark"></span><span>3 Bedrooms</span></label><label class="filter-option"><input type="checkbox" name="bedrooms" value="4"><span class="checkmark"></span><span>4 Bedrooms</span></label><label class="filter-option"><input type="checkbox" name="bedrooms" value="5"><span class="checkmark"></span><span>5 Bedrooms</span></label><label class="filter-option"><input type="checkbox" name="bedrooms" value="6+"><span class="checkmark"></span><span>6+ Bedrooms</span></label>
+              </div>
+            </div>
+            <div class="search-filter" data-rent-filter-group>
+              <button class="filter-trigger" type="button" aria-expanded="false" aria-controls="rentBathroomsMenu">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Zm0 2v1a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-1H7Z"/></svg>
+                <span data-filter-label>Bathrooms</span><span class="chevron" aria-hidden="true"></span>
+              </button>
+              <div class="filter-menu checklist-menu" id="rentBathroomsMenu" role="group" aria-label="Bathroom options">
+                <label class="filter-option"><input type="checkbox" name="bathrooms" value="1"><span class="checkmark"></span><span>1 Bathroom</span></label><label class="filter-option"><input type="checkbox" name="bathrooms" value="2"><span class="checkmark"></span><span>2 Bathrooms</span></label><label class="filter-option"><input type="checkbox" name="bathrooms" value="3"><span class="checkmark"></span><span>3 Bathrooms</span></label><label class="filter-option"><input type="checkbox" name="bathrooms" value="4"><span class="checkmark"></span><span>4 Bathrooms</span></label><label class="filter-option"><input type="checkbox" name="bathrooms" value="5"><span class="checkmark"></span><span>5 Bathrooms</span></label><label class="filter-option"><input type="checkbox" name="bathrooms" value="6+"><span class="checkmark"></span><span>6+ Bathrooms</span></label>
+              </div>
+            </div>
+            <div class="search-filter" data-rent-filter-group>
+              <button class="filter-trigger" type="button" aria-expanded="false" aria-controls="rentPriceMenu">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14a2 2 0 0 1 2 2v5h-2V7H5v10h7v2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm3 4h4v2H8V8Zm0 4h7v2H8v-2Zm9 1a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-6.5-7.5h1.5v1.5h-1.5V7.5Z"/></svg>
+                <span data-filter-label>Price Range</span><span class="chevron" aria-hidden="true"></span>
+              </button>
+              <div class="filter-menu price-range-menu" id="rentPriceMenu" role="group" aria-label="Price range options">
+                <div class="price-range-fields">
+                  <label class="price-field"><span>Min Price (KES)</span><select name="min-price" aria-label="Minimum monthly rent"><option value="0">0</option><option value="50000">50,000</option><option value="100000">100,000</option><option value="150000">150,000</option><option value="200000">200,000</option><option value="250000">250,000</option><option value="300000">300,000</option><option value="350000">350,000</option><option value="400000">400,000</option><option value="450000">450,000</option></select></label>
+                  <span class="price-range-separator">To</span>
+                  <label class="price-field"><span>Max Price (KES)</span><select name="max-price" aria-label="Maximum monthly rent"><option value="50000">50,000</option><option value="100000">100,000</option><option value="150000">150,000</option><option value="200000">200,000</option><option value="250000">250,000</option><option value="300000">300,000</option><option value="350000">350,000</option><option value="400000">400,000</option><option value="450000" selected>450,000</option></select></label>
                 </div>
               </div>
-
-              <button class="icon-sort-button" type="button" data-sort-shortcut="bedrooms" aria-label="Sort by number of bedrooms">
-                <svg viewBox="0 0 80 80" aria-hidden="true">
-                  <path d="M11 17h26a5 5 0 0 1 0 10H11a5 5 0 0 1 0-10Zm0 22h18a5 5 0 0 1 0 10H11a5 5 0 0 1 0-10Zm0 22h34a5 5 0 0 1 0 10H11a5 5 0 0 1 0-10Zm44.5-46.5L72 31H60v38H49V31H37l18.5-16.5Z"/>
-                </svg>
-              </button>
-
-              <button class="icon-sort-button" type="button" data-sort-shortcut="bathrooms" aria-label="Sort by number of bathrooms">
-                <svg viewBox="0 0 80 80" aria-hidden="true">
-                  <path d="M24.5 65.5 8 49h12V11h11v38h12L24.5 65.5ZM50 17h19a5 5 0 0 1 0 10H50a5 5 0 0 1 0-10Zm0 22h28a5 5 0 0 1 0 10H50a5 5 0 0 1 0-10Zm0 22h14a5 5 0 0 1 0 10H50a5 5 0 0 1 0-10Z"/>
-                </svg>
-              </button>
             </div>
-          </div>
+            <button class="search-submit" type="reset">Clear Filters</button>
+          </form>
         </div>
       </section>
 
       <section class="properties-list" aria-label="Premium property listings">
-        <div class="page-shell property-rows" data-property-rows>
-          <div class="listing-row">
-            <article class="property-card reveal" id="4 Bedroom Maisonette" data-card data-order="1" data-title="4 Bedroom Maisonette" data-property-type="Mansion" data-location="Runda, Nairobi" data-price="350000000" data-bedrooms="4" data-bathrooms="3">
-              <a class="property-image" href="property.html?id=dg-west">
-                <img src="assets/images/Premium properties/RundaMansion.jpeg" alt="DG WEST aerial pool view">
-              </a>
-              <div class="property-info">
-                <h2>4 Bedroom Maisonette</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Runda, Nairobi
-                </p>
-                <p class="summary">Set on half an acre of lush, manicured land, this masterpiece offers a blend of luxury, serenity, and modern design in one of Nairobi's most elite neighbourhoods — Runda, where the birds sing softly, the neighbours drive quietly, and security guards know you by name (and by car model).</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>4 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>3 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Wifi</li><li>Swimming pool</li><li>Gym</li><li>Parking space</li><li>Security</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="property.html?id=dg-west">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="4 Bedroom Maisonette" data-location="Runda, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-
-            <article class="property-card reveal" id="5 Bedroom Modern Villas" data-card data-order="2" data-title="5 Bedroom Modern Villas" data-property-type="Villa" data-location="Lavington, Nairobi" data-price="780000000" data-bedrooms="5" data-bathrooms="3">
-              <a class="property-image" href="property.html?id=5 Bedroom Modern Villas">
-                <img src="assets/images/Premium properties/ModernVillas-Lavington4.jpeg" alt="5 Bedroom Modern Villas exterior">
-              </a>
-              <div class="property-info">
-                <h2>5 Bedroom Modern Villas</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Lavington, Nairobi
-                </p>
-                <p class="summary">Newly built 5 Bedroom Villas for Rent in Lavington, off James Gichuru rd -Private Garden & Pool -Ample Security -All Rooms en-suite</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>5 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>3 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Wifi</li><li>Swimming pool</li><li>Gym</li><li>Parking space</li><li>Security</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="property.html?id=5 Bedroom Modern Villas">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="5 Bedroom Modern Villas" data-location="Lavington, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="listing-row">
-            <article class="property-card reveal" id="Ostrea Villas" data-card data-order="3" data-title="Ostrea Villas" data-property-type="Villa" data-location="Karen, Nairobi" data-price="165000000" data-bedrooms="5" data-bathrooms="3">
-              <a class="property-image" href="property.html?id=ostrea-villas">
-                <img src="assets/images/Premium properties/OSTREA Karen Villas.jpeg" alt="Ostrea Villas exterior">
-              </a>
-              <div class="property-info">
-                <h2>Ostrea Villas</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Karen, Nairobi
-                </p>
-                <p class="summary">Step into the future of refined living at OSTREA
-                   Karen Villas — a groundbreaking development where sophisticated luxury meets intelligent technology.
-                   Inspired by the rarity and elegance of the oyster, each villa redefines modern living with cutting-edge Al integration, all set in the lush, tranquil heart of Karen.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>4 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>3 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Wifi</li><li>Swimming pool</li><li>Gym</li><li>Parking space</li><li>Security</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="property.html?id=ostrea-villas">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="Ostrea Villas" data-location="Karen, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-
-            <article class="property-card reveal" id="5 Bedroom Mansion" data-card data-order="4" data-title="5 Bedroom Mansion" data-property-type="Mansion" data-location="Karen, Nairobi" data-price="250000000" data-bedrooms="5" data-bathrooms="6">
-              <a class="property-image" href="property.html?id=5 Bedroom Mansion">
-                <img src="assets/images/Premium properties/Naserian Karen (2).jpeg" alt="5 Bedroom Mansion, Naserian Karen exterior">
-              </a>
-              <div class="property-info">
-                <h2>5 Bedroom Mansion</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Naserian Karen, Nairobi
-                </p>
-                <p class="summary">Hidden along the breathtaking Ololua Forest in Karen, Nairobi, lies one of Kenya's most exclusive residential enclaves.
-                  A private sanctuary of only 30 luxury residences set within 20 acres of pristine greenery, offering a rare combination of luxury, privacy, security, and nature.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>5 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>6 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Wifi</li><li>Swimming pool</li><li>Gym</li><li>Parking space</li><li>Security</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="property.html?id=5 Bedroom Mansion">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="5 Bedroom Mansion" data-location="Naserian Karen, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="listing-row">
-
-
-            <article class="property-card reveal" id="5 Bedroom Mansion" data-card data-order="5" data-title="5 Bedroom Mansion" data-location="Lower Kabete,Nairobi" data-property-type="Mansion" data-price="Sale, 250Million | Rent $10,000/month" data-bedrooms="5" data-bathrooms="3">
-              <a class="property-image" href="property.html?id=5 Bedroom Mansion">
-                <img src="assets/images/Premium properties/Lower Kabete 5 Bedroom.jpeg" alt="5 Bedroom Mansion, Lower kabete exterior">
-              </a>
-              <div class="property-info">
-                <h2>5 Bedroom Mansion</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Lower Kabete, Nairobi
-                </p>
-                <p class="summary">This 5 bed all en-suite, smart home has all the luxury a family needs for easy living. 
-                  Large living room with curtain, light, security automation, which can be controlled from anywhere as long 
-                  as you have WIFI connectivity in the house and on your smart gadget, for your peace of mind. outdoor 
-                  jacuzzi for 8 people.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>5 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>3 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Wifi</li><li>Swimming pool</li><li>Gym</li><li>Parking space</li><li>Security</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="property.html?id=9 bedroom mansion">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="9 Bedroom Mansion" data-location="Ngong, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-            
-
-            <article class="property-card reveal" id="9 Bedroom Mansion" data-card data-order="6" data-title="9 Bedroom Mansion" data-property-type="Mansion" data-price="350000000" data-location="Ngong, Nairobi" data-bedrooms="9" data-bathrooms="12">
-              <a class="property-image" href="property.html?id=9 bedroom mansion">
-                <img src="assets/images/Premium properties/CROWN JEWEL (2).jpeg" alt="9 Bedroom Mansion, Ngong">
-              </a>
-              <div class="property-info">
-                <h2>9 Bedroom Mansion</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Ngong, Nairobi
-                </p>
-                <p class="summary">Set on an expansive 0.8-acre prime plot in the prestigious suburb of Lavington, Nairobi, this magnificent estate offers approximately 15,000 sq ft of luxury living space, world-class amenities, unmatched privacy, and timeless architectural elegance.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>9 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>12 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Wifi</li><li>Swimming pool</li><li>Gym</li><li>Parking space</li><li>Security</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="property.html?id=9 bedroom mansion">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="9 Bedroom Mansion" data-location="Ngong, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="listing-row">
-            <article class="property-card reveal" id="5 Bedroom Super Villa, Lower Kabete" data-card data-order="7" data-title="5 Bedroom Super Villa, Lower Kabete" data-property-type="Villa" data-location="Lower Kabete, Nairobi" data-price="185000000" data-bedrooms="5" data-bathrooms="3">
-              <a class="property-image" href="property.html?id=5-bedroom-super-villa-lower-kabete">
-                <img src="assets/images/Premium properties/Super Villa, Lower Kabete 2.jpeg" alt="5 Bedroom Super Villa exterior">
-              </a>
-              <div class="property-info">
-                <h2>5 Bedroom Super Villa</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Lower Kabete, Nairobi
-                </p>
-                <p class="summary">There are homes, and then there are sanctuaries. Just 8 km northwest of Nairobi, this masterfully planned gated community offers timeless elegance and resort-inspired tranquility. Nestled on the lush slopes of an ancient river valley, it blends natural beauty, refined design, and modern convenience.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>5 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>6 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Wifi</li><li>Swimming pool</li><li>Gym</li><li>Parking space</li><li>Security</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="property.html?id=dg-west-tower">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="DG WEST" data-location="Westlands, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-
-            <article class="property-card reveal" id="grosvenor-karen" data-card data-order="8" data-title="Grosvenor" data-location="Karen, Nairobi" data-bedrooms="3" data-bathrooms="3">
-              <a class="property-image" href="property.html?id=grosvenor-karen">
-                <img src="assets/images/premium-page-grosvenor-towers.jpg" alt="Grosvenor Karen exterior towers">
-              </a>
-              <div class="property-info">
-                <h2>Grosvenor</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Karen, Nairobi
-                </p>
-                <p class="summary">Welcome to Grosvenor - where business meets prestige. Rising in a prime commercial district, Crespoint offers state-of-the-art office spaces designed for forward-thinking enterprises. With sleek architecture, high-speed connectivity, panoramic views,</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>3 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>3 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Wifi</li><li>Swimming pool</li><li>Gym</li><li>Parking space</li><li>Security</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="property.html?id=grosvenor-karen">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="Grosvenor" data-location="Karen, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="listing-row">
-            <article class="property-card reveal" id="4-bedroom-maisonette-runda-nairobi" data-card data-order="9" data-title="4 Bedroom Maisonette" data-location="Runda, Nairobi" data-bedrooms="4" data-bathrooms="4">
-              <a class="property-image" href="properties/4-bedroom-maisonette-runda-nairobi.html">
-                <img src="assets/images/Premium properties/RundaMansion3.jpeg" alt="4 Bedroom Maisonette in Runda Nairobi exterior">
-              </a>
-              <div class="property-info">
-                <h2>4 Bedroom Maisonette</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Runda, Nairobi
-                </p>
-                <p class="summary">A private Runda maisonette with generous rooms, refined finishes, outdoor leisure spaces, and the calm residential character expected from one of Nairobi's established premium neighborhoods.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>4 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>4 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Private setting</li><li>Family living</li><li>Parking space</li><li>Security</li><li>Runda address</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="properties/4-bedroom-maisonette-runda-nairobi.html">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="4 Bedroom Maisonette" data-location="Runda, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-
-            <article class="property-card reveal" id="5-bedroom-mansion-lower-kabete" data-card data-order="10" data-title="5 Bedroom Mansion" data-location="Lower Kabete, Nairobi" data-bedrooms="5" data-bathrooms="5">
-              <a class="property-image" href="properties/5-bedroom-mansion-lower-kabete.html">
-                <img src="assets/images/Premium properties/Lower Kabete 5 Bedroom (2).jpeg" alt="5 Bedroom Mansion in Lower Kabete">
-              </a>
-              <div class="property-info">
-                <h2>5 Bedroom Mansion</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Lower Kabete, Nairobi
-                </p>
-                <p class="summary">An expansive Lower Kabete mansion balancing generous interiors, refined finishes, and a composed family address with access to schools, clubs, and key residential corridors.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>5 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>5 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Private setting</li><li>Family living</li><li>Parking space</li><li>Security</li><li>Lower Kabete</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="properties/5-bedroom-mansion-lower-kabete.html">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="5 Bedroom Mansion" data-location="Lower Kabete, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="listing-row">
-            <article class="property-card reveal" id="modern-villas-lavington" data-card data-order="11" data-title="Modern Villas" data-location="Lavington, Nairobi" data-bedrooms="4" data-bathrooms="4">
-              <a class="property-image" href="properties/modern-villas-lavington.html">
-                <img src="assets/images/Premium properties/ModernVillas-Lavington9.jpeg" alt="Modern Villas in Lavington interior">
-              </a>
-              <div class="property-info">
-                <h2>Modern Villas</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Lavington, Nairobi
-                </p>
-                <p class="summary">Contemporary Lavington villas with bright interiors, practical family planning, secure living, and easy access to schools, shopping, hospitals, and city routes.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>4 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>4 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Modern design</li><li>Family living</li><li>Parking space</li><li>Security</li><li>Lavington</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="properties/modern-villas-lavington.html">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="Modern Villas" data-location="Lavington, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-
-            <article class="property-card reveal" id="naserian-karen-nairobi" data-card data-order="12" data-title="Naserian" data-location="Karen, Nairobi" data-bedrooms="5" data-bathrooms="5">
-              <a class="property-image" href="properties/naserian-karen-nairobi.html">
-                <img src="assets/images/Premium properties/Naserian Karen.jpeg" alt="Naserian Karen residence">
-              </a>
-              <div class="property-info">
-                <h2>Naserian</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Karen, Nairobi
-                </p>
-                <p class="summary">A premium Karen residential opportunity shaped around space, privacy, secure surroundings, and long-term value in one of Nairobi's calmest villa neighborhoods.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>5 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>5 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Private setting</li><li>Villa living</li><li>Parking space</li><li>Security</li><li>Karen</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="properties/naserian-karen-nairobi.html">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="Naserian" data-location="Karen, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="listing-row">
-            <article class="property-card reveal" id="ostrea-villas-karen-nairobi" data-card data-order="13" data-title="Ostrea Villas" data-location="Karen, Nairobi" data-bedrooms="5" data-bathrooms="5">
-              <a class="property-image" href="properties/ostrea-villas-karen-nairobi.html">
-                <img src="assets/images/Premium properties/OSTREA Karen Villas (6).jpeg" alt="Ostrea Villas Karen residence">
-              </a>
-              <div class="property-info">
-                <h2>Ostrea Villas</h2>
-                <p class="location">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
-                  Karen, Nairobi
-                </p>
-                <p class="summary">Signature Karen villa living in a serene green setting, with generous planning, refined finishes, and access to schools, clubs, and premium lifestyle destinations.</p>
-                <ul class="specs">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>5 Bedrooms</li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>5 Baths</li>
-                </ul>
-                <ul class="amenities" aria-label="Amenities">
-                  <li>Villa living</li><li>Green setting</li><li>Parking space</li><li>Security</li><li>Karen</li>
-                </ul>
-                <div class="card-actions">
-                  <a href="properties/ostrea-villas-karen-nairobi.html">View Property</a>
-                  <a href="#enquire" data-enquiry-open data-property="Ostrea Villas" data-location="Karen, Nairobi">Enquire</a>
-                </div>
-              </div>
-            </article>
-          </div>
+        <div class="page-shell property-rows" data-property-rows data-listing="rent">
+          <p class="rent-empty-state" data-rent-empty hidden>No properties match the selected filters.</p>
+          <!-- Cards are rendered from data/properties.js by listings.js -->
         </div>
       </section>
     </main>
@@ -534,8 +195,14 @@
       </div>
     </footer>
 
+    <!-- Central inventory + card renderer must run first so the cards exist
+         before the enquiry modal and rent filter initialise. -->
+    <script src="data/properties.js"></script>
+    <script src="listings.js"></script>
     <script src="enquiry-config.js"></script>
     <script src="enquiry-modal.js"></script>
     <script src="premium-properties.js"></script>
+    <script src="rent-filter.js"></script>
+    <script src="nav-active.js"></script>
   </body>
 </html>

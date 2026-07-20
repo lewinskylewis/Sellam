@@ -2,6 +2,19 @@ body.enquiry-modal-open {
   overflow: hidden;
 }
 
+.enquiry-honeypot {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+  pointer-events: none !important;
+}
+
 .enquiry-modal {
   position: fixed;
   inset: 0;
@@ -196,6 +209,27 @@ body.enquiry-modal-open {
 
 .enquiry-status.is-success {
   color: #e6f7e8;
+}
+
+.enquiry-form .enquiry-status {
+  min-height: 20px;
+  margin: -8px 0 0;
+  color: #314851;
+  text-align: left;
+}
+
+.enquiry-form .enquiry-status.is-error {
+  color: #a52a1e;
+}
+
+.enquiry-form .enquiry-status.is-success {
+  color: #26713a;
+}
+
+.enquiry-form button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+  transform: none;
 }
 
 @media (max-width: 1024px) {

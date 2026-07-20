@@ -611,12 +611,65 @@ function setupRevealAnimations() {
   revealItems.forEach((item) => observer.observe(item));
 }
 
-function getProperty() {
-  if (window.SELLAM_PROPERTY_PAGE) return window.SELLAM_PROPERTY_PAGE;
+/* ---------------------------------------------------------------------------
+   Central inventory bridge (data/properties.js -> window.SELLAM_PROPERTIES).
+   This is the single source of truth going forward: editing a property there
+   updates its detail page automatically, whether reached via
+   property.html?id=<slug> or a standalone properties/<slug>.html page (both
+   resolve the same record, by id or slug). The legacy propertyData map below
+   remains only as a fallback for pages not yet migrated into the inventory
+   (the diaspora template pages).
+   --------------------------------------------------------------------------- */
 
+function findInventoryProperty(id) {
+  const list = window.SELLAM_PROPERTIES;
+  if (!Array.isArray(list) || !id) return null;
+  return list.find((item) => item.id === id || item.slug === id) || null;
+}
+
+function formatPropertyPrice(inventoryItem) {
+  const format = window.SellamSearch && typeof window.SellamSearch.formatKES === "function"
+    ? window.SellamSearch.formatKES
+    : (value) => `KES ${Number(value).toLocaleString("en-KE")}`;
+
+  const parts = [];
+  if (inventoryItem.salePrice) parts.push(`Sale, ${format(inventoryItem.salePrice)}`);
+  if (inventoryItem.rentPrice) parts.push(`Rent, ${format(inventoryItem.rentPrice)}/month`);
+  return parts.length ? parts.join(" | ") : "Price on application";
+}
+
+function inventoryToLegacyShape(inventoryItem) {
+  const sourceGallery = inventoryItem.gallery?.length ? inventoryItem.gallery : [inventoryItem.image];
+  const gallery = sourceGallery.map((src, index) => ({
+    src,
+    alt: `${inventoryItem.title} image ${index + 1}`
+  }));
+
+  return {
+    title: inventoryItem.title,
+    location: inventoryItem.location,
+    price: formatPropertyPrice(inventoryItem),
+    hero: gallery[0].src,
+    heroAlt: `${inventoryItem.title} in ${inventoryItem.location}`,
+    description: inventoryItem.description,
+    featureLocation: inventoryItem.featureLocation,
+    gallery,
+    // Bespoke narrative text (when present) overlays the auto-generated story
+    // rows in buildStoryContent() — see there for how images are assigned.
+    storyText: inventoryItem.story?.rows
+  };
+}
+
+function getProperty() {
   const params = new URLSearchParams(window.location.search);
   const pageSlug = window.location.pathname.split("/").pop()?.replace(/\.html$/i, "");
-  const id = params.get("id") || document.body.dataset.propertyKey || pageSlug || "dg-west";
+  const id = params.get("id") || document.body.dataset.propertyKey || pageSlug;
+
+  const inventoryItem = findInventoryProperty(id);
+  if (inventoryItem) return inventoryToLegacyShape(inventoryItem);
+
+  if (window.SELLAM_PROPERTY_PAGE) return window.SELLAM_PROPERTY_PAGE;
+
   return propertyData[id] || propertyData["dg-west"];
 }
 
@@ -667,29 +720,47 @@ function buildStoryContent(property) {
   const title = property.title;
   const location = property.location || "Nairobi";
 
+  // Generic, always-available narrative — used as-is when a property has no
+  // bespoke copy, and as the image/fallback-text source when it does.
+  const rows = [
+    {
+      image: imageAt(1),
+      title: `${title} Residence`,
+      body: `${title} is presented as a composed premium residence in ${location}, with spaces planned for comfort, privacy, and everyday ease. The interiors and exterior setting work together to create a property experience that feels refined, practical, and ready for discerning buyers.`
+    },
+    {
+      image: imageAt(2),
+      title: "Design And Finishes",
+      body: `The property brings together generous proportions, considered finishes, and strong visual character. Each image in the gallery reflects the quality and atmosphere of ${title}, giving buyers a clearer sense of how the home supports family living, hosting, and long-term value.`
+    },
+    {
+      image: imageAt(3),
+      title: "Lifestyle And Comfort",
+      body: `From relaxed daily routines to private entertaining, ${title} is shaped around a comfortable premium lifestyle. The residence offers the kind of space, light, and calm expected from a carefully selected SELLAM property.`
+    },
+    {
+      image: imageAt(4),
+      title: "Location Advantage",
+      body: `${location} gives this property a strong residential context, with access to established amenities, key routes, and the privacy buyers expect from a premium address. It is positioned for both lifestyle appeal and long-term investment confidence.`
+    }
+  ];
+
+  // Bespoke narrative text (property.storyText, from data/properties.js'
+  // `story.rows`) overlays the generic title/body per row, index for index,
+  // while the image assignment above (and the wide/pair images below) stays
+  // exactly the same either way.
+  const overrides = property.storyText;
+  const finalRows = overrides
+    ? rows.map((row, index) => {
+        const override = overrides[index];
+        return override
+          ? { image: row.image, title: override.title || row.title, body: override.body || row.body }
+          : row;
+      })
+    : rows;
+
   return {
-    rows: [
-      {
-        image: imageAt(1),
-        title: `${title} Residence`,
-        body: `${title} is presented as a composed premium residence in ${location}, with spaces planned for comfort, privacy, and everyday ease. The interiors and exterior setting work together to create a property experience that feels refined, practical, and ready for discerning buyers.`
-      },
-      {
-        image: imageAt(2),
-        title: "Design And Finishes",
-        body: `The property brings together generous proportions, considered finishes, and strong visual character. Each image in the gallery reflects the quality and atmosphere of ${title}, giving buyers a clearer sense of how the home supports family living, hosting, and long-term value.`
-      },
-      {
-        image: imageAt(3),
-        title: "Lifestyle And Comfort",
-        body: `From relaxed daily routines to private entertaining, ${title} is shaped around a comfortable premium lifestyle. The residence offers the kind of space, light, and calm expected from a carefully selected SELLAM property.`
-      },
-      {
-        image: imageAt(4),
-        title: "Location Advantage",
-        body: `${location} gives this property a strong residential context, with access to established amenities, key routes, and the privacy buyers expect from a premium address. It is positioned for both lifestyle appeal and long-term investment confidence.`
-      }
-    ],
+    rows: finalRows,
     wide: imageAt(5),
     pair: [imageAt(6), imageAt(7)]
   };
@@ -708,7 +779,7 @@ function setStoryImage(button, image, fallbackLabel) {
 }
 
 function setupPropertyStory(property) {
-  const story = property.story || buildStoryContent(property);
+  const story = buildStoryContent(property);
   const rows = document.querySelectorAll(".detail-story .story-row");
 
   rows.forEach((row, index) => {

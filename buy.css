@@ -11,14 +11,14 @@
    matching styles.css's navbar breakpoints). */
 .buy-categories {
   background: #ffffff;
-  padding-top: 160px;
-  padding-bottom: clamp(38px, 5vw, 66px);
+  padding-top: 210px;
+  padding-bottom: clamp(46px, 6vw, 80px);
 }
 
 .category-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(18px, 2vw, 28px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(26px, 3vw, 48px);
   align-items: stretch;
 }
 
@@ -116,26 +116,26 @@ html:not(.motion-ready) .category-grid.reveal .category-card {
   animation: none !important;
 }
 
-/* Top offset matches the navbar's occupied height at each breakpoint
-   (styles.css: 62+72=134, 28+72=100, 22+68=90, 16+64=80) plus a small gap.
+/* Top offset clears the navbar (occupied height per styles.css: 134/100/90/80)
+   plus a comfortable gap so the cards sit well below the floating navbar.
    Ordered descending so the smallest matching breakpoint wins. */
 @media (max-width: 1280px) {
-  .buy-categories { padding-top: 124px; }
+  .buy-categories { padding-top: 170px; }
 }
 
 @media (max-width: 1024px) {
-  .buy-categories { padding-top: 112px; }
+  .buy-categories { padding-top: 158px; }
 }
 
 @media (max-width: 900px) {
   .category-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 26px 18px;
+    gap: 34px 24px;
   }
 }
 
 @media (max-width: 760px) {
-  .buy-categories { padding-top: 100px; }
+  .buy-categories { padding-top: 130px; }
 }
 
 @media (max-width: 540px) {
