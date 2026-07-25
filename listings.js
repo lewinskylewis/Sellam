@@ -2,22 +2,41 @@
    SELLAM — SHARED LISTING RENDERER
    ============================================================================
    Renders the property cards on every listing page from the central inventory
-   (data/properties.js). One renderer, three pages — the mode is read from the
-   container:
+   (data/properties.js). One renderer, every listing page — the mode (and, for
+   leasing pages, the property type) is read from the container:
 
      <div data-property-rows data-listing="rent">       rent.html
      <div data-property-rows data-listing="sale">       premium-properties.html
      <div data-property-rows data-listing="exclusive">  exclusive-properties.html
+     <div data-property-rows data-listing="leasing"
+          data-leasing-type="office">                   leasing-offices.html
+     <div data-property-rows data-listing="leasing"
+          data-leasing-type="retail">                   leasing-retail.html
+     <div data-property-rows data-listing="leasing"
+          data-leasing-type="industrial">                leasing-industrial.html
+     <div data-property-rows data-listing="leasing"
+          data-leasing-type="land">                     leasing-land.html
 
    Modes:
-     rent       -> letting "rent" | "both"      · data-price = rentPrice
-     sale       -> letting "sale" | "both"      · data-price = salePrice
-     exclusive  -> collection "exclusive"       · data-price = salePrice
+     rent       -> letting "rent" | "both"                          · rentPrice
+     sale       -> letting "sale" | "both", not "exclusive"          · salePrice
+     exclusive  -> collection "exclusive"                            · salePrice
+     leasing    -> propertyType === data-leasing-type,
+                   letting "rent" | "both"                           · rentPrice
 
    Runs SYNCHRONOUSLY (script sits below the markup) so cards exist in the DOM
    before enquiry-modal.js / premium-properties.js / rent-filter.js initialise
    on DOMContentLoaded. Generated data-* attributes match what those scripts
-   expect, so sorting and filtering keep working untouched.
+   expect, so filtering keeps working untouched.
+
+   Commercial properties (office/retail/industrial/land) may have `bedrooms`
+   and `bathrooms` set to `null` in data/properties.js — the card simply omits
+   that spec row rather than showing "null Bedrooms".
+
+   A property that lists more than one floor plan (data/properties.js gives
+   it a `units` array instead of flat bedrooms/bathrooms/price fields, see
+   data/property-units.js) renders one price line per unit instead of the
+   usual bed/bath spec row + single price.
    ========================================================================== */
 
 (function () {
@@ -26,7 +45,10 @@
   var container = document.querySelector("[data-property-rows]");
   if (!container || !window.SELLAM_PROPERTIES) return;
 
+  var Units = window.SellamUnits;
+
   var mode = container.getAttribute("data-listing") || "sale";
+  var leasingType = container.getAttribute("data-leasing-type") || "";
 
   /* rent-filter.js matches its checkbox values (Title Case) against
      data-property-type, so convert the inventory's lowercase keys. */
@@ -35,22 +57,17 @@
     return value.charAt(0).toUpperCase() + value.slice(1);
   }
 
-  var FEATURE_LABELS = {
-    wifi: "Wifi",
-    pool: "Swimming pool",
-    gym: "Gym",
-    "backup-generator": "Backup generator",
-    parking: "Parking space",
-    security: "Security",
-    garden: "Garden"
-  };
-
   var PIN_SVG =
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.2 6.8 12.2s6.8-7.1 6.8-12.2A6.8 6.8 0 0 0 12 2.5Zm0 9.3a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>';
-  var BED_SVG =
-    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12V7.5C4 6.1 5.1 5 6.5 5h11C18.9 5 20 6.1 20 7.5V12h1v7h-2v-2H5v2H3v-7h1Zm2 0h5V7H6.5c-.3 0-.5.2-.5.5V12Zm7 0h5V7.5c0-.3-.2-.5-.5-.5H13v5Z"/></svg>';
-  var BATH_SVG =
-    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V6.5A3.5 3.5 0 0 1 10.5 3H13v2h-2.5A1.5 1.5 0 0 0 9 6.5V11h10v3a5 5 0 0 1-2 4l.7 2H15l-.4-1H9.4L9 20H6.3L7 18a5 5 0 0 1-2-4v-3h2Z"/></svg>';
+  var GRID_SVG =
+    '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+      '<rect x="3" y="3" width="8" height="8" rx="1.5"/>' +
+      '<rect x="13" y="3" width="8" height="5" rx="1.5"/>' +
+      '<rect x="13" y="10" width="8" height="11" rx="1.5"/>' +
+      '<rect x="3" y="13" width="8" height="8" rx="1.5"/>' +
+    '</svg>';
+  var TAG_SVG =
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.8 3h7.05c.53 0 1.04.21 1.41.59l7.15 7.15a2 2 0 0 1 0 2.83l-6.84 6.84a2 2 0 0 1-2.83 0l-7.15-7.15A2 2 0 0 1 3 11.85V4.8C3 3.81 3.81 3 4.8 3Zm3.25 6.15a2.1 2.1 0 1 0 0-4.2 2.1 2.1 0 0 0 0 4.2Z"/></svg>';
 
   function escapeAttr(value) {
     return String(value == null ? "" : value)
@@ -60,15 +77,38 @@
       .replace(/>/g, "&gt;");
   }
 
-  function amenities(features) {
-    if (!features || !features.length) return "";
-    var items = features
-      .map(function (key) {
-        var label = FEATURE_LABELS[key];
-        return label ? "<li>" + label + "</li>" : "";
-      })
-      .join("");
-    return items ? '<ul class="amenities" aria-label="Amenities">' + items + "</ul>" : "";
+  // Listing cards show which bedroom counts this property comes in, never
+  // bathrooms (bathrooms are a detail-page-only field — see property.html /
+  // property-detail.js). A property with more than one floor plan (`units`,
+  // see data/property-units.js) lists every distinct count it offers.
+  function bedroomsHTML(p) {
+    var counts = Units.bedroomCounts(p);
+    if (!counts.length) return "";
+    var label = (counts.length === 1 && counts[0] === 1) ? "Bedroom" : "Bedrooms";
+    return '<div class="beds-line">' + GRID_SVG + Units.joinList(counts) + " " + label + "</div>";
+  }
+
+  function formatPrice(value) {
+    return "KES " + Number(value).toLocaleString("en-KE");
+  }
+
+  function priceField() {
+    return (mode === "rent" || mode === "leasing") ? "rentPrice" : "salePrice";
+  }
+
+  function priceSuffix() {
+    return (mode === "rent" || mode === "leasing") ? " / month" : "";
+  }
+
+  // Always the CHEAPEST unit's price. A property with more than one floor
+  // plan gets a "Starting" prefix; a single-unit property just shows its
+  // one price, unprefixed.
+  function priceHTML(p) {
+    var field = priceField();
+    var value = Units.minPrice(p, field);
+    if (value === null) return "";
+    var prefix = Units.unitsOf(p).length > 1 ? "Starting " : "";
+    return '<div class="price">' + TAG_SVG + prefix + formatPrice(value) + priceSuffix() + "</div>";
   }
 
   /* ------------------------------------------------------------ select set */
@@ -78,13 +118,12 @@
       if (p.status === "sold" || p.status === "let") return false;
       if (mode === "rent") return p.letting === "rent" || p.letting === "both";
       if (mode === "exclusive") return p.collection === "exclusive";
+      if (mode === "leasing") {
+        return p.propertyType === leasingType && (p.letting === "rent" || p.letting === "both");
+      }
       // "sale" — the premium listing, excluding the exclusive collection
       return (p.letting === "sale" || p.letting === "both") && p.collection !== "exclusive";
     });
-  }
-
-  function priceFor(p) {
-    return mode === "rent" ? p.rentPrice : p.salePrice;
   }
 
   /* ---------------------------------------------------------------- render */
@@ -93,7 +132,14 @@
     var title = escapeAttr(p.title);
     var location = escapeAttr(p.location);
     var url = escapeAttr(p.url);
-    var price = priceFor(p);
+    var field = priceField();
+
+    // Filter matching (rent-filter.js) needs to know about every unit, so
+    // bedrooms/bathrooms/price are comma-separated lists — for a normal
+    // single-unit property that's just a list of one, identical to before.
+    var bedroomsAttr = Units.bedroomCounts(p).join(",");
+    var bathroomsAttr = Units.bathroomCounts(p).join(",");
+    var pricesAttr = Units.prices(p, field).join(",");
 
     return (
       '<article class="property-card reveal"' +
@@ -106,21 +152,18 @@
         ' data-title="' + title + '"' +
         ' data-property-type="' + escapeAttr(titleCase(p.propertyType)) + '"' +
         ' data-location="' + location + '"' +
-        ' data-price="' + escapeAttr(price == null ? "" : price) + '"' +
-        ' data-bedrooms="' + escapeAttr(p.bedrooms) + '"' +
-        ' data-bathrooms="' + escapeAttr(p.bathrooms) + '">' +
+        ' data-price="' + escapeAttr(pricesAttr) + '"' +
+        ' data-bedrooms="' + escapeAttr(bedroomsAttr) + '"' +
+        ' data-bathrooms="' + escapeAttr(bathroomsAttr) + '">' +
         '<a class="property-image" href="' + url + '">' +
           '<img src="' + escapeAttr(p.image) + '" alt="' + title + '" loading="lazy">' +
         "</a>" +
         '<div class="property-info">' +
           "<h2>" + p.title + "</h2>" +
           '<p class="location">' + PIN_SVG + p.location + "</p>" +
-          '<p class="summary">' + (p.description || "") + "</p>" +
-          '<ul class="specs">' +
-            "<li>" + BED_SVG + p.bedrooms + " Bedrooms</li>" +
-            "<li>" + BATH_SVG + p.bathrooms + " Baths</li>" +
-          "</ul>" +
-          amenities(p.features) +
+          '<p class="summary">' + (p.summary || p.description || "") + "</p>" +
+          bedroomsHTML(p) +
+          priceHTML(p) +
           '<div class="card-actions">' +
             '<a href="' + url + '">View Property</a>' +
             '<a href="#enquire" data-enquiry-open data-property="' + title +
@@ -149,11 +192,4 @@
   container.innerHTML = "";
   if (emptyState) container.appendChild(emptyState);
   container.insertAdjacentHTML("beforeend", html);
-
-  // Keep any "N Units available" heading in sync with the real count.
-  var countEl = document.querySelector("[data-listing-count]");
-  if (countEl) {
-    countEl.textContent =
-      items.length + (items.length === 1 ? " Unit available" : " Units available");
-  }
 })();

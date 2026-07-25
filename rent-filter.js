@@ -34,9 +34,22 @@ function setupRentFilters() {
     return Array.from(form.querySelectorAll(`input[name="${name}"]:checked`)).map((input) => input.value);
   }
 
-  function matchesCount(value, selections) {
+  // A card lists every distinct value across its unit(s) as a comma-
+  // separated attribute (e.g. data-bedrooms="1,2" for a property with both a
+  // 1-bed and a 2-bed floor plan) — matches if ANY of them satisfies the
+  // filter. A single-unit card's list just has one value, same as before.
+  function parseNumberList(value) {
+    return (value || "")
+      .split(",")
+      .map((v) => Number(v))
+      .filter((n) => !Number.isNaN(n));
+  }
+
+  function matchesCount(values, selections) {
     if (!selections.length) return true;
-    return selections.some((selection) => selection === "6+" ? value >= 6 : value === Number(selection));
+    return values.some((value) =>
+      selections.some((selection) => selection === "6+" ? value >= 6 : value === Number(selection))
+    );
   }
 
   function updateLabels() {
@@ -90,13 +103,12 @@ function setupRentFilters() {
     const maxPrice = Number(form.elements["max-price"].value);
 
     const visibleCards = cards.filter((card) => {
-      const price = Number(card.dataset.price);
+      const prices = parseNumberList(card.dataset.price);
       const typeMatches = !propertyTypes.length || propertyTypes.includes(card.dataset.propertyType);
       return typeMatches
-        && matchesCount(Number(card.dataset.bedrooms), bedrooms)
-        && matchesCount(Number(card.dataset.bathrooms), bathrooms)
-        && price >= minPrice
-        && price <= maxPrice;
+        && matchesCount(parseNumberList(card.dataset.bedrooms), bedrooms)
+        && matchesCount(parseNumberList(card.dataset.bathrooms), bathrooms)
+        && prices.some((price) => price >= minPrice && price <= maxPrice);
     });
 
     updateLabels();

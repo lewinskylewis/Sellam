@@ -35,8 +35,16 @@
   background: var(--white);
 }
 
+.detail-title-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 26px;
+}
+
 .detail-overview h1 {
-  margin: 0 0 34px;
+  margin: 0;
   color: var(--ink);
   font-family: var(--font-serif);
   font-size: clamp(50px, 2.8vw, 92px);
@@ -62,61 +70,68 @@
   margin-top: 22px;
 }
 
-.price-strip {
-  margin-top: 78px;
-  display: grid;
-  grid-template-columns: minmax(280px, 0.65fr) 1fr;
-  align-items: center;
-  gap: clamp(38px, 6vw, 104px);
+.price-section {
+  margin: 0 0 40px;
 }
 
-.price-block {
-  display: flex;
-  align-items: center;
-  gap: 26px;
-  padding-right: clamp(34px, 5vw, 86px);
-  border-right: 1px solid rgba(6, 53, 69, 0.65);
-}
-
-.price-block svg {
-  width: 52px;
-  height: 52px;
-  flex: 0 0 auto;
-  fill: var(--gold);
-}
-
-.price-block span {
-  display: block;
-  margin-bottom: 10px;
-  color: #1d3138;
-  font-size: 19px;
-  font-weight: 700;
-}
-
-.price-block strong {
-  display: block;
-  color: #BC903E;
+.price-heading {
+  margin: 0 0 6px;
+  color: var(--gold);
   font-family: var(--font-serif);
-  font-size: clamp(28px, 4vw, 52px);
-  line-height: 1;
-  font-weight: 700;
+  font-size: clamp(24px, 1.6vw, 32px);
+  font-weight: 600;
 }
 
-.payment-block {
-  display: grid;
-  gap: 10px;
+.price-list {
+  max-width: 900px;
 }
 
-.payment-block p {
-  margin: 0;
-  color: #111;
-  font-size: clamp(17px, 0.8vw, 25px);
-  line-height: 1.2;
-  font-weight: 300;
+.price-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 24px 4px;
+  border-top: 1px solid rgba(6, 53, 69, 0.12);
+  transition: background 260ms ease;
+}
+
+.price-list .price-row:last-child {
+  border-bottom: 1px solid rgba(6, 53, 69, 0.12);
+}
+
+.price-row:hover {
+  background: rgba(211, 162, 59, 0.06);
+}
+
+.price-row-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: clamp(12px, 0.75vw, 14px);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.price-row-sep {
+  color: rgba(6, 53, 69, 0.25);
+  font-weight: 400;
+}
+
+.price-row-value {
+  color: var(--gold);
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 1.35vw, 29px);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 
 .detail-gallery-section {
-  padding: 48px 0 74px;
+  padding: 48px 0 0;
 }
 
 .detail-gallery {
@@ -146,7 +161,7 @@
   aspect-ratio: 0.74 / 1;
   padding: 0;
   border: 0;
-  border-radius: 20px;
+  border-radius: 0;
   background: #d8dde0;
   overflow: hidden;
 }
@@ -222,14 +237,29 @@
   transform: translate(-50%, -50%) rotate(45deg);
 }
 
-.detail-arrow.next span::before,
 .lightbox-next span::before {
   transform: translate(-50%, -50%) rotate(135deg);
 }
 
-.detail-arrow.next span::after,
 .lightbox-next span::after {
   transform: translate(-50%, -50%) rotate(-135deg);
+}
+
+/* Mirror prev's exact (known-good) chevron instead of rotating to 135/-135 —
+   that geometry doesn't stay centred in the box, so the visible arrow drifts
+   away from the actual 58x72 click target. scaleX(-1) flips prev's chevron
+   around the span's own centre, keeping icon and hitbox aligned — same fix
+   already applied to .slider-arrow.next in styles.css. */
+.detail-arrow.next span {
+  transform: scaleX(-1);
+}
+
+.detail-arrow.next span::before {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.detail-arrow.next span::after {
+  transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .detail-arrow:disabled {
@@ -243,7 +273,9 @@
 }
 
 .detail-gallery-dots {
+  grid-row: 2;
   grid-column: 2;
+  align-self: start;
   display: flex;
   justify-content: center;
   gap: 14px;
@@ -265,8 +297,109 @@
   transform: scale(1.35);
 }
 
+.gallery-view-all {
+  grid-row: 2;
+  grid-column: 2;
+  justify-self: end;
+  align-self: start;
+  margin: 36px 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.gallery-view-all:hover,
+.gallery-view-all:focus-visible {
+  color: var(--gold);
+}
+
+.gallery-collage {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  padding: 48px;
+  background: rgba(0, 20, 27, 0.94);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  overflow-y: auto;
+  transition: opacity 260ms ease, visibility 260ms ease;
+}
+
+.gallery-collage.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.gallery-collage-inner {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.gallery-collage-close {
+  position: fixed;
+  top: 28px;
+  right: 32px;
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  color: var(--white);
+  background: transparent;
+  z-index: 1;
+}
+
+.gallery-collage-close svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.gallery-collage-close:hover,
+.gallery-collage-close:focus-visible {
+  color: var(--gold);
+}
+
+.gallery-collage-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  padding-top: 60px;
+}
+
+.gallery-collage-grid button {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border: 0;
+  background: #1c2b30;
+  overflow: hidden;
+}
+
+.gallery-collage-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms ease;
+}
+
+.gallery-collage-grid button:hover img,
+.gallery-collage-grid button:focus-visible img {
+  transform: scale(1.05);
+}
+
 .detail-story {
-  padding: 38px 0 118px;
+  padding: 76px 0 118px;
 }
 
 .story-row {
@@ -343,7 +476,7 @@
 }
 
 .detail-features {
-  padding: 104px 0 108px;
+  padding: 56px 0 60px;
   color: var(--white);
   background: var(--teal);
 }
@@ -351,36 +484,46 @@
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 42px clamp(72px, 9vw, 160px);
+  gap: 28px clamp(72px, 9vw, 160px);
 }
 
 .feature-grid article {
   display: grid;
-  grid-template-columns: 54px 1fr;
+  grid-template-columns: 30px 1fr;
   align-items: start;
-  gap: 24px;
+  gap: 16px;
 }
 
 .feature-grid svg {
-  width: 46px;
-  height: 46px;
-  fill: var(--gold);
+  width: 24px;
+  height: 24px;
+  fill: var(--white);
 }
 
 .feature-grid h3 {
-  margin: 0 0 6px;
+  margin: 0 0 4px;
   font-family: var(--font-serif);
-  font-size: clamp(23px, 1.6vw, 36px);
+  font-size: clamp(18px, 1.1vw, 24px);
   line-height: 1.05;
   font-weight: 700;
-  color: #BC903E;
+  color: var(--white);
 }
 
 .feature-grid p {
   margin: 0;
   max-width: 520px;
-  font-size: clamp(15px, 0.9vw, 19px);
+  font-size: clamp(13px, 0.8vw, 16px);
   line-height: 1.36;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.detail-closing {
+  padding: 64px 0 0;
+  background: var(--white);
+}
+
+.detail-closing[hidden] {
+  display: none;
 }
 
 .enquiry-section {
@@ -409,41 +552,36 @@
 
 .enquiry-shell {
   display: grid;
-  grid-template-columns: minmax(280px, 0.42fr) minmax(0, 0.58fr);
-  gap: clamp(70px, 10vw, 170px);
-  align-items: start;
+  justify-items: center;
+  max-width: 900px;
+  margin: 0 auto;
+  gap: 40px;
 }
 
 .enquiry-heading {
-  display: grid;
-  gap: 38px;
-}
-
-.enquiry-heading span {
-  width: 100%;
-  height: 1px;
-  background: var(--ink);
+  text-align: center;
 }
 
 .enquiry-heading h2 {
   margin: 0;
   color: var(--ink);
   font-family: var(--font-serif);
-  font-size: clamp(38px, 2.5vw, 72px);
+  font-size: clamp(28px, 2vw, 42px);
   line-height: 1.2;
   text-transform: uppercase;
   font-weight: 600;
 }
 
 .enquiry-form {
+  width: 100%;
   display: grid;
-  gap: 30px;
+  gap: 20px;
 }
 
 .field-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 28px;
+  gap: 20px;
 }
 
 .enquiry-form label {
@@ -454,34 +592,50 @@
   font-weight: 700;
 }
 
+.enquiry-form label > span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
 .enquiry-form input,
 .enquiry-form textarea {
   width: 100%;
+  padding: 0 20px;
   border: 0;
-  border-bottom: 1px solid rgba(6, 53, 69, 0.72);
-  border-radius: 0;
-  color: #111;
-  background: transparent;
+  border-radius: 10px;
+  color: var(--white);
+  background: #5f7580;
   outline: none;
+  font-style: italic;
+}
+
+.enquiry-form input::placeholder,
+.enquiry-form textarea::placeholder {
+  color: rgba(255, 255, 255, 0.78);
 }
 
 .enquiry-form input {
-  height: 48px;
+  height: 52px;
 }
 
 .enquiry-form textarea {
-  min-height: 168px;
+  min-height: 140px;
+  padding-top: 16px;
   resize: vertical;
 }
 
 .enquiry-form input:focus,
 .enquiry-form textarea:focus {
-  border-color: var(--gold);
+  box-shadow: 0 0 0 2px var(--gold);
 }
 
 .enquiry-form button {
+  justify-self: center;
   width: 188px;
-  min-height: 56px;
+  min-height: 52px;
   border: 0;
   border-radius: 999px;
   color: var(--white);
@@ -598,16 +752,10 @@
     height: 620px;
   }
 
-  .price-strip {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-
-  .price-block {
-    padding-right: 0;
-    padding-bottom: 28px;
-    border-right: 0;
-    border-bottom: 1px solid rgba(6, 53, 69, 0.65);
+  .detail-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
   }
 
   .story-row,
@@ -621,13 +769,8 @@
     order: initial;
   }
 
-  .feature-grid,
-  .enquiry-shell {
+  .feature-grid {
     grid-template-columns: 1fr;
-  }
-
-  .enquiry-shell {
-    gap: 48px;
   }
 }
 
@@ -646,8 +789,14 @@
     font-size: 42px;
   }
 
-  .price-strip {
-    margin-top: 48px;
+  .price-row {
+    flex-wrap: wrap;
+    gap: 6px 32px;
+    padding: 18px 4px;
+  }
+
+  .price-row-value {
+    font-size: 20px;
   }
 
   .detail-gallery-section {
@@ -671,6 +820,16 @@
   .detail-gallery-dots {
     grid-column: 1;
     margin-top: 8px;
+  }
+
+  .gallery-view-all {
+    grid-row: auto;
+    grid-column: 1;
+    margin-top: 14px;
+  }
+
+  .gallery-collage {
+    padding: 74px 18px 32px;
   }
 
   .detail-story {
@@ -710,17 +869,21 @@
   }
 
   .feature-grid article {
-    grid-template-columns: 42px 1fr;
-    gap: 18px;
+    grid-template-columns: 26px 1fr;
+    gap: 14px;
   }
 
   .feature-grid svg {
-    width: 38px;
-    height: 38px;
+    width: 20px;
+    height: 20px;
   }
 
   .enquiry-section {
     padding: 78px 0 86px;
+  }
+
+  .gallery-collage-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .lightbox {
@@ -744,7 +907,7 @@
     aspect-ratio: 0.82 / 1;
   }
 
-  .price-block {
-    align-items: flex-start;
+  .gallery-collage-grid {
+    grid-template-columns: 1fr;
   }
 }

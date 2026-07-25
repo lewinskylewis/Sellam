@@ -105,8 +105,15 @@
         <ul class="desktop-nav" aria-label="Main menu">
           <li><a href="buy.html">Buy</a></li>
           <li><a href="rent.html">Rent</a></li>
-          <li><a href="#leasing">Leasing</a></li>
-          <li><a href="#off-plan">Off-plan</a></li>
+          <li class="nav-has-dropdown">
+            <a href="leasing-offices.html" aria-haspopup="true">Leasing<span class="chevron" aria-hidden="true"></span></a>
+            <ul class="nav-dropdown">
+              <li><a href="leasing-offices.html">Offices</a></li>
+              <li><a href="leasing-retail.html">Retail</a></li>
+              <li><a href="leasing-industrial.html">Industrial</a></li>
+              <li><a href="leasing-land.html">Land</a></li>
+            </ul>
+          </li>
           <li><a href="services.html">Services</a></li>
         </ul>
 
@@ -139,8 +146,15 @@
           <ul class="mobile-nav-list">
             <li><a href="buy.html">Buy</a></li>
             <li><a href="rent.html">Rent</a></li>
-            <li><a href="#leasing">Leasing</a></li>
-            <li><a href="#off-plan">Off-plan</a></li>
+            <li class="mobile-nav-has-sublist">
+              <a href="leasing-offices.html">Leasing</a>
+              <ul class="mobile-nav-sublist">
+                <li><a href="leasing-offices.html">Offices</a></li>
+                <li><a href="leasing-retail.html">Retail</a></li>
+                <li><a href="leasing-industrial.html">Industrial</a></li>
+                <li><a href="leasing-land.html">Land</a></li>
+              </ul>
+            </li>
             <li><a href="services.html">Services</a></li>
             <li>
               <a class="mobile-whatsapp" href="https://wa.me/254700435000">
@@ -232,6 +246,21 @@
                 <input type="checkbox" name="property_type" value="commercial">
                 <span class="checkmark"></span>
                 <span>Commercial</span>
+              </label>
+              <label class="filter-option">
+                <input type="checkbox" name="property_type" value="office">
+                <span class="checkmark"></span>
+                <span>Office</span>
+              </label>
+              <label class="filter-option">
+                <input type="checkbox" name="property_type" value="retail">
+                <span class="checkmark"></span>
+                <span>Retail</span>
+              </label>
+              <label class="filter-option">
+                <input type="checkbox" name="property_type" value="industrial">
+                <span class="checkmark"></span>
+                <span>Industrial</span>
               </label>
             </div>
           </div>
@@ -336,116 +365,7 @@
               <span class="chevron"></span>
             </button>
             <div class="filter-menu checklist-menu community-filter-menu" role="group" aria-label="Community options">
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="runda">
-                <span class="checkmark"></span>
-                <span>Runda</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="muthaiga">
-                <span class="checkmark"></span>
-                <span>Muthaiga</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="ridgeways">
-                <span class="checkmark"></span>
-                <span>Ridgeways</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="nyari">
-                <span class="checkmark"></span>
-                <span>Nyari</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="karen">
-                <span class="checkmark"></span>
-                <span>Karen</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="lavington">
-                <span class="checkmark"></span>
-                <span>Lavington</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="kileleshwa">
-                <span class="checkmark"></span>
-                <span>Kileleshwa</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="kilimani">
-                <span class="checkmark"></span>
-                <span>Kilimani</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="westlands">
-                <span class="checkmark"></span>
-                <span>Westlands</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="thigiri">
-                <span class="checkmark"></span>
-                <span>Thigiri</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="rosslyn">
-                <span class="checkmark"></span>
-                <span>Rosslyn</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="parklands">
-                <span class="checkmark"></span>
-                <span>Parklands</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="lower-kabete">
-                <span class="checkmark"></span>
-                <span>Lower Kabete</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="muthangari">
-                <span class="checkmark"></span>
-                <span>Muthangari</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="kitisuru">
-                <span class="checkmark"></span>
-                <span>Kitisuru</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="spring-valley">
-                <span class="checkmark"></span>
-                <span>Spring Valley</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="loresho">
-                <span class="checkmark"></span>
-                <span>Loresho</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="riverside">
-                <span class="checkmark"></span>
-                <span>Riverside</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="nyali">
-                <span class="checkmark"></span>
-                <span>Nyali</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="vipingo">
-                <span class="checkmark"></span>
-                <span>Vipingo</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="ngong">
-                <span class="checkmark"></span>
-                <span>Ngong</span>
-              </label>
-              <label class="filter-option">
-                <input type="checkbox" name="communities" value="syokimau">
-                <span class="checkmark"></span>
-                <span>Syokimau</span>
-              </label>
+              <!-- Checkboxes are rendered from data/communities.js by community-render.js -->
             </div>
           </div>
 
@@ -580,181 +500,7 @@
             </button>
             <div class="community-viewport">
               <div class="community-track">
-                <article class="community-card">
-                  <a class="image-frame" href="communities/runda.html">
-                    <img src="assets/images/community-runda.webp" alt="Runda skyline and green community">
-                  </a>
-                  <h3><a href="communities/runda.html">Runda</a></h3>
-                  <p>Expansive villas and townhouses in Runda offer luxury, privacy, and convenience near diplomatic zones, top schools, and amenities.</p>
-                  <a class="community-button" href="communities/runda.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/muthaiga.html">
-                    <img src="assets/images/community-muthaiga.webp" alt="Muthaiga luxury apartment tower">
-                  </a>
-                  <h3><a href="communities/muthaiga.html">Muthaiga</a></h3>
-                  <p>Gracious villas on landscaped grounds offer privacy, elegance, and prestige near diplomatic zones, hospitals, and elite clubs in Nairobi.</p>
-                  <a class="community-button" href="communities/muthaiga.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/ridgeways.html">
-                    <img src="assets/images/community-ridgeways.webp" alt="Ridgeways curved apartment tower"></a>
-                  <h3><a href="communities/ridgeways.html">Ridgeways</a></h3>
-                  <p>Ridgeways offers modern homes in a serene setting, near malls, top schools, and highways - ideal for families and professionals.</p>
-                  <a class="community-button" href="communities/ridgeways.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/nyari.html">
-                    <img src="assets/images/community-nyari.webp" alt="Nyari premium residential tower">
-                  </a>
-                  <h3><a href="communities/nyari.html">Nyari</a></h3>
-                  <p>Elegant villas and townhouses with top security, lush greenery, and gated living near diplomatic zones, offering space and community.</p>
-                  <a class="community-button" href="communities/nyari.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/karen.html">
-                    <img src="assets/images/diaspora-miami.webp" alt="Karen contemporary villa exterior">
-                  </a>
-                  <h3><a href="communities/karen.html">Karen</a></h3>
-                  <p>Generous homes, calm streets, and leafy compounds create a refined residential setting for families and private retreats.</p>
-                  <a class="community-button" href="communities/karen.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/lavington.html">
-                    <img src="assets/images/diaspora-manchester.webp" alt="Lavington modern townhouse frontage">
-                  </a>
-                  <h3><a href="communities/lavington.html">Lavington</a></h3>
-                  <p>Modern residences, easy access, and composed urban living define this sought-after address for elegant daily life.</p>
-                  <a class="community-button" href="communities/lavington.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/kileleshwa.html">
-                    <img src="assets/images/hero-kileleshwa.webp" alt="Kileleshwa apartment tower">
-                  </a>
-                  <h3><a href="communities/kileleshwa.html">Kileleshwa</a></h3>
-                  <p>Elegant apartment living, green streets, and easy access to Nairobi's lifestyle corridors make Kileleshwa highly desirable.</p>
-                  <a class="community-button" href="communities/kileleshwa.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/kilimani.html">
-                    <img src="assets/images/premium-living.webp" alt="Kilimani refined apartment interior">
-                  </a>
-                  <h3><a href="communities/kilimani.html">Kilimani</a></h3>
-                  <p>Connected, vibrant, and central, Kilimani offers polished apartments close to dining, retail, business, and leisure.</p>
-                  <a class="community-button" href="communities/kilimani.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/westlands.html">
-                    <img src="assets/images/premium-bedroom.webp" alt="Westlands contemporary apartment suite">
-                  </a>
-                  <h3><a href="communities/westlands.html">Westlands</a></h3>
-                  <p>Westlands brings premium apartments, business access, nightlife, shopping, and high-demand investment potential together.</p>
-                  <a class="community-button" href="communities/westlands.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/thigiri.html">
-                    <img src="assets/images/diaspora-new-york.webp" alt="Thigiri serene residential estate">
-                  </a>
-                  <h3><a href="communities/thigiri.html">Thigiri</a></h3>
-                  <p>Quiet streets, mature greenery, and diplomatic convenience make Thigiri a composed address for private family living.</p>
-                  <a class="community-button" href="communities/thigiri.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/rosslyn.html">
-                    <img src="assets/images/hero-runda.webp" alt="Rosslyn premium residential greenery">
-                  </a>
-                  <h3><a href="communities/rosslyn.html">Rosslyn</a></h3>
-                  <p>Rosslyn blends generous homes, secure compounds, embassy proximity, and easy access to schools, malls, and diplomatic hubs.</p>
-                  <a class="community-button" href="communities/rosslyn.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/parklands.html">
-                    <img src="assets/images/Kile.png" alt="Parklands urban apartment community">
-                  </a>
-                  <h3><a href="communities/parklands.html">Parklands</a></h3>
-                  <p>Parklands offers connected apartment living near commerce, education, healthcare, and Nairobi's established urban corridors.</p>
-                  <a class="community-button" href="communities/parklands.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/lower-kabete.html">
-                    <img src="assets/images/Premium properties/Lower Kabete 5 Bedroom (2).jpeg" alt="Lower Kabete premium family residence">
-                  </a>
-                  <h3><a href="communities/lower-kabete.html">Lower Kabete</a></h3>
-                  <p>Lower Kabete is known for spacious homes, leafy privacy, school access, and calm residential streets close to key city routes.</p>
-                  <a class="community-button" href="communities/lower-kabete.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/kilimani.html">
-                    <img src="assets/images/Kileout.png" alt="Kilimani contemporary apartment tower">
-                  </a>
-                  <h3><a href="communities/kilimani.html">Kilimani</a></h3>
-                  <p>Kilimani combines high-demand apartment living, restaurants, retail, business links, and strong rental appeal for investors.</p>
-                  <a class="community-button" href="communities/kilimani.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/muthangari.html">
-                    <img src="assets/images/premium-page-grosvenor-towers.jpg" alt="Muthangari refined residential tower">
-                  </a>
-                  <h3><a href="communities/muthangari.html">Muthangari</a></h3>
-                  <p>Muthangari offers a polished residential setting near Westlands, with apartments, townhomes, and excellent urban access.</p>
-                  <a class="community-button" href="communities/muthangari.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/kitisuru.html">
-                    <img src="assets/images/hero-moon-valley.webp" alt="Kitisuru serene green residential area">
-                  </a>
-                  <h3><a href="communities/kitisuru.html">Kitisuru</a></h3>
-                  <p>Kitisuru brings quiet prestige, generous plots, private residences, and easy reach to schools, shopping, and diplomatic zones.</p>
-                  <a class="community-button" href="communities/kitisuru.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/spring-valley.html">
-                    <img src="assets/images/property-detail-arrival.jpg" alt="Spring Valley refined residential entry">
-                  </a>
-                  <h3><a href="communities/spring-valley.html">Spring Valley</a></h3>
-                  <p>Spring Valley offers understated prestige, green compounds, quiet roads, and convenient access to Westlands and diplomatic areas.</p>
-                  <a class="community-button" href="communities/spring-valley.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/loresho.html">
-                    <img src="assets/images/Premium properties/Loresho 4 Bedroom Villas (10).jpeg" alt="Loresho premium villa community">
-                  </a>
-                  <h3><a href="communities/loresho.html">Loresho</a></h3>
-                  <p>Loresho is a calm villa neighborhood with family homes, green surroundings, privacy, and quick access to Westlands corridors.</p>
-                  <a class="community-button" href="communities/loresho.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/lower-kabete.html">
-                    <img src="assets/images/Premium properties/Lower Kabete 5 Bedroom (7).jpeg" alt="Lower Kabete leafy premium residence">
-                  </a>
-                  <h3><a href="communities/lower-kabete.html">Lower Kabete</a></h3>
-                  <p>Lower Kabete also offers elevated family estates, secure compounds, and a quiet premium setting close to established amenities.</p>
-                  <a class="community-button" href="communities/lower-kabete.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/riverside.html">
-                    <img src="assets/images/grosvenor.jpg" alt="Riverside modern residential tower">
-                  </a>
-                  <h3><a href="communities/riverside.html">Riverside</a></h3>
-                  <p>Riverside blends apartment convenience, embassies, offices, dining, and central access in one of Nairobi's strongest addresses.</p>
-                  <a class="community-button" href="communities/riverside.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/nyali.html">
-                    <img src="assets/images/premium-page-seaview-tower.jpg" alt="Nyali coastal residential tower">
-                  </a>
-                  <h3><a href="communities/nyali.html">Nyali</a></h3>
-                  <p>Nyali offers coastal apartments and homes close to beaches, shopping, schools, hospitality, and Mombasa's leisure lifestyle.</p>
-                  <a class="community-button" href="communities/nyali.html">View Community</a>
-                </article>
-                <article class="community-card">
-                  <a class="image-frame" href="communities/vipingo.html">
-                    <img src="assets/images/diaspora-miami.webp" alt="Vipingo coastal resort-style residence">
-                  </a>
-                  <h3><a href="communities/vipingo.html">Vipingo</a></h3>
-                  <p>Vipingo is shaped by coastal calm, resort-style living, golf, beaches, and long-term lifestyle investment appeal.</p>
-                  <a class="community-button" href="communities/vipingo.html">View Community</a>
-                </article>
+                <!-- Cards are rendered from data/communities.js by community-render.js -->
               </div>
             </div>
             <button class="slider-arrow next" type="button" aria-label="Next communities">
@@ -981,6 +727,9 @@
     </footer>
 
     <script src="data/properties.js"></script>
+    <script src="data/property-units.js"></script>
+    <script src="data/communities.js"></script>
+    <script src="community-render.js"></script>
     <script src="property-search.js"></script>
     <script src="script.js"></script>
     <script src="nav-active.js"></script>

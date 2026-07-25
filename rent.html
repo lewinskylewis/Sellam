@@ -28,8 +28,15 @@
         <ul class="desktop-nav" aria-label="Main menu">
           <li><a href="buy.html">Buy</a></li>
           <li><a href="rent.html">Rent</a></li>
-          <li><a href="index.html#leasing">Leasing</a></li>
-          <li><a href="index.html#off-plan">Off-plan</a></li>
+          <li class="nav-has-dropdown">
+            <a href="leasing-offices.html" aria-haspopup="true">Leasing<span class="chevron" aria-hidden="true"></span></a>
+            <ul class="nav-dropdown">
+              <li><a href="leasing-offices.html">Offices</a></li>
+              <li><a href="leasing-retail.html">Retail</a></li>
+              <li><a href="leasing-industrial.html">Industrial</a></li>
+              <li><a href="leasing-land.html">Land</a></li>
+            </ul>
+          </li>
           <li><a href="services.html">Services</a></li>
         </ul>
 
@@ -62,8 +69,15 @@
           <ul class="mobile-nav-list">
             <li><a href="buy.html">Buy</a></li>
             <li><a href="rent.html">Rent</a></li>
-            <li><a href="index.html#leasing">Leasing</a></li>
-            <li><a href="index.html#off-plan">Off-plan</a></li>
+            <li class="mobile-nav-has-sublist">
+              <a href="leasing-offices.html">Leasing</a>
+              <ul class="mobile-nav-sublist">
+                <li><a href="leasing-offices.html">Offices</a></li>
+                <li><a href="leasing-retail.html">Retail</a></li>
+                <li><a href="leasing-industrial.html">Industrial</a></li>
+                <li><a href="leasing-land.html">Land</a></li>
+              </ul>
+            </li>
             <li><a href="services.html">Services</a></li>
             <li>
               <a class="mobile-whatsapp" href="https://wa.me/254700435000">
@@ -90,7 +104,7 @@
                 <span data-filter-label>Property Type</span><span class="chevron" aria-hidden="true"></span>
               </button>
               <div class="filter-menu checklist-menu" id="rentPropertyTypeMenu" role="group" aria-label="Property type options">
-                <label class="filter-option"><input type="checkbox" name="property-type" value="Apartment"><span class="checkmark"></span><span>Apartment</span></label><label class="filter-option"><input type="checkbox" name="property-type" value="Villa"><span class="checkmark"></span><span>Villa</span></label><label class="filter-option"><input type="checkbox" name="property-type" value="Mansion"><span class="checkmark"></span><span>Mansion</span></label><label class="filter-option"><input type="checkbox" name="property-type" value="Bungalow"><span class="checkmark"></span><span>Bungalow</span></label><label class="filter-option"><input type="checkbox" name="property-type" value="Penthouse"><span class="checkmark"></span><span>Penthouse</span></label>
+                <label class="filter-option"><input type="checkbox" name="property-type" value="Apartment"><span class="checkmark"></span><span>Apartment</span></label><label class="filter-option"><input type="checkbox" name="property-type" value="Villa"><span class="checkmark"></span><span>Villa</span></label><label class="filter-option"><input type="checkbox" name="property-type" value="Mansion"><span class="checkmark"></span><span>Mansion</span></label><label class="filter-option"><input type="checkbox" name="property-type" value="Bungalow"><span class="checkmark"></span><span>Bungalow</span></label><label class="filter-option"><input type="checkbox" name="property-type" value="Penthouse"><span class="checkmark"></span><span>Penthouse</span></label><label class="filter-option"><input type="checkbox" name="property-type" value="Office"><span class="checkmark"></span><span>Offices</span></label>
               </div>
             </div>
             <div class="search-filter" data-rent-filter-group>
@@ -198,6 +212,7 @@
     <!-- Central inventory + card renderer must run first so the cards exist
          before the enquiry modal and rent filter initialise. -->
     <script src="data/properties.js"></script>
+    <script src="data/property-units.js"></script>
     <script src="listings.js"></script>
     <script src="enquiry-config.js"></script>
     <script src="enquiry-modal.js"></script>

@@ -209,6 +209,80 @@ section {
   transform-origin: left;
 }
 
+/* Leasing nav dropdown (desktop): CSS-only, opens on hover or keyboard focus. */
+.nav-has-dropdown {
+  position: relative;
+}
+
+.nav-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 40;
+  min-width: 190px;
+  margin: 8px 0 0;
+  padding: 10px;
+  list-style: none;
+  background: var(--white);
+  border: 1px solid rgba(12, 51, 64, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 20px 45px rgba(0, 31, 43, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
+}
+
+.nav-has-dropdown:hover .nav-dropdown,
+.nav-has-dropdown:focus-within .nav-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-dropdown li {
+  list-style: none;
+}
+
+.nav-dropdown a {
+  display: block;
+  padding: 7.5px 14px;
+  border-radius: 9px;
+  color: #17323b;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.nav-dropdown a::after {
+  content: none;
+}
+
+.nav-dropdown a:hover,
+.nav-dropdown a:focus-visible {
+  background: #edf3f4;
+  color: var(--teal);
+}
+
+/* Down-facing chevron beside the "Leasing" trigger, reusing the site's
+   existing .chevron component (defined above for the search bar filters).
+   IMPORTANT: the trigger <a> must stay `display: inline` (its default) so it
+   keeps the exact same box/baseline as its plain-text siblings (Buy, Rent,
+   Services) inside the shared flex nav — switching it to inline-flex here
+   previously broke vertical alignment, pushing "Leasing" down inside the
+   pill. Only the chevron itself is sized as inline-block. */
+.nav-has-dropdown > a .chevron {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+.nav-has-dropdown:hover > a .chevron,
+.nav-has-dropdown:focus-within > a .chevron {
+  transform: rotate(180deg);
+}
+
 .whatsapp {
   width: 52px;
   height: 52px;
@@ -2361,6 +2435,36 @@ html:not(.motion-ready) .motion-item-visible {
     width: 28px;
     height: 28px;
     fill: currentColor;
+  }
+
+  /* Leasing sub-links: always visible, indented, under the "Leasing" row. */
+  .mobile-nav-has-sublist > a {
+    border-bottom: 0;
+    padding-bottom: 8px;
+  }
+
+  .mobile-nav-sublist {
+    display: grid;
+    gap: 0;
+    margin: 0 0 4px;
+    padding: 0 0 12px 18px;
+    list-style: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  .mobile-nav-sublist a {
+    display: block;
+    padding: 10px 0;
+    border-bottom: 0;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 13px;
+    font-weight: 400;
+    transition: color 0.32s ease;
+  }
+
+  .mobile-nav-sublist a:hover,
+  .mobile-nav-sublist a:focus-visible {
+    color: var(--gold);
   }
 }
 

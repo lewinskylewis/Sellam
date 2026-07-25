@@ -28,8 +28,15 @@
         <ul class="desktop-nav" aria-label="Main menu">
           <li><a href="buy.html">Buy</a></li>
           <li><a href="index.html#rent">Rent</a></li>
-          <li><a href="index.html#leasing">Leasing</a></li>
-          <li><a href="index.html#off-plan">Off-plan</a></li>
+          <li class="nav-has-dropdown">
+            <a href="leasing-offices.html" aria-haspopup="true">Leasing<span class="chevron" aria-hidden="true"></span></a>
+            <ul class="nav-dropdown">
+              <li><a href="leasing-offices.html">Offices</a></li>
+              <li><a href="leasing-retail.html">Retail</a></li>
+              <li><a href="leasing-industrial.html">Industrial</a></li>
+              <li><a href="leasing-land.html">Land</a></li>
+            </ul>
+          </li>
           <li><a href="index.html#services">Services</a></li>
         </ul>
 
@@ -62,8 +69,15 @@
           <ul class="mobile-nav-list">
             <li><a href="buy.html">Buy</a></li>
             <li><a href="index.html#rent">Rent</a></li>
-            <li><a href="index.html#leasing">Leasing</a></li>
-            <li><a href="index.html#off-plan">Off-plan</a></li>
+            <li class="mobile-nav-has-sublist">
+              <a href="leasing-offices.html">Leasing</a>
+              <ul class="mobile-nav-sublist">
+                <li><a href="leasing-offices.html">Offices</a></li>
+                <li><a href="leasing-retail.html">Retail</a></li>
+                <li><a href="leasing-industrial.html">Industrial</a></li>
+                <li><a href="leasing-land.html">Land</a></li>
+              </ul>
+            </li>
             <li><a href="index.html#services">Services</a></li>
             <li>
               <a class="mobile-whatsapp" href="https://wa.me/254700435000">
@@ -88,39 +102,6 @@
           <p class="intro-copy reveal">
             SELLAM presents a carefully curated portfolio of rare, premium properties reserved for discerning investors and selective homeowners. Situated in Kenya's most prestigious neighborhoods and growth corridors, these exclusive listings combine timeless architecture, refined interiors, and exceptional privacy. Owning an exclusively listed property with SELLAM offers unmatched advantages, from access to rare opportunities and off-market deals to long-term value growth in high-demand locations. Our portfolio features elegant city apartments with panoramic views, modern townhouses in sought-after suburbs, and private homes that meet the highest standards of design, comfort, and investment potential.
           </p>
-
-          <div class="listing-toolbar reveal">
-            <h1>8 Exclusive units available</h1>
-            <span class="toolbar-line" aria-hidden="true"></span>
-
-            <div class="toolbar-actions">
-              <div class="sort-select" data-sort-select>
-                <button class="sort-trigger" type="button" aria-expanded="false" aria-controls="sortMenu">
-                  <span>Sort by</span>
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="m6.7 8.75 5.3 5.3 5.3-5.3 1.4 1.4-6.7 6.7-6.7-6.7 1.4-1.4Z"/>
-                  </svg>
-                </button>
-                <div class="sort-menu" id="sortMenu">
-                  <button type="button" data-sort="name">Name</button>
-                  <button type="button" data-sort="bedrooms">No of Bedrooms</button>
-                  <button type="button" data-sort="bathrooms">No of Bathrooms</button>
-                </div>
-              </div>
-
-              <button class="icon-sort-button" type="button" data-sort-shortcut="bedrooms" aria-label="Sort by number of bedrooms">
-                <svg viewBox="0 0 80 80" aria-hidden="true">
-                  <path d="M11 17h26a5 5 0 0 1 0 10H11a5 5 0 0 1 0-10Zm0 22h18a5 5 0 0 1 0 10H11a5 5 0 0 1 0-10Zm0 22h34a5 5 0 0 1 0 10H11a5 5 0 0 1 0-10Zm44.5-46.5L72 31H60v38H49V31H37l18.5-16.5Z"/>
-                </svg>
-              </button>
-
-              <button class="icon-sort-button" type="button" data-sort-shortcut="bathrooms" aria-label="Sort by number of bathrooms">
-                <svg viewBox="0 0 80 80" aria-hidden="true">
-                  <path d="M24.5 65.5 8 49h12V11h11v38h12L24.5 65.5ZM50 17h19a5 5 0 0 1 0 10H50a5 5 0 0 1 0-10Zm0 22h28a5 5 0 0 1 0 10H50a5 5 0 0 1 0-10Zm0 22h14a5 5 0 0 1 0 10H50a5 5 0 0 1 0-10Z"/>
-                </svg>
-              </button>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -192,6 +173,7 @@
     <!-- Central inventory + card renderer run first so the cards exist
          before the other scripts initialise. -->
     <script src="data/properties.js"></script>
+    <script src="data/property-units.js"></script>
     <script src="listings.js"></script>
     <script src="enquiry-config.js"></script>
     <script src="enquiry-modal.js"></script>

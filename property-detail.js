@@ -44,7 +44,25 @@ const propertyData = {
     heroAlt: "DG WEST premium living suite",
     description:
       "DG West is a signature residence where thoughtful design meets urban convenience, offering a lifestyle tailored for discerning homeowners and smart investors alike. Located in a prime, rapidly growing area, this development blends modern architecture with refined finishes to create a truly elevated living experience. Whether you're buying your first home, upgrading your lifestyle, or expanding your real estate portfolio, DG West delivers on all fronts. Each unit is crafted for comfort, natural light, and efficient living, complemented by a full suite of amenities that set the property apart.\n\nEnjoy a fully equipped gym for your fitness goals, a rooftop entertainment lounge perfect for relaxing or hosting guests, a safe and spacious children’s play area, and beautiful communal spaces designed to build a sense of community. Additional features include high-speed lifts, 24/7 manned security with CCTV surveillance, secure and ample parking, borehole water supply, solar water heating, and fibre-optic internet infrastructure for seamless connectivity. With flexible payment plans and investor-friendly pricing, DG West offers more than just a place to live—it’s a long-term asset. Reach out today to schedule a site visit and see firsthand what makes this development a standout in the Nairobi property market.",
-    featureLocation: "Prime Westlands address with premium access, high visibility, and strong long-term value.",
+    featureLocation: "Prime CBD address with high visibility and foot traffic.",
+    storyText: [
+      {
+        title: "The Master Sanctuary",
+        body: "Step into a realm of calm refinement. This bedroom is designed as a private retreat where elegant textures, soft lighting, and warm tones meet to create a sanctuary of peace. Floor-to-ceiling windows invite natural light while rich finishes and ambient detail exude quiet luxury. It's more than just a bedroom—it's your daily escape, tailored for rest, rejuvenation, and inspired mornings."
+      },
+      {
+        title: "The Skyline Oasis",
+        body: "Unwind in the serene embrace of our rooftop infinity pool—an exquisite blend of leisure and panoramic beauty. The Skyline Oasis offers crystal-clear waters, luxury deck seating, and ambient surroundings that feel worlds away from city bustle. Whether for a morning swim or golden-hour retreat, this pool redefines indulgence. Here, relaxation meets elegance in the most breathtaking way imaginable."
+      },
+      {
+        title: "The Prestige Wellness Suite",
+        body: "Elevate your lifestyle in a gym curated for those who value excellence. The Prestige Wellness Suite features state-of-the-art fitness equipment, mood-enhancing lighting, and ample space for yoga, strength training, or cardio. Set within a tranquil design palette, every workout feels like a luxury ritual. Whether you're starting your day or unwinding, this space turns wellness into a daily indulgence."
+      },
+      {
+        title: "The Grand Arrival Lounge",
+        body: "Make every entrance unforgettable. The hotel-style reception at Sellam blends timeless class with five-star ambiance. Double-height ceilings, curated art, and bespoke lighting welcome you with poise and prestige. Whether greeting guests or returning home, this is a space where first impressions are felt deeply—crafted to mirror the sophistication of a luxury hotel in every detail."
+      }
+    ],
     gallery: commonGallery
   },
   "grosvenor-westlands": {
@@ -627,15 +645,45 @@ function findInventoryProperty(id) {
   return list.find((item) => item.id === id || item.slug === id) || null;
 }
 
-function formatPropertyPrice(inventoryItem) {
-  const format = window.SellamSearch && typeof window.SellamSearch.formatKES === "function"
-    ? window.SellamSearch.formatKES
-    : (value) => `KES ${Number(value).toLocaleString("en-KE")}`;
+function formatKESValue(value) {
+  return window.SellamSearch && typeof window.SellamSearch.formatKES === "function"
+    ? window.SellamSearch.formatKES(value)
+    : `KES ${Number(value).toLocaleString("en-KE")}`;
+}
 
-  const parts = [];
-  if (inventoryItem.salePrice) parts.push(`Sale, ${format(inventoryItem.salePrice)}`);
-  if (inventoryItem.rentPrice) parts.push(`Rent, ${format(inventoryItem.rentPrice)}/month`);
-  return parts.length ? parts.join(" | ") : "Price on application";
+function countLabel(count, noun) {
+  return `${count} ${noun}${count === 1 ? "" : "s"}`;
+}
+
+// Builds one row per price the property actually has — a single-unit
+// property with both a sale and a rent price gets two rows (same bed/bath,
+// different price); a property with more than one floor plan (see
+// data/property-units.js) gets one row per unit per price it lists. This is
+// the "full info" breakdown the listing card deliberately omits (cards only
+// show bedroom counts and a starting price — see listings.js).
+function buildPriceRows(inventoryItem) {
+  const units = window.SellamUnits ? window.SellamUnits.unitsOf(inventoryItem) : [inventoryItem];
+  const rows = [];
+
+  units.forEach((unit) => {
+    const bedrooms = unit.bedrooms !== null && unit.bedrooms !== undefined ? countLabel(unit.bedrooms, "Bedroom") : "—";
+    const bathrooms = unit.bathrooms !== null && unit.bathrooms !== undefined ? countLabel(unit.bathrooms, "Bathroom") : "—";
+
+    if (unit.salePrice) rows.push({ bedrooms, bathrooms, price: formatKESValue(unit.salePrice) });
+    if (unit.rentPrice) rows.push({ bedrooms, bathrooms, price: `${formatKESValue(unit.rentPrice)} / month` });
+  });
+
+  if (!rows.length) rows.push({ bedrooms: "—", bathrooms: "—", price: "Price on application" });
+  return rows;
+}
+
+// Plain-text fallback for anything that isn't rendered as the price table
+// (currently unused on property.html, kept for legacy propertyData entries
+// — see getProperty() — that only ever had a single formatted string).
+function formatPropertyPriceText(priceRows) {
+  return priceRows
+    .map((row) => (row.bedrooms === "—" ? row.price : `${row.bedrooms} — ${row.price}`))
+    .join("  ·  ");
 }
 
 function inventoryToLegacyShape(inventoryItem) {
@@ -645,18 +693,33 @@ function inventoryToLegacyShape(inventoryItem) {
     alt: `${inventoryItem.title} image ${index + 1}`
   }));
 
+  const priceRows = buildPriceRows(inventoryItem);
+
   return {
     title: inventoryItem.title,
     location: inventoryItem.location,
-    price: formatPropertyPrice(inventoryItem),
-    hero: gallery[0].src,
+    priceRows,
+    price: formatPropertyPriceText(priceRows),
+    // The hero banner is landscape; gallery photos are portrait carousel
+    // slides. Deliberately NOT gallery[0] — reusing the same photo for both
+    // means one of the two crops looks wrong. `heroImage` (a dedicated detail-
+    // page banner shot) is used when set; otherwise falls back to `image`
+    // (the card thumbnail) so existing properties without `heroImage` keep
+    // working unchanged.
+    hero: inventoryItem.heroImage || inventoryItem.image,
     heroAlt: `${inventoryItem.title} in ${inventoryItem.location}`,
     description: inventoryItem.description,
     featureLocation: inventoryItem.featureLocation,
+    featureHighlights: inventoryItem.featureHighlights,
+    closingParagraphs: inventoryItem.closingParagraphs,
     gallery,
     // Bespoke narrative text (when present) overlays the auto-generated story
     // rows in buildStoryContent() — see there for how images are assigned.
-    storyText: inventoryItem.story?.rows
+    storyText: inventoryItem.story?.rows,
+    // Used to pick residential vs. commercial wording in buildStoryContent(),
+    // and to choose the enquiry heading ("To Buy Now" vs "To Lease Now").
+    propertyType: inventoryItem.propertyType,
+    letting: inventoryItem.letting
   };
 }
 
@@ -694,12 +757,90 @@ function renderDescription(selector, value) {
     });
 }
 
+// A legacy propertyData entry (see getProperty()) only ever had a single
+// pre-formatted price string, no bed/bath breakdown — fall back to one row.
+function renderPriceTable(property) {
+  const list = document.querySelector("[data-price-rows]");
+  if (!list) return;
+
+  const rows = property.priceRows || [{ bedrooms: "—", bathrooms: "—", price: property.price }];
+  list.replaceChildren();
+
+  rows.forEach((row) => {
+    const item = document.createElement("div");
+    item.className = "price-row";
+    item.innerHTML =
+      `<span class="price-row-meta">${row.bedrooms}<span class="price-row-sep" aria-hidden="true">/</span>${row.bathrooms}</span>` +
+      `<span class="price-row-value">${row.price}</span>`;
+    list.append(item);
+  });
+}
+
+// Single universal icon used for every feature-banner item — a feature can
+// be anything (location, parking, amenities...), so one neutral check-circle
+// mark reads correctly for all of them instead of a house glyph that only
+// suits "Location".
+const FEATURE_ICON_SVG =
+  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-1.2 14.4-4.2-4.2 1.4-1.4 2.8 2.8 6-6 1.4 1.4-7.4 7.4Z"/></svg>';
+
+// Used whenever a property has no bespoke `featureHighlights` list of its
+// own (see data/properties.js field reference). `featureLocation` still
+// overrides the first item's text so existing per-property location blurbs
+// keep working without every property needing a full custom list.
+const DEFAULT_FEATURE_HIGHLIGHTS = [
+  { title: "Location:", text: "Prime address with strong access and visibility." },
+  { title: "Connectivity:", text: "High-speed elevators, fiber internet, and backup power." },
+  { title: "Size Options:", text: "Units from 1000 to 20,000 sq. ft. available." },
+  { title: "Design:", text: "Flexible open-plan layouts ready for customization." },
+  { title: "Architecture:", text: "Modern glass facade with a striking city presence." },
+  { title: "Access:", text: "Easy connection to main roads and public transport." },
+  { title: "Parking:", text: "Secure multi-level parking for tenants and visitors." },
+  { title: "Amenities Nearby:", text: "Close to banks, restaurants, malls, and hotels." }
+];
+
+function renderFeatureHighlights(property) {
+  const grid = document.querySelector("[data-feature-grid]");
+  if (!grid) return;
+
+  const items = property.featureHighlights?.length
+    ? property.featureHighlights
+    : DEFAULT_FEATURE_HIGHLIGHTS.map((item, index) =>
+        index === 0 && property.featureLocation ? { ...item, text: property.featureLocation } : item
+      );
+
+  grid.replaceChildren();
+  items.forEach((item) => {
+    const article = document.createElement("article");
+    article.className = "reveal";
+    article.innerHTML =
+      `${FEATURE_ICON_SVG}<div><h3>${item.title}</h3><p>${item.text}</p></div>`;
+    grid.append(article);
+  });
+}
+
+// Optional 1-3 paragraph closing note shown between the features banner and
+// the enquiry form. Absent on most listings — the section stays hidden
+// entirely (no empty gap) unless a property sets `closingParagraphs`.
+function renderClosingParagraphs(property) {
+  const section = document.querySelector("[data-closing-section]");
+  if (!section) return;
+
+  if (!property.closingParagraphs || !String(property.closingParagraphs).trim()) {
+    section.hidden = true;
+    return;
+  }
+
+  renderDescription("[data-closing-paragraphs]", property.closingParagraphs);
+  section.hidden = false;
+}
+
 function setupPropertyContent(property) {
   document.title = `Sellam | ${property.title}`;
   setText("[data-property-title]", property.title);
   renderDescription("[data-property-description]", property.description);
-  setText("[data-property-price]", property.price);
-  setText("[data-feature-location]", property.featureLocation);
+  renderPriceTable(property);
+  renderFeatureHighlights(property);
+  renderClosingParagraphs(property);
 
   const hero = document.querySelector("[data-hero-image]");
   if (hero) {
@@ -712,38 +853,77 @@ function setupPropertyContent(property) {
     heroButton.dataset.lightboxSrc = property.hero;
     heroButton.setAttribute("aria-label", `Open ${property.heroAlt}`);
   }
+
+  // Rent-only listings (e.g. offices, retail, industrial, land leases) get
+  // "To Lease Now" instead of "To Buy Now". Anything else (sale, both, or the
+  // legacy pages that don't carry a `letting` at all) keeps the original copy.
+  const enquiryHeading = document.querySelector("[data-enquiry-heading]");
+  if (enquiryHeading) {
+    enquiryHeading.textContent = property.letting === "rent" ? "To Lease Now" : "To Buy Now";
+  }
 }
+
+// Property types that should get commercial-flavoured generic copy (no
+// "bedroom" / "residence" / "buyers" language) when a property has no
+// bespoke `story` text of its own.
+const COMMERCIAL_TYPES = ["office", "retail", "industrial", "land", "commercial"];
 
 function buildStoryContent(property) {
   const gallery = property.gallery?.length ? property.gallery : commonGallery;
   const imageAt = (index) => gallery[index % gallery.length];
   const title = property.title;
   const location = property.location || "Nairobi";
+  const isCommercial = COMMERCIAL_TYPES.includes(property.propertyType);
 
   // Generic, always-available narrative — used as-is when a property has no
-  // bespoke copy, and as the image/fallback-text source when it does.
-  const rows = [
-    {
-      image: imageAt(1),
-      title: `${title} Residence`,
-      body: `${title} is presented as a composed premium residence in ${location}, with spaces planned for comfort, privacy, and everyday ease. The interiors and exterior setting work together to create a property experience that feels refined, practical, and ready for discerning buyers.`
-    },
-    {
-      image: imageAt(2),
-      title: "Design And Finishes",
-      body: `The property brings together generous proportions, considered finishes, and strong visual character. Each image in the gallery reflects the quality and atmosphere of ${title}, giving buyers a clearer sense of how the home supports family living, hosting, and long-term value.`
-    },
-    {
-      image: imageAt(3),
-      title: "Lifestyle And Comfort",
-      body: `From relaxed daily routines to private entertaining, ${title} is shaped around a comfortable premium lifestyle. The residence offers the kind of space, light, and calm expected from a carefully selected SELLAM property.`
-    },
-    {
-      image: imageAt(4),
-      title: "Location Advantage",
-      body: `${location} gives this property a strong residential context, with access to established amenities, key routes, and the privacy buyers expect from a premium address. It is positioned for both lifestyle appeal and long-term investment confidence.`
-    }
-  ];
+  // bespoke copy, and as the image/fallback-text source when it does. Wording
+  // switches based on property type so an office or warehouse never reads
+  // like a family home.
+  const rows = isCommercial
+    ? [
+        {
+          image: imageAt(1),
+          title: `${title} Overview`,
+          body: `${title} is presented as a well-positioned commercial property in ${location}, with space planned for efficiency, accessibility, and everyday practicality. The interior and setting work together to create a property experience that feels professional, functional, and ready for discerning occupiers.`
+        },
+        {
+          image: imageAt(2),
+          title: "Specification",
+          body: `The property brings together practical proportions, considered specification, and strong functional character. Each image in the gallery reflects the quality and condition of ${title}, giving occupiers a clearer sense of how the space supports day-to-day operations and long-term value.`
+        },
+        {
+          image: imageAt(3),
+          title: "Operational Advantages",
+          body: `From daily operations to client-facing use, ${title} is shaped around dependable, professional occupancy. The property offers the kind of space, access, and reliability expected from a carefully selected SELLAM commercial listing.`
+        },
+        {
+          image: imageAt(4),
+          title: "Location Advantage",
+          body: `${location} gives this property a strong commercial context, with access to established infrastructure, key routes, and the visibility or accessibility occupiers expect from a well-placed address. It is positioned for both operational appeal and long-term investment confidence.`
+        }
+      ]
+    : [
+        {
+          image: imageAt(1),
+          title: `${title} Residence`,
+          body: `${title} is presented as a composed premium residence in ${location}, with spaces planned for comfort, privacy, and everyday ease. The interiors and exterior setting work together to create a property experience that feels refined, practical, and ready for discerning buyers.`
+        },
+        {
+          image: imageAt(2),
+          title: "Design And Finishes",
+          body: `The property brings together generous proportions, considered finishes, and strong visual character. Each image in the gallery reflects the quality and atmosphere of ${title}, giving buyers a clearer sense of how the home supports family living, hosting, and long-term value.`
+        },
+        {
+          image: imageAt(3),
+          title: "Lifestyle And Comfort",
+          body: `From relaxed daily routines to private entertaining, ${title} is shaped around a comfortable premium lifestyle. The residence offers the kind of space, light, and calm expected from a carefully selected SELLAM property.`
+        },
+        {
+          image: imageAt(4),
+          title: "Location Advantage",
+          body: `${location} gives this property a strong residential context, with access to established amenities, key routes, and the privacy buyers expect from a premium address. It is positioned for both lifestyle appeal and long-term investment confidence.`
+        }
+      ];
 
   // Bespoke narrative text (property.storyText, from data/properties.js'
   // `story.rows`) overlays the generic title/body per row, index for index,
@@ -947,6 +1127,49 @@ function setupGallery(property) {
   refresh();
 }
 
+function setupGalleryCollage(property) {
+  const trigger = document.querySelector("[data-gallery-view-all]");
+  const collage = document.querySelector("[data-gallery-collage]");
+  const grid = document.querySelector("[data-gallery-collage-grid]");
+  const closeButton = document.querySelector("[data-gallery-collage-close]");
+
+  if (!trigger || !collage || !grid || !closeButton) return;
+
+  grid.replaceChildren();
+  property.gallery.forEach((image, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.setAttribute("aria-label", `Open ${image.alt}`);
+    button.innerHTML = `<img src="${image.src}" alt="${image.alt}" loading="lazy">`;
+    button.addEventListener("click", () => {
+      close();
+      openLightbox(index);
+    });
+    grid.append(button);
+  });
+
+  const open = () => {
+    collage.classList.add("is-open");
+    collage.setAttribute("aria-hidden", "false");
+    document.body.classList.add("menu-open");
+  };
+
+  const close = () => {
+    collage.classList.remove("is-open");
+    collage.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("menu-open");
+  };
+
+  trigger.addEventListener("click", open);
+  closeButton.addEventListener("click", close);
+  collage.addEventListener("click", (event) => {
+    if (event.target === collage) close();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (collage.classList.contains("is-open") && event.key === "Escape") close();
+  });
+}
+
 function setupInlineLightboxTriggers() {
   document.querySelectorAll("[data-lightbox-src]").forEach((button) => {
     const src = button.dataset.lightboxSrc;
@@ -1033,6 +1256,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupMobileMenu();
   setupPropertyContent(property);
   setupGallery(property);
+  setupGalleryCollage(property);
   setupPropertyStory(property);
   setupInlineLightboxTriggers();
   setupLightbox();

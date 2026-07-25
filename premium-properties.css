@@ -191,6 +191,110 @@ button {
   transform-origin: left;
 }
 
+/* Leasing nav dropdown (desktop): CSS-only, opens on hover or keyboard focus. */
+.nav-has-dropdown {
+  position: relative;
+}
+
+.nav-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 40;
+  min-width: 190px;
+  margin: 8px 0 0;
+  padding: 10px;
+  list-style: none;
+  background: var(--white);
+  border: 1px solid rgba(12, 51, 64, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 20px 45px rgba(0, 31, 43, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
+}
+
+.nav-has-dropdown:hover .nav-dropdown,
+.nav-has-dropdown:focus-within .nav-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-dropdown li {
+  list-style: none;
+}
+
+.nav-dropdown a {
+  display: block;
+  padding: 7.5px 14px;
+  border-radius: 9px;
+  color: #17323b;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.nav-dropdown a::after {
+  content: none;
+}
+
+.nav-dropdown a:hover,
+.nav-dropdown a:focus-visible {
+  background: #edf3f4;
+  color: var(--teal);
+}
+
+/* Down-facing chevron beside the "Leasing" trigger. Matches the search bar's
+   .rent-search-bar .chevron look exactly, but usable anywhere (that rule is
+   scoped to the rent search bar only). */
+.chevron {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  flex: none;
+  transition: transform 180ms ease;
+}
+
+.chevron::before,
+.chevron::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  width: 9px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.chevron::before {
+  left: 0;
+  transform: rotate(45deg);
+}
+
+.chevron::after {
+  right: 0;
+  transform: rotate(-45deg);
+}
+
+/* IMPORTANT: the trigger <a> must stay `display: inline` (its default) so it
+   keeps the exact same box/baseline as its plain-text siblings (Buy, Rent,
+   Services) inside the shared flex nav — switching it to inline-flex here
+   previously broke vertical alignment, pushing "Leasing" down inside the
+   pill. Only the chevron itself is sized as inline-block. */
+.nav-has-dropdown > a .chevron {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+.nav-has-dropdown:hover > a .chevron,
+.nav-has-dropdown:focus-within > a .chevron {
+  transform: rotate(180deg);
+}
+
 .whatsapp {
   width: 52px;
   height: 52px;
@@ -485,7 +589,7 @@ button {
 .properties-intro {
   position: relative;
   z-index: 10;
-  padding: 82px 0 70px;
+  padding: 82px 0 40px;
 }
 
 .intro-copy {
@@ -497,144 +601,10 @@ button {
   font-weight: 400;
 }
 
-.listing-toolbar {
-  position: relative;
-  z-index: 50;
-  margin-top: clamp(84px, 6.6vw, 128px);
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 42px;
-}
-
-.listing-toolbar h1 {
-  margin: 0;
-  color: #111;
-  font-family: var(--font-serif);
-  font-size: clamp(24px, 1.3vw, 30px);
-  line-height: 1;
-  font-weight: 700;
-}
-
-.toolbar-line {
-  height: 1px;
-  background: rgba(16, 39, 47, 0.72);
-}
-
-.toolbar-actions {
-  position: relative;
-  z-index: 60;
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  color: #101820;
-}
-
-.sort-select {
-  position: relative;
-  z-index: 70;
-}
-
-.sort-trigger,
-.icon-sort-button,
-.sort-menu button {
-  border: 0;
-  background: transparent;
-  color: inherit;
-}
-
-.sort-trigger {
-  display: inline-flex;
-  align-items: center;
-  gap: 18px;
-  padding: 12px 0;
-  text-transform: uppercase;
-  font-size: clamp(24px, 1.vw, 30px);
-  font-weight: 700;
-  letter-spacing: 0;
-  white-space: nowrap;
-}
-
-.sort-trigger svg {
-  width: 28px;
-  height: 28px;
-  fill: currentColor;
-  transition: transform 0.3s ease;
-}
-
-.sort-select.is-open .sort-trigger svg {
-  transform: rotate(180deg);
-}
-
-.sort-menu {
-  position: absolute;
-  top: calc(100% + 14px);
-  right: 0;
-  z-index: 1000;
-  min-width: 260px;
-  padding: 18px;
-  display: grid;
-  gap: 8px;
-  background: var(--white);
-  border-radius: 18px;
-  box-shadow: 0 18px 46px rgba(0, 31, 43, 0.18);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(-8px);
-  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
-}
-
-.sort-select.is-open .sort-menu {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(0);
-}
-
-.sort-menu button {
-  min-height: 46px;
-  padding: 12px 14px;
-  text-align: left;
-  border-radius: 10px;
-  font-size: 16px;
-  line-height: 1.15;
-  white-space: nowrap;
-}
-
-.sort-menu button:hover,
-.sort-menu button:focus-visible {
-  background: var(--cloud);
-}
-
-.icon-sort-button {
-  width: 32px;
-  height: 32px;
-  padding: 2px;
-  transition: color 0.25s ease, transform 0.25s ease;
-}
-
-.icon-sort-button svg {
-  width: 100%;
-  height: 100%;
-  fill: #111;
-}
-
-.icon-sort-button:hover,
-.icon-sort-button:focus-visible {
-  color: var(--gold);
-  transform: translateY(-1px);
-}
-
-.icon-sort-button:hover svg,
-.icon-sort-button:focus-visible svg {
-  fill: currentColor;
-}
-
 .properties-list {
   position: relative;
   z-index: 1;
-  padding: 76px 0 108px;
+  padding: 40px 0 108px;
 }
 
 .property-rows {
@@ -657,7 +627,7 @@ button {
 .property-card {
   display: grid;
   grid-template-columns: clamp(220px, 16vw, 284px) minmax(210px, 1fr);
-  align-items: center;
+  align-items: start;
   gap: clamp(24px, 2vw, 34px);
 }
 
@@ -666,7 +636,7 @@ button {
   display: block;
   aspect-ratio: 0.75;
   overflow: hidden;
-  border-radius: 32px;
+  border-radius: 0;
   background: var(--cloud);
   box-shadow: 0 16px 32px rgba(0, 25, 33, 0.08);
 }
@@ -683,11 +653,17 @@ button {
   transform: scale(1.07);
 }
 
+.property-info {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+}
+
 .property-info h2 {
   margin: 0 0 8px;
   color: #121212;
   font-family: var(--font-serif);
-  font-size: clamp(21px, 1.18vw, 27px);
+  font-size: clamp(22px, 1.26vw, 28px);
   line-height: 1.08;
   font-weight: 700;
 }
@@ -718,181 +694,77 @@ button {
   font-weight: 400;
 }
 
-.specs,
-.amenities {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.specs {
+/* Bedroom-count line: lists every count the property comes in (e.g. "1, 2 &
+   3 Bedrooms" for a multi-unit development). Bathrooms are a detail-page
+   -only field, not shown here. */
+.beds-line {
   display: flex;
   align-items: center;
-  gap: 44px;
-  margin-bottom: 30px;
-  color: #25343a;
-  font-size: 16px;
-  font-weight: 400;
-}
-
-.specs li {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.specs svg {
-  width: 26px;
-  height: 26px;
-  fill: var(--gold);
-  flex: 0 0 auto;
-}
-
-.amenities {
-  display: flex;
-  width: 272px;
-  justify-content: space-between;
-  gap: 0;
-  margin-bottom: 28px;
-  overflow: visible;
-}
-
-.amenities li {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  background: #8aa0a9;
-  color: transparent;
-  font-size: 0;
-  overflow: visible;
-  position: relative;
-  transition: transform 0.28s ease, background 0.28s ease, box-shadow 0.28s ease;
-}
-
-.amenities li::before {
-  content: "";
-  width: 31px;
-  height: 31px;
-  display: block;
-  flex: 0 0 auto;
-  background: var(--white);
-  -webkit-mask: var(--icon);
-  -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask: var(--icon);
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
-  transition: transform 0.28s ease;
-}
-
-.amenities li::after {
-  content: attr(data-label);
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 9px);
-  z-index: 4;
-  padding: 7px 11px;
-  border-radius: 999px;
-  background: var(--ink-deep);
-  color: var(--white);
-  box-shadow: 0 10px 26px rgba(0, 31, 43, 0.22);
-  font-size: 11px;
+  gap: 10px;
+  margin: 0 0 12px;
+  color: var(--ink-deep);
+  font-family: var(--font-serif);
+  font-size: 14px;
   font-weight: 700;
-  line-height: 1;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, 8px);
-  transition: opacity 0.24s ease, transform 0.24s ease;
 }
 
-.amenities li:hover,
-.amenities li:focus-within {
-  background: #7f939c;
-  box-shadow: 0 14px 28px rgba(0, 31, 43, 0.16);
-  transform: translateY(-4px);
+.beds-line svg {
+  width: 22px;
+  height: 22px;
+  fill: var(--ink-deep);
+  flex: 0 0 auto;
 }
 
-.amenities li:hover::before,
-.amenities li:focus-within::before {
-  transform: scale(1.05);
+.price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 28px;
+  color: var(--ink-deep);
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 700;
 }
 
-.amenities li:hover::after,
-.amenities li:focus-within::after {
-  opacity: 1;
-  transform: translate(-50%, 0);
+.price svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--ink-deep);
+  flex: 0 0 auto;
 }
 
-.amenities li:nth-child(1) {
-  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'%3E%3Cpath d='M36 55.8a5.4 5.4 0 1 0 0-10.8 5.4 5.4 0 0 0 0 10.8Zm-13.4-17.2a3 3 0 0 0 4.2 4.2 13 13 0 0 1 18.4 0 3 3 0 1 0 4.2-4.2 19 19 0 0 0-26.8 0Zm-10.1-10.2a3 3 0 0 0 4.2 4.2 27.4 27.4 0 0 1 38.6 0 3 3 0 1 0 4.2-4.2 33.4 33.4 0 0 0-47 0Zm-10.1-10a3 3 0 0 0 4.2 4.2 41.7 41.7 0 0 1 58.8 0 3 3 0 0 0 4.2-4.2 47.7 47.7 0 0 0-67.2 0Z'/%3E%3C/svg%3E");
-}
-
-.amenities li:nth-child(2) {
-  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'%3E%3Cpath d='M38.7 19.9 51.2 18a3 3 0 1 0-.9-5.9l-13.5 2a3.4 3.4 0 0 0-2.2 1.2l-8.2 9.5a3 3 0 0 0 .7 4.6l10 6.1-4.6 12.2a3 3 0 1 0 5.6 2.1l5.4-14.3a3 3 0 0 0-1.3-3.6l-6.8-4.2 3.3-7.8Zm15.1 16.7a6.4 6.4 0 1 0 0-12.8 6.4 6.4 0 0 0 0 12.8ZM3.8 45.5c4.9 0 4.9-2.7 9.8-2.7s4.8 2.7 9.7 2.7 4.9-2.7 9.8-2.7 4.9 2.7 9.8 2.7 4.9-2.7 9.8-2.7 4.9 2.7 9.8 2.7v5.8c-4.9 0-4.9-2.7-9.8-2.7s-4.9 2.7-9.8 2.7-4.9-2.7-9.8-2.7-4.9 2.7-9.8 2.7-4.8-2.7-9.7-2.7-4.9 2.7-9.8 2.7v-5.8Zm0 11.8c4.9 0 4.9-2.7 9.8-2.7s4.8 2.7 9.7 2.7 4.9-2.7 9.8-2.7 4.9 2.7 9.8 2.7 4.9-2.7 9.8-2.7 4.9 2.7 9.8 2.7v5.8c-4.9 0-4.9-2.7-9.8-2.7s-4.9 2.7-9.8 2.7-4.9-2.7-9.8-2.7-4.9 2.7-9.8 2.7-4.8-2.7-9.7-2.7-4.9 2.7-9.8 2.7v-5.8Z'/%3E%3C/svg%3E");
-}
-
-.amenities li:nth-child(3) {
-  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'%3E%3Cpath d='M30.1 11.9a8.2 8.2 0 0 1 11.6 0l1.8 1.8 1.8-1.8a8.2 8.2 0 0 1 11.6 11.6L43.5 36.9 30.1 23.5a8.2 8.2 0 0 1 0-11.6ZM20 39h28v6H20v-6ZM9 31h7v22H9V31Zm43 0h7v22h-7V31ZM1 37h6v10H1V37Zm60 0h6v10h-6V37Z'/%3E%3C/svg%3E");
-}
-
-.amenities li:nth-child(4) {
-  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'%3E%3Cpath d='M16 32.5 20.8 21c.8-2 2.8-3.3 5-3.3h20.4c2.2 0 4.2 1.3 5 3.3L56 32.5h3.5v16H54v5.8h-6v-5.8H24v5.8h-6v-5.8h-5.5v-16H16Zm7.2 0h25.6l-3.1-7.6c-.2-.6-.8-1-1.5-1H27.8c-.7 0-1.3.4-1.5 1l-3.1 7.6ZM23 43.3a4.3 4.3 0 1 0 0-8.6 4.3 4.3 0 0 0 0 8.6Zm26 0a4.3 4.3 0 1 0 0-8.6 4.3 4.3 0 0 0 0 8.6ZM5.8 37.6a6.2 6.2 0 1 1 12.4 0 6.2 6.2 0 0 1-12.4 0Zm3.2-1.3v2.6h3v3h2.6v-3h3v-2.6h-3v-3H12v3H9Z'/%3E%3C/svg%3E");
-}
-
-.amenities li:nth-child(5) {
-  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'%3E%3Cpath d='M36 5.5c8.9 5.1 17.9 7.9 27 8.4v22.8C63 50.4 54 60.5 36 66.5 18 60.5 9 50.4 9 36.7V13.9c9.1-.5 18.1-3.3 27-8.4Zm0 7.6c-6.7 3.5-13.6 5.8-20.7 6.7v16.9c0 10 6.9 17.6 20.7 22.9 13.8-5.3 20.7-12.9 20.7-22.9V19.8c-7.1-.9-14-3.2-20.7-6.7Zm0 5.9v34.4c-9.9-4.2-14.9-9.8-14.9-16.7V24.8A61.5 61.5 0 0 0 36 19Z'/%3E%3C/svg%3E");
-}
-
-.amenities li:nth-child(1)::after {
-  content: "Wifi";
-}
-
-.amenities li:nth-child(2)::after {
-  content: "Swimming pool";
-}
-
-.amenities li:nth-child(3)::after {
-  content: "Gym";
-}
-
-.amenities li:nth-child(4)::after {
-  content: "Parking space";
-}
-
-.amenities li:nth-child(5)::after {
-  content: "Security";
-}
-
+/* Minimalist card buttons: plain text links with a thin divider between
+   them, no pill background. */
 .card-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  margin-top: auto;
 }
 
 .card-actions a {
-  min-width: 128px;
-  height: 38px;
-  display: inline-grid;
-  place-items: center;
-  padding: 0 22px;
-  border-radius: 999px;
-  background: var(--ink-deep);
-  color: var(--white);
-  font-size: 12px;
+  padding: 0;
+  min-width: 0;
+  height: auto;
+  display: inline-block;
+  border-radius: 0;
+  background: transparent;
+  color: var(--gold);
+  font-size: 21px;
   font-weight: 700;
-  transition: transform 0.3s ease, background 0.3s ease;
+  transition: color 0.25s ease;
 }
 
 .card-actions a:hover,
 .card-actions a:focus-visible {
-  background: var(--teal);
-  transform: translateY(-2px);
+  color: var(--teal);
+  background: transparent;
+  transform: none;
+}
+
+.card-actions a + a {
+  margin-left: 20px;
+  padding-left: 20px;
+  border-left: 1px solid rgba(16, 16, 16, 0.25);
 }
 
 .site-footer {
@@ -1150,10 +1022,6 @@ html:not(.motion-ready) .footer-grid.reveal > * {
     grid-template-columns: minmax(190px, 0.7fr) minmax(205px, 1fr);
     gap: 24px;
   }
-
-  .card-actions a {
-    min-width: 128px;
-  }
 }
 
 @media (max-width: 1024px) {
@@ -1299,6 +1167,36 @@ html:not(.motion-ready) .footer-grid.reveal > * {
     fill: currentColor;
   }
 
+  /* Leasing sub-links: always visible, indented, under the "Leasing" row. */
+  .mobile-nav-has-sublist > a {
+    border-bottom: 0;
+    padding-bottom: 8px;
+  }
+
+  .mobile-nav-sublist {
+    display: grid;
+    gap: 0;
+    margin: 0 0 4px;
+    padding: 0 0 12px 18px;
+    list-style: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  .mobile-nav-sublist a {
+    display: block;
+    padding: 10px 0;
+    border-bottom: 0;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 13px;
+    font-weight: 400;
+    transition: color 0.32s ease;
+  }
+
+  .mobile-nav-sublist a:hover,
+  .mobile-nav-sublist a:focus-visible {
+    color: var(--gold);
+  }
+
   .premium-hero {
     min-height: 700px;
   }
@@ -1332,17 +1230,6 @@ html:not(.motion-ready) .footer-grid.reveal > * {
 
   .properties-intro {
     padding-top: 58px;
-  }
-
-  .listing-toolbar {
-    margin-top: 65px;
-    grid-template-columns: auto 1fr;
-    gap: 28px;
-  }
-
-  .toolbar-actions {
-    grid-column: 1 / -1;
-    justify-content: flex-end;
   }
 
   .listing-row,
@@ -1489,42 +1376,12 @@ html:not(.motion-ready) .footer-grid.reveal > * {
   }
 
   .properties-list {
-    padding-top: 44px;
+    padding-top: 24px;
+    padding-bottom: 62px;
   }
 
   .properties-intro {
-    padding: 44px 0 34px;
-  }
-
-  .listing-toolbar {
-    margin-top: 44px;
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .toolbar-line {
-    width: 100%;
-  }
-
-  .toolbar-actions {
-    grid-column: auto;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .sort-trigger {
-    font-size: 22px;
-  }
-
-  .sort-menu {
-    left: 0;
-    right: auto;
-    min-width: min(280px, calc(100vw - 44px));
-  }
-
-  .properties-list {
-    padding-bottom: 62px;
+    padding: 44px 0 24px;
   }
 
   .listing-row,
@@ -1542,11 +1399,11 @@ html:not(.motion-ready) .footer-grid.reveal > * {
   .property-image {
     width: 100%;
     aspect-ratio: 0.82;
-    border-radius: 26px;
+    border-radius: 0;
   }
 
   .property-info h2 {
-    font-size: 25px;
+    font-size: 27px;
   }
 
   .location {
@@ -1558,27 +1415,9 @@ html:not(.motion-ready) .footer-grid.reveal > * {
     margin-bottom: 24px;
   }
 
-  .specs {
-    gap: 22px;
-    flex-wrap: wrap;
-  }
-
-  .amenities {
-    width: 272px;
-  }
-
-  .amenities li {
-    width: 48px;
-    height: 48px;
-  }
-
   .card-actions {
-    gap: 12px;
     flex-wrap: wrap;
-  }
-
-  .card-actions a {
-    min-width: 132px;
+    row-gap: 10px;
   }
 
   .site-footer {
@@ -2025,7 +1864,7 @@ body main h1:not(.hero *):not(.site-header *) {
   line-height: 1.12 !important;
 }
 
-body main h2:not(.hero *):not(.site-header *) {
+body main h2:not(.hero *):not(.site-header *):not(.property-info *) {
   font-size: clamp(24px, 2.2vw, 34px) !important;
   line-height: 1.15 !important;
 }

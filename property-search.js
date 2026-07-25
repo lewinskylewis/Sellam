@@ -26,6 +26,7 @@
   "use strict";
 
   var INVENTORY = window.SELLAM_PROPERTIES || [];
+  var Units = window.SellamUnits;
 
   /* ---------------------------------------------------------------- helpers */
 
@@ -35,22 +36,20 @@
   }
 
   // Matches values like "3" (exact) or "6_plus" (>= 6) against a number.
-  function matchesCount(value, selected) {
+  // A property with more than one floor plan (see data/property-units.js)
+  // passes a list of every distinct value across its units — matches if ANY
+  // of them satisfies the filter.
+  function matchesCount(values, selected) {
     if (!selected || !selected.length) return true;
-    if (value === null || value === undefined) return false;
-    return selected.some(function (raw) {
-      if (String(raw).indexOf("_plus") !== -1) {
-        return value >= parseInt(raw, 10);
-      }
-      return value === parseInt(raw, 10);
+    return values.some(function (value) {
+      if (value === null || value === undefined) return false;
+      return selected.some(function (raw) {
+        if (String(raw).indexOf("_plus") !== -1) {
+          return value >= parseInt(raw, 10);
+        }
+        return value === parseInt(raw, 10);
+      });
     });
-  }
-
-  function inRange(price, min, max) {
-    if (price === null || price === undefined) return false;
-    if (min !== null && price < min) return false;
-    if (max !== null && price > max) return false;
-    return true;
   }
 
   /* ----------------------------------------------------------------- filter */
@@ -75,8 +74,8 @@
       if (types.length && types.indexOf(p.propertyType) === -1) return false;
       if (communities.length && communities.indexOf(p.community) === -1) return false;
 
-      if (!matchesCount(p.bedrooms, criteria.bedrooms)) return false;
-      if (!matchesCount(p.bathrooms, criteria.bathrooms)) return false;
+      if (!matchesCount(Units.bedroomCounts(p), criteria.bedrooms)) return false;
+      if (!matchesCount(Units.bathroomCounts(p), criteria.bathrooms)) return false;
 
       // features: property must include every selected feature
       if (features.length) {
@@ -88,8 +87,8 @@
 
       // price — only applied when a bound was actually chosen
       if (min !== null || max !== null) {
-        var okSale = inRange(p.salePrice, min, max);
-        var okRent = inRange(p.rentPrice, min, max);
+        var okSale = Units.anyPriceInRange(p, "salePrice", min, max);
+        var okRent = Units.anyPriceInRange(p, "rentPrice", min, max);
         if (priceField === "sale" && !okSale) return false;
         if (priceField === "rent" && !okRent) return false;
         if (priceField === "any" && !okSale && !okRent) return false;
@@ -102,15 +101,35 @@
   /* ----------------------------------------------------------------- render */
 
   function priceLine(p) {
+    // Multi-unit properties (see data/property-units.js) show the cheapest
+    // unit's price, prefixed "Starting" — the per-unit breakdown belongs to
+    // the listing-page card and the detail page, this one just summarises.
+    var isMulti = Units.unitsOf(p).length > 1;
+    var prefix = isMulti ? "Starting " : "";
+    var sale = Units.minPrice(p, "salePrice");
+    var rent = Units.minPrice(p, "rentPrice");
     var parts = [];
-    if (p.salePrice) parts.push(formatKES(p.salePrice));
-    if (p.rentPrice) parts.push(formatKES(p.rentPrice) + " / month");
+    if (sale !== null) parts.push(prefix + formatKES(sale));
+    if (rent !== null) parts.push(prefix + formatKES(rent) + " / month");
     return parts.length ? parts.join("  ·  ") : "Price on application";
   }
 
   function titleCase(s) {
     if (!s) return "";
     return s.replace(/-/g, " ").replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+  }
+
+  // Commercial listings (office/retail/industrial/land) may have `bedrooms`
+  // set to null in data/properties.js — omit it rather than showing "null
+  // Bed". A multi-unit property (see data/property-units.js) lists every
+  // bedroom count it comes in (e.g. "1, 2 & 3 Bed"). Bathrooms are a detail
+  // -page-only field, not shown in listing summaries.
+  function metaLine(p) {
+    var parts = [];
+    var counts = Units.bedroomCounts(p);
+    if (counts.length) parts.push(Units.joinList(counts) + " Bed");
+    parts.push(titleCase(p.propertyType));
+    return parts.join(' · ');
   }
 
   function cardHTML(p) {
@@ -123,9 +142,7 @@
           '<h3 class="result-title"><a href="' + p.url + '">' + p.title + '</a></h3>' +
           '<p class="result-location">' + p.location + '</p>' +
           '<p class="result-price">' + priceLine(p) + '</p>' +
-          '<p class="result-meta">' +
-            p.bedrooms + ' Bed · ' + p.bathrooms + ' Bath · ' + titleCase(p.propertyType) +
-          '</p>' +
+          '<p class="result-meta">' + metaLine(p) + '</p>' +
         '</div>' +
       '</article>'
     );

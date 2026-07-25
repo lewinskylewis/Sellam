@@ -9,8 +9,16 @@
     }
 
     if (pageName === "rent.html") return "rent";
-    if (pageName === "leasing.html") return "leasing";
-    if (["services.html", "operations-management.html", "property-sales.html"].includes(pageName)) {
+    if (
+      ["leasing-offices.html", "leasing-retail.html", "leasing-industrial.html", "leasing-land.html"].includes(
+        pageName
+      )
+    ) {
+      return "leasing";
+    }
+    if (
+      ["services.html", "operations-management.html", "property-sales.html", "leasing.html"].includes(pageName)
+    ) {
       return "services";
     }
     if (
