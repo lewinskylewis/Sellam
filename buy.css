@@ -22,6 +22,14 @@
   align-items: stretch;
 }
 
+/* Same card/grid system as the 3-tile Buy page, just 4 columns wide at
+   desktop — used by the Leasing landing page (Offices/Retail/Industrial/
+   Land). Everything else (card design, motion, responsive collapse to 2
+   then 1 columns below) is shared, unchanged. */
+.category-grid--four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .category-card {
   display: flex;
   flex-direction: column;

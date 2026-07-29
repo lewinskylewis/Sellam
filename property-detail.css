@@ -70,64 +70,65 @@
   margin-top: 22px;
 }
 
+/* The intro's optional bold lead-in title (see renderDescription in
+   property-detail.js). Explicit weight rather than relying on the browser's
+   default "bolder" — the sitewide `body p { font-weight: 300 !important }`
+   rule (styles.css) makes the paragraph text unusually light, so the
+   relative "bolder" keyword would only compute to ~400, not read as bold. */
+.detail-intro strong {
+  font-weight: 700;
+}
+
 .price-section {
   margin: 0 0 40px;
 }
 
-.price-heading {
-  margin: 0 0 6px;
-  color: var(--gold);
-  font-family: var(--font-serif);
-  font-size: clamp(24px, 1.6vw, 32px);
-  font-weight: 600;
-}
-
 .price-list {
-  max-width: 900px;
-}
-
-.price-row {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 32px;
-  padding: 24px 4px;
-  border-top: 1px solid rgba(6, 53, 69, 0.12);
-  transition: background 260ms ease;
+  flex-wrap: wrap;
+  row-gap: 24px;
 }
 
-.price-list .price-row:last-child {
-  border-bottom: 1px solid rgba(6, 53, 69, 0.12);
-}
-
-.price-row:hover {
-  background: rgba(211, 162, 59, 0.06);
-}
-
-.price-row-meta {
+.price-item {
   display: flex;
-  align-items: baseline;
-  gap: 9px;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 36px;
+  border-right: 1px solid rgba(6, 53, 69, 0.15);
+}
+
+.price-item:first-child {
+  padding-left: 0;
+}
+
+.price-item:last-child {
+  border-right: 0;
+}
+
+.price-item-label {
   color: var(--ink);
-  font-family: var(--font-sans);
-  font-size: clamp(12px, 0.75vw, 14px);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-family: var(--font-serif);
+  font-size: clamp(15px, 0.95vw, 18px);
+  font-weight: 500;
 }
 
-.price-row-sep {
-  color: rgba(6, 53, 69, 0.25);
-  font-weight: 400;
-}
-
-.price-row-value {
+.price-item-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: var(--gold);
   font-family: var(--font-serif);
-  font-size: clamp(20px, 1.35vw, 29px);
+  font-size: clamp(19px, 1.25vw, 26px);
   font-weight: 600;
   letter-spacing: 0.01em;
   white-space: nowrap;
+}
+
+.price-item-value svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: currentColor;
 }
 
 .detail-gallery-section {
@@ -789,13 +790,11 @@
     font-size: 42px;
   }
 
-  .price-row {
-    flex-wrap: wrap;
-    gap: 6px 32px;
-    padding: 18px 4px;
+  .price-item {
+    padding: 0 20px;
   }
 
-  .price-row-value {
+  .price-item-value {
     font-size: 20px;
   }
 

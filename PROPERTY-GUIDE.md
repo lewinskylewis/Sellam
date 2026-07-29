@@ -65,7 +65,7 @@ values are allowed.
 | `image` | string | ✅ | Card thumbnail — **also** used as the detail page's hero banner. Pick a landscape photo; the hero is a wide banner, not a portrait crop. Deliberately independent from `gallery[0]` — see §2.4. |
 | `gallery` | array of strings | ✅ | Paths to every photo for the detail page's carousel + story sections. Any length works, 1 to 20+ — no hard cap, and nothing breaks or shows a blank placeholder with fewer than 20 (see §2.4). |
 | `url` | string | ✅ | Always `"property.html?id=<slug>"` (matching the `slug` field above). Don't point this anywhere else. |
-| `description` | string | ✅ | **Long** marketing copy for the detail page's intro paragraph(s). This is the lengthy version — don't reuse `summary` here or vice versa. See §2.4b. |
+| `description` | string \| `{title, body}` | ✅ | **Long** marketing copy for the detail page's intro paragraph(s). This is the lengthy version — don't reuse `summary` here or vice versa. See §2.4b. Plain string is the common case (no bold lead-in). Use `{ title: "...", body: "..." }` instead when the intro should open with a short bold title, e.g. `{ title: "The Future of Kilimani Living.", body: "Positioned along Maalim Juma Road..." }` — the title renders bold, inline, at the start of the first paragraph; `body` still supports multiple paragraphs (blank-line separated) exactly like a plain string does. |
 | `featureLocation` | string | ✅ | One sentence about the location, shown in the blue features banner on the detail page (e.g. *"Karen address near international schools, private clubs, green compounds, and lifestyle destinations."*). |
 | `story` | object | optional | Bespoke narrative content for the detail page's four "area" sections (kitchen, bedrooms, lifestyle, location). Omit it entirely for auto-generated text — see §2.3. The auto-generated text is automatically worded for a home when `propertyType` is residential, and worded for a commercial space (no "bedroom"/"buyers" language) when it's `office`/`retail`/`industrial`/`land`/`commercial`. |
 | `listedDate` | string | ✅ | ISO date `"YYYY-MM-DD"`. Used for "newest first" sorting. |
@@ -254,6 +254,37 @@ fields, so this works everywhere without special-casing:
 Use `bedrooms: 0` for a genuine studio unit (not `null` — `null` means "not
 applicable," which is for commercial types; a studio has a real, meaningful
 bedroom count of zero).
+
+#### 2.5a — Named unit types (Bedsitter, Studio, Mini 1 Bedroom, ...)
+
+`bedrooms` alone can't tell a Bedsitter from a Studio (both are `bedrooms: 0`),
+or a Mini 1 Bedroom from a full 1 Bedroom (both are `bedrooms: 1`) — but they're
+different floor plans and should read differently on the listing card and the
+detail page's price table. Add an optional `unitType` key to any unit entry:
+
+```js
+units: [
+  { unitType: "bedsitter", bedrooms: 0, bathrooms: 1, salePrice: 3000000, rentPrice: null },
+  { unitType: "studio", bedrooms: 0, bathrooms: 1, salePrice: 2000000, rentPrice: null },
+  { unitType: "mini-1-bedroom", bedrooms: 1, bathrooms: 1, salePrice: 10000000, rentPrice: null },
+  { unitType: "1-bedroom", bedrooms: 1, bathrooms: 3, salePrice: 13000000, rentPrice: null },
+  { unitType: "2-bedroom", bedrooms: 2, bathrooms: 2, salePrice: 20000000, rentPrice: null }
+]
+```
+
+Recognised keys live in `UNIT_TYPE_LABELS` in `data/property-units.js`:
+`bedsitter`, `studio`, `mini-1-bedroom`, `1-bedroom`, `2-bedroom`, `3-bedroom`,
+`4-bedroom`, `5-bedroom`, `penthouse`. `unitType` is purely a display label —
+`bedrooms` still drives the numeric search/rent-page filters exactly as
+before, so a Bedsitter and a Studio both still match the "0 Bedrooms"
+checkbox. Omit `unitType` and a unit falls back to the old generic
+`"N Bedroom(s)"` wording — every property written before this field existed
+needs no changes.
+
+`Units.unitLabel(unit)` returns one unit's label; `Units.unitLabels(property)`
+returns every distinct label the property offers, in the order its `units`
+array lists them — that's what the card's bedroom line and the price table's
+row label both read from now instead of the raw bedroom count.
 
 If a property only ever has one floor plan (the normal case), just keep using
 the flat `bedrooms`/`bathrooms`/`salePrice`/`rentPrice` fields as before —

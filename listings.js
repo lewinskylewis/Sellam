@@ -16,13 +16,26 @@
           data-leasing-type="industrial">                leasing-industrial.html
      <div data-property-rows data-listing="leasing"
           data-leasing-type="land">                     leasing-land.html
+     <div data-property-rows data-listing="buy-category"
+          data-buy-category="commercial"
+          data-buy-types="office,retail,industrial,commercial">  buy-commercial.html
+     <div data-property-rows data-listing="buy-category"
+          data-buy-category="land"
+          data-buy-types="land">                        buy-land.html
+     <div data-property-rows data-listing="buy-category"
+          data-buy-category="residential"
+          data-buy-types="apartment,townhouse,villa,mansion,bungalow,penthouse">
+                                                          buy-residential.html
 
    Modes:
-     rent       -> letting "rent" | "both"                          · rentPrice
-     sale       -> letting "sale" | "both", not "exclusive"          · salePrice
-     exclusive  -> collection "exclusive"                            · salePrice
-     leasing    -> propertyType === data-leasing-type,
-                   letting "rent" | "both"                           · rentPrice
+     rent          -> letting "rent" | "both"                       · rentPrice
+     sale          -> letting "sale" | "both", not "exclusive"       · salePrice
+     exclusive     -> collection "exclusive"                        · salePrice
+     leasing       -> propertyType === data-leasing-type,
+                       letting "rent" | "both"                       · rentPrice
+     buy-category  -> propertyType is one of data-buy-types (comma-
+                       separated), letting "sale" | "both", not
+                       "exclusive"                                    · salePrice
 
    Runs SYNCHRONOUSLY (script sits below the markup) so cards exist in the DOM
    before enquiry-modal.js / premium-properties.js / rent-filter.js initialise
@@ -49,6 +62,11 @@
 
   var mode = container.getAttribute("data-listing") || "sale";
   var leasingType = container.getAttribute("data-leasing-type") || "";
+  var buyCategory = container.getAttribute("data-buy-category") || "";
+  var buyTypes = (container.getAttribute("data-buy-types") || "")
+    .split(",")
+    .map(function (t) { return t.trim(); })
+    .filter(Boolean);
 
   /* rent-filter.js matches its checkbox values (Title Case) against
      data-property-type, so convert the inventory's lowercase keys. */
@@ -82,10 +100,9 @@
   // property-detail.js). A property with more than one floor plan (`units`,
   // see data/property-units.js) lists every distinct count it offers.
   function bedroomsHTML(p) {
-    var counts = Units.bedroomCounts(p);
-    if (!counts.length) return "";
-    var label = (counts.length === 1 && counts[0] === 1) ? "Bedroom" : "Bedrooms";
-    return '<div class="beds-line">' + GRID_SVG + Units.joinList(counts) + " " + label + "</div>";
+    var labels = Units.unitLabels(p);
+    if (!labels.length) return "";
+    return '<div class="beds-line">' + GRID_SVG + Units.joinList(labels) + "</div>";
   }
 
   function formatPrice(value) {
@@ -121,6 +138,10 @@
       if (mode === "leasing") {
         return p.propertyType === leasingType && (p.letting === "rent" || p.letting === "both");
       }
+      if (mode === "buy-category") {
+        return buyTypes.indexOf(p.propertyType) !== -1 &&
+          (p.letting === "sale" || p.letting === "both") && p.collection !== "exclusive";
+      }
       // "sale" — the premium listing, excluding the exclusive collection
       return (p.letting === "sale" || p.letting === "both") && p.collection !== "exclusive";
     });
@@ -133,6 +154,7 @@
     var location = escapeAttr(p.location);
     var url = escapeAttr(p.url);
     var field = priceField();
+    var listingCategory = buyCategory || mode;
 
     // Filter matching (rent-filter.js) needs to know about every unit, so
     // bedrooms/bathrooms/price are comma-separated lists — for a normal
@@ -147,7 +169,7 @@
         " data-card" +
         ' data-property-id="' + escapeAttr(p.id) + '"' +
         ' data-property-url="' + url + '"' +
-        ' data-listing-category="' + escapeAttr(mode) + '"' +
+        ' data-listing-category="' + escapeAttr(listingCategory) + '"' +
         ' data-order="' + (index + 1) + '"' +
         ' data-title="' + title + '"' +
         ' data-property-type="' + escapeAttr(titleCase(p.propertyType)) + '"' +
@@ -169,7 +191,7 @@
             '<a href="#enquire" data-enquiry-open data-property="' + title +
               '" data-property-id="' + escapeAttr(p.id) +
               '" data-property-url="' + url +
-              '" data-listing-category="' + escapeAttr(mode) +
+              '" data-listing-category="' + escapeAttr(listingCategory) +
               '" data-location="' + location + '">Enquire</a>' +
           "</div>" +
         "</div>" +

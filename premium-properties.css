@@ -586,6 +586,21 @@ button {
   background-position: center;
 }
 
+.buy-commercial-hero .premium-hero-image {
+  background-image: linear-gradient(rgba(4, 51, 65, 0.5), rgba(4, 51, 65, 0.5)), url("assets/images/buy/commercial.jpg");
+  background-position: center;
+}
+
+.buy-land-hero .premium-hero-image {
+  background-image: linear-gradient(rgba(4, 51, 65, 0.5), rgba(4, 51, 65, 0.5)), url("assets/images/buy/land.jpg");
+  background-position: center;
+}
+
+.buy-residential-hero .premium-hero-image {
+  background-image: linear-gradient(rgba(4, 51, 65, 0.5), rgba(4, 51, 65, 0.5)), url("assets/images/buy/residential.jpg");
+  background-position: center;
+}
+
 .properties-intro {
   position: relative;
   z-index: 10;
@@ -1844,18 +1859,24 @@ body p {
   font-weight: 300 !important;
 }
 
-/* Unified navbar typography and current-page state. */
+/* Unified navbar typography and current-page state. Scoped to `> li > a`
+   (top-level Buy/Rent/Leasing/Services triggers only) — NOT the plain
+   descendant `a`, which would also reach into .nav-dropdown/.mobile-nav-sublist
+   and blow the submenu items up to this same bold 16px, stomping their own
+   (intentionally smaller/lighter) .nav-dropdown a / .mobile-nav-sublist a
+   rules via !important. That collision is what made the Buy/Leasing dropdown
+   panels render inconsistently bold/oversized depending on page. */
 .site-header .desktop-nav,
-.site-header .desktop-nav a,
+.site-header .desktop-nav > li > a,
 .site-header .mobile-nav-list,
-.site-header .mobile-nav-list a {
+.site-header .mobile-nav-list > li > a {
   font-family: "Optima Local", OptimaLocal, Optima, Candara, "Segoe UI", Arial, sans-serif !important;
   font-size: 16px !important;
   font-weight: 700 !important;
 }
 
-.site-header .desktop-nav a[aria-current="page"],
-.site-header .mobile-nav-list a[aria-current="page"] {
+.site-header .desktop-nav > li > a[aria-current="page"],
+.site-header .mobile-nav-list > li > a[aria-current="page"] {
   color: #d3a23b !important;
 }
 

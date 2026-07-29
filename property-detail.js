@@ -1,5 +1,8 @@
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+const PRICE_TAG_SVG =
+  '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.8 3h7.05c.53 0 1.04.21 1.41.59l7.15 7.15a2 2 0 0 1 0 2.83l-6.84 6.84a2 2 0 0 1-2.83 0l-7.15-7.15A2 2 0 0 1 3 11.85V4.8C3 3.81 3.81 3 4.8 3Zm3.25 6.15a2.1 2.1 0 1 0 0-4.2 2.1 2.1 0 0 0 0 4.2Z"/></svg>';
+
 const commonGallery = [
   {
     src: "assets/images/property-detail-tower.jpg",
@@ -666,7 +669,8 @@ function buildPriceRows(inventoryItem) {
   const rows = [];
 
   units.forEach((unit) => {
-    const bedrooms = unit.bedrooms !== null && unit.bedrooms !== undefined ? countLabel(unit.bedrooms, "Bedroom") : "—";
+    const bedroomLabel = window.SellamUnits ? window.SellamUnits.unitLabel(unit) : "";
+    const bedrooms = bedroomLabel || (unit.bedrooms !== null && unit.bedrooms !== undefined ? countLabel(unit.bedrooms, "Bedroom") : "—");
     const bathrooms = unit.bathrooms !== null && unit.bathrooms !== undefined ? countLabel(unit.bathrooms, "Bathroom") : "—";
 
     if (unit.salePrice) rows.push({ bedrooms, bathrooms, price: formatKESValue(unit.salePrice) });
@@ -741,20 +745,37 @@ function setText(selector, value) {
   if (element) element.textContent = value;
 }
 
+// `value` is either a plain string (the common case — no title, just body
+// copy) or `{ title, body }` when the intro paragraph should lead with a
+// bold title. Either way, `body` is split on blank lines into one <p> per
+// paragraph exactly as before; the title (if any) is prepended as a <strong>
+// inside the first paragraph, so it reads as part of the same flowing
+// paragraph rather than a separate heading/block.
 function renderDescription(selector, value) {
   const element = document.querySelector(selector);
   if (!element) return;
 
-  element.replaceChildren();
-  String(value)
+  const hasTitle = value && typeof value === "object";
+  const title = hasTitle ? value.title : "";
+  const body = hasTitle ? value.body : value;
+
+  const paragraphs = String(body || "")
     .split(/\n{2,}/)
     .map((part) => part.trim())
-    .filter(Boolean)
-    .forEach((part) => {
-      const paragraph = document.createElement("p");
+    .filter(Boolean);
+
+  element.replaceChildren();
+  paragraphs.forEach((part, index) => {
+    const paragraph = document.createElement("p");
+    if (index === 0 && title) {
+      const strong = document.createElement("strong");
+      strong.textContent = `${title} `;
+      paragraph.append(strong, document.createTextNode(part));
+    } else {
       paragraph.textContent = part;
-      element.append(paragraph);
-    });
+    }
+    element.append(paragraph);
+  });
 }
 
 // A legacy propertyData entry (see getProperty()) only ever had a single
@@ -768,10 +789,10 @@ function renderPriceTable(property) {
 
   rows.forEach((row) => {
     const item = document.createElement("div");
-    item.className = "price-row";
+    item.className = "price-item";
     item.innerHTML =
-      `<span class="price-row-meta">${row.bedrooms}<span class="price-row-sep" aria-hidden="true">/</span>${row.bathrooms}</span>` +
-      `<span class="price-row-value">${row.price}</span>`;
+      `<span class="price-item-label">${row.bedrooms}</span>` +
+      `<span class="price-item-value">${PRICE_TAG_SVG}${row.price}</span>`;
     list.append(item);
   });
 }

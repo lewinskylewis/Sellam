@@ -62,6 +62,24 @@
                 bathrooms/price through data/property-units.js so both
                 shapes work everywhere — don't create one duplicate row per
                 floor plan, that's the pattern this replaces.
+
+                unitType  OPTIONAL per-unit key for named floor plans that
+                don't map 1:1 onto a bedroom count — a Bedsitter and a Studio
+                are both `bedrooms: 0`, a Mini 1 Bedroom and a 1 Bedroom are
+                both `bedrooms: 1`, but they should read as different unit
+                types on the card and price table. `bedrooms` still drives
+                numeric search/filter matching unchanged — `unitType` is
+                display-only. Recognised keys (see UNIT_TYPE_LABELS in
+                data/property-units.js): bedsitter | studio |
+                mini-1-bedroom | 1-bedroom | 2-bedroom | 3-bedroom |
+                4-bedroom | 5-bedroom | penthouse. Omit it and the unit just
+                falls back to the old generic "N Bedroom(s)" wording. Example:
+                  units: [
+                    { unitType: "bedsitter", bedrooms: 0, bathrooms: 1, salePrice: 3000000, rentPrice: null },
+                    { unitType: "studio", bedrooms: 0, bathrooms: 1, salePrice: 2000000, rentPrice: null },
+                    { unitType: "mini-1-bedroom", bedrooms: 1, bathrooms: 1, salePrice: 10000000, rentPrice: null },
+                    { unitType: "1-bedroom", bedrooms: 1, bathrooms: 3, salePrice: 13000000, rentPrice: null }
+                  ]
    features     wifi | pool | gym | backup-generator | parking | security | garden
    image        Card thumbnail — shown on listing pages (Rent/Buy/Exclusive/
                 Leasing/search). Falls back to being the detail page's hero
@@ -150,10 +168,12 @@ window.SELLAM_PROPERTIES = [
     // NOTE: salePrice is identical for both units in the source data (both
     // 5,000,000) — flagging in case the 2-bedroom price was meant to differ.
     units: [
-      { bedrooms: 1, bathrooms: 3, salePrice: 13000000, rentPrice: null },
-      { bedrooms: 2, bathrooms: 2, salePrice: 20000000, rentPrice: null },
-      { bedrooms: 3, bathrooms: 3, salePrice: 30000000, rentPrice: null }
-      
+      { unitType: "bedsitter", bedrooms: 0, bathrooms: 1, salePrice: 3000000, rentPrice: null },
+      { unitType: "studio", bedrooms: 0, bathrooms: 1, salePrice: 2000000, rentPrice: null },
+      { unitType: "mini-1-bedroom", bedrooms: 1, bathrooms: 1, salePrice: 10000000, rentPrice: null },
+      { unitType: "1-bedroom", bedrooms: 1, bathrooms: 3, salePrice: 13000000, rentPrice: null },
+      { unitType: "2-bedroom", bedrooms: 2, bathrooms: 2, salePrice: 20000000, rentPrice: null },
+      { unitType: "3-bedroom", bedrooms: 3, bathrooms: 3, salePrice: 30000000, rentPrice: null }
     ],
     features: ["pool", "garden", "security", "parking", "backup-generator", "gym", "wifi", "restaurant", "spa", "lounge" ],
     image: "assets/images/Silva Gigiri Residences Exterior.jpeg",
@@ -460,7 +480,10 @@ window.SELLAM_PROPERTIES = [
       "assets/images/Premium properties/CROWN JEWEL (8).jpeg"
     ],
     url: "property.html?id=amethyst-residences",
-    description: "The Future of Kilimani Living. Positioned along Maalim Juma Road in the heart of Kilimani, Amethyst introduces a refined collection of contemporary residences designed for modern city living. Developed with a focus on timeless architecture, intelligent design, and everyday functionality, Amethyst creates a residential experience where elegant spaces, premium amenities, and exceptional connectivity come together in one of Nairobi's most established neighbourhoods. Whether purchasing your first home or expanding your investment portfolio, Amethyst offers a compelling balance of lifestyle and long-term value.",
+    description: {
+      title: "The Future of Kilimani Living.",
+      body: "Positioned along Maalim Juma Road in the heart of Kilimani, Amethyst introduces a refined collection of contemporary residences designed for modern city living. Developed with a focus on timeless architecture, intelligent design, and everyday functionality, Amethyst creates a residential experience where elegant spaces, premium amenities, and exceptional connectivity come together in one of Nairobi's most established neighbourhoods. Whether purchasing your first home or expanding your investment portfolio, Amethyst offers a compelling balance of lifestyle and long-term value."
+    },
     featureLocation: "Ngong address with access to schools, shopping, transport links, and green residential settings.",
     story: {
       rows: [

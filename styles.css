@@ -318,6 +318,10 @@ section {
   font-family: var(--font-optima);
   isolation: isolate;
   overflow: hidden;
+  /* Lets the browser still handle vertical scrolling natively on touch
+     devices while script.js's pointer listeners read horizontal swipes
+     (see setupHeroSwipe) to move between hero properties. */
+  touch-action: pan-y;
 }
 
 .hero-bg,
@@ -466,6 +470,12 @@ section {
   font-size: clamp(19px, 1.28vw, 30px);
   line-height: 1;
   font-weight: 900;
+}
+
+.hero-property-copy h2 a:hover,
+.hero-property-copy h2 a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .hero-property-copy p {
@@ -1538,8 +1548,8 @@ section {
   display: block;
   padding: 0 22px;
   color: var(--gold);
-  font-family: "Gabriela", "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(38.25px, 3.375vw, 65.25px);
+  font-family: var(--font-optima);
+  font-size: clamp(22.95px, 2.025vw, 39.15px);
   line-height: 1.12;
   font-weight: 500;
   text-align: center;
@@ -1547,7 +1557,7 @@ section {
   letter-spacing: 0;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, -45%);
+  transform: translate(-50%, -50%);
   transition: opacity 220ms ease, transform 220ms ease;
 }
 
@@ -1963,7 +1973,7 @@ section {
 .tile-grid.reveal .feature-tile span,
 .tile-grid.reveal .feature-tile.motion-item-visible span {
   opacity: 0;
-  transform: translate(-50%, -45%);
+  transform: translate(-50%, -50%);
   animation: none;
 }
 
@@ -3169,18 +3179,24 @@ body p {
   font-weight: 300 !important;
 }
 
-/* Unified navbar typography and current-page state. */
+/* Unified navbar typography and current-page state. Scoped to `> li > a`
+   (top-level Buy/Rent/Leasing/Services triggers only) — NOT the plain
+   descendant `a`, which would also reach into .nav-dropdown/.mobile-nav-sublist
+   and blow the submenu items up to this same bold 16px, stomping their own
+   (intentionally smaller/lighter) .nav-dropdown a / .mobile-nav-sublist a
+   rules via !important. That collision is what made the Buy/Leasing dropdown
+   panels render inconsistently bold/oversized depending on page. */
 .site-header .desktop-nav,
-.site-header .desktop-nav a,
+.site-header .desktop-nav > li > a,
 .site-header .mobile-nav-list,
-.site-header .mobile-nav-list a {
+.site-header .mobile-nav-list > li > a {
   font-family: "Optima Local", OptimaLocal, Optima, Candara, "Segoe UI", Arial, sans-serif !important;
   font-size: 16px !important;
   font-weight: 700 !important;
 }
 
-.site-header .desktop-nav a[aria-current="page"],
-.site-header .mobile-nav-list a[aria-current="page"] {
+.site-header .desktop-nav > li > a[aria-current="page"],
+.site-header .mobile-nav-list > li > a[aria-current="page"] {
   color: #d3a23b !important;
 }
 

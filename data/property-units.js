@@ -51,6 +51,45 @@
     return distinctSorted(unitsOf(p).map(function (u) { return u.bathrooms; }));
   }
 
+  // Named unit types (Bedsitter, Studio, Mini 1 Bedroom, ...) that don't map
+  // 1:1 onto a bedroom count — a Bedsitter and a Studio are both `bedrooms: 0`,
+  // and a Mini 1 Bedroom and a 1 Bedroom are both `bedrooms: 1`, but they're
+  // different floor plans that should read differently on cards and the price
+  // table. Set `unitType` on a unit entry to one of these keys; `bedrooms`
+  // still drives numeric filtering (search bar / rent-filter.js) unchanged.
+  var UNIT_TYPE_LABELS = {
+    "bedsitter": "Bedsitter",
+    "studio": "Studio",
+    "mini-1-bedroom": "Mini 1 Bedroom",
+    "1-bedroom": "1 Bedroom",
+    "2-bedroom": "2 Bedroom",
+    "3-bedroom": "3 Bedroom",
+    "4-bedroom": "4 Bedroom",
+    "5-bedroom": "5 Bedroom",
+    "penthouse": "Penthouse"
+  };
+
+  // Display label for one unit: its named `unitType` if set (and recognised),
+  // else the old generic "N Bedroom(s)" wording, else "" for commercial units
+  // (bedrooms: null).
+  function unitLabel(u) {
+    if (u.unitType && UNIT_TYPE_LABELS[u.unitType]) return UNIT_TYPE_LABELS[u.unitType];
+    if (u.bedrooms === null || u.bedrooms === undefined) return "";
+    return u.bedrooms + (u.bedrooms === 1 ? " Bedroom" : " Bedrooms");
+  }
+
+  // Every distinct unit label a property offers, in the order its units are
+  // listed (so the property record controls display order, e.g. Bedsitter
+  // before Studio before Mini 1 Bedroom before 1 Bedroom).
+  function unitLabels(p) {
+    var seen = [];
+    unitsOf(p).forEach(function (u) {
+      var label = unitLabel(u);
+      if (label && seen.indexOf(label) === -1) seen.push(label);
+    });
+    return seen;
+  }
+
   // Natural-language list: [1] -> "1", [1,2] -> "1 & 2", [1,2,3] -> "1, 2 & 3".
   function joinList(values) {
     if (!values.length) return "";
@@ -91,6 +130,8 @@
     unitsOf: unitsOf,
     bedroomCounts: bedroomCounts,
     bathroomCounts: bathroomCounts,
+    unitLabel: unitLabel,
+    unitLabels: unitLabels,
     joinList: joinList,
     prices: prices,
     minPrice: minPrice,

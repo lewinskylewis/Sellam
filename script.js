@@ -1,44 +1,111 @@
-const heroSlides = [
+/* Each hero entry is ONE property. The big hero background and the 3 tiles
+   are all the SAME property at once — the tiles are just minimised previews
+   of that property's other sections (kitchen, living room, bedroom, dining,
+   ...), not separate properties. Clicking a tile swaps the big background to
+   that section (property, title and price stay put). The dots move between
+   PROPERTIES — each dot is one property, and there can be any number of them
+   (6 here); selecting a dot swaps the background, all 3 tiles, and the
+   title/meta copy to that property, resetting to its first section.
+
+   Only `sections` (the curated interior/exterior photo set) is hand-authored
+   here. `id` points at the matching record in data/properties.js — the
+   title, its link (property.html?id=...), the full unit-type list, and the
+   starting price are all read live off that record (via resolveHeroProperty
+   below), so the hero can never drift out of sync with the real inventory. */
+const heroProperties = [
   {
-    title: "Loresho Villas",
-    meta: "Loresho | 4 Bedroom Villas | Starting KES 96,000,000",
-    tile: "assets/images/Premium properties/Loresho 4 Bedroom Villas (3).jpeg",
-    background: "assets/images/Premium properties/Loresho 4 Bedroom Villas (11).jpeg"
+    id: "sl-001",
+    sections: [
+      { label: "Exterior", image: "assets/images/Silva Gigiri Residences Exterior.jpeg" },
+      { label: "Living Room", image: "assets/images/Silva Gigiri Residences Living room.jpeg" },
+      { label: "Kitchen", image: "assets/images/Silva Gigiri Residences Kitchen.jpeg" }
+    ]
   },
   {
-    title: "Luxury Mansion",
-    meta: "Runda | 4 Bedroom Luxury Mansion | Starting KES 350,000,000",
-    tile: "assets/images/Premium properties/RundaMansion3.jpeg",
-    background: "assets/images/grosvenor.jpg"
+    id: "sl-002",
+    sections: [
+      { label: "Exterior", image: "assets/images/Cheval Riverside Exterior (3).jpeg" },
+      { label: "Swimming Pool", image: "assets/images/Cheval Riverside Swimming pool.jpeg" },
+      { label: "Outdoor Living", image: "assets/images/Cheval Riverside Outdoor.jpeg" }
+    ]
   },
   {
-    title: "Ostrea Villas",
-    meta: "Karen | Signature Villas | Starting KES 165,000,000",
-    tile: "assets/images/Premium properties/OSTREA Karen Villas (2).jpeg",
-    background: "assets/images/Premium properties/OSTREA Karen Villas.jpeg"
+    id: "sl-003",
+    sections: [
+      { label: "Exterior", image: "assets/images/Diplomat Residences Exterior (2).jpeg" },
+      { label: "Living Room", image: "assets/images/Diplomat Residences Living.jpeg" },
+      { label: "Kitchen", image: "assets/images/Diplomat Residences Kitchen.jpeg" }
+    ]
   },
   {
-    title: "Runda Gardens",
-    meta: "Runda | Private Villas | Bespoke Family Living",
-    tile: "assets/images/hero-runda.webp",
-    background: "assets/images/grosout.JPG"
+    id: "sl-004",
+    sections: [
+      { label: "Exterior", image: "assets/images/Gaia Brookside Forest Exterior (6).jpeg" },
+      { label: "Living Room", image: "assets/images/Gaia Brookside Forest Living Room.jpeg" },
+      { label: "Dining", image: "assets/images/Gaia Brookside Forest Dinning.jpeg" }
+    ]
   },
   {
-    title: "Nyari Crest",
-    meta: "Nyari | Exclusive Off-Market Homes | Viewing By Appointment",
-    tile: "assets/images/hero-moon-valley.webp",
-    background: "assets/images/aumout.jpeg"
+    id: "sl-005",
+    sections: [
+      { label: "Exterior", image: "assets/images/Hephé Palace Exterior.jpeg" },
+      { label: "Living Room", image: "assets/images/Hephé Palace Living room.jpeg" },
+      { label: "Bedroom", image: "assets/images/Hephé Palace Bedroom.jpeg" }
+    ]
+  },
+  {
+    id: "sl-006",
+    sections: [
+      { label: "Exterior", image: "assets/images/Amethyst Residences Outdoors.jpeg" },
+      { label: "Living Room", image: "assets/images/Amethyst Residences Living Room (2).jpeg" },
+      { label: "Interior", image: "assets/images/Amethyst Residences (10).jpeg" }
+    ]
   }
 ];
 
+// Resolves a hero entry's `id` against the central inventory to build the
+// title/link/description — the ONLY thing hand-authored per hero entry is
+// `sections`. `meta` always lists every unit type the property comes in
+// (via Units.unitLabels — Studio/Bedsitter/Mini 1 Bedroom/N Bedroom, same
+// labels as the listing cards) rather than a hand-typed bedroom range, and
+// keeps the site's "Starting KES X" pricing convention for a multi-unit
+// property (see listings.js's identical prefix rule).
+function resolveHeroProperty(entry) {
+  const Units = window.SellamUnits;
+  const inventory = (window.SELLAM_PROPERTIES || []).find((p) => p.id === entry.id);
+
+  if (!inventory) {
+    return { title: "", url: "#", meta: "", sections: entry.sections };
+  }
+
+  const priceField = inventory.letting === "rent" ? "rentPrice" : "salePrice";
+  const price = Units ? Units.minPrice(inventory, priceField) : null;
+  const priceText = window.SellamSearch
+    ? window.SellamSearch.formatKES(price)
+    : `KES ${Number(price).toLocaleString("en-KE")}`;
+  const prefix = Units && Units.unitsOf(inventory).length > 1 ? "Starting " : "";
+
+  const unitLabels = Units ? Units.unitLabels(inventory) : [];
+  const unitsLine = unitLabels.length ? Units.joinList(unitLabels) : "";
+
+  const district = (inventory.location || "").split(",")[0].trim();
+
+  return {
+    title: inventory.title,
+    url: inventory.url,
+    meta: [district, unitsLine, prefix + priceText].filter(Boolean).join(" | "),
+    sections: entry.sections
+  };
+}
+
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const heroSlideCount = 3;
 const heroCurrent = document.querySelector(".hero-bg-current");
 const heroNext = document.querySelector(".hero-bg-next");
 const heroTiles = document.querySelector(".hero-tiles");
 const heroDots = document.querySelector(".hero-dots");
 const heroCopy = document.querySelector(".hero-property-copy");
-let activeHeroIndex = 0;
+let activePropertyIndex = 0;
+let activeSectionIndex = 0;
 let activeBgLayer = heroCurrent;
 let inactiveBgLayer = heroNext;
 let heroTimer;
@@ -47,79 +114,192 @@ function setBackgroundImage(layer, src) {
   layer.style.backgroundImage = `url("${src}")`;
 }
 
+// Crossfades the big hero background to `src` — used by both a section
+// change (same property) and a property change (dot).
+function swapBackground(src) {
+  setBackgroundImage(inactiveBgLayer, src);
+  inactiveBgLayer.classList.add("is-active");
+  activeBgLayer.classList.remove("is-active");
+  [activeBgLayer, inactiveBgLayer] = [inactiveBgLayer, activeBgLayer];
+}
+
 function buildHeroControls() {
   if (!heroTiles || !heroDots) return;
 
-  heroSlides.slice(0, heroSlideCount).forEach((slide, index) => {
+  // Exactly 3 tile buttons, fixed "section slots" — NOT tied to one
+  // property. Their image/label are rewritten to match whichever property
+  // is currently active; clicking one shows that section of that property.
+  for (let sectionIndex = 0; sectionIndex < 3; sectionIndex += 1) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "hero-tile";
-    button.setAttribute("aria-label", `Show ${slide.title}`);
-    button.innerHTML = `<img src="${slide.tile}" alt="${slide.title}">`;
+    button.innerHTML = "<img alt=\"\">";
     button.addEventListener("click", () => {
-      setHeroSlide(index);
+      setActiveSection(sectionIndex);
       restartHeroTimer();
     });
     heroTiles.append(button);
-  });
+  }
 
-  heroSlides.slice(0, heroSlideCount).forEach((slide, index) => {
+  // One dot per property.
+  heroProperties.forEach((entry, index) => {
     const dot = document.createElement("button");
     dot.type = "button";
     dot.className = "hero-dot";
     dot.setAttribute("role", "tab");
-    dot.setAttribute("aria-label", `Show ${slide.title}`);
+    dot.setAttribute("aria-label", `Show ${resolveHeroProperty(entry).title}`);
     dot.addEventListener("click", () => {
-      setHeroSlide(index);
+      setActiveProperty(index);
       restartHeroTimer();
     });
     heroDots.append(dot);
   });
 }
 
-function setHeroSlide(index) {
-  const nextIndex = (index + heroSlideCount) % heroSlideCount;
-  const slide = heroSlides[nextIndex];
+function renderTiles(property) {
+  if (!heroTiles) return;
+  heroTiles.querySelectorAll(".hero-tile").forEach((button, index) => {
+    const section = property.sections[index];
+    const img = button.querySelector("img");
+    img.src = section.image;
+    img.alt = `${property.title} — ${section.label}`;
+    button.setAttribute("aria-label", `Show ${property.title} — ${section.label}`);
+  });
+}
 
-  if (nextIndex !== activeHeroIndex || !activeBgLayer.classList.contains("is-active")) {
-    setBackgroundImage(inactiveBgLayer, slide.background);
-    inactiveBgLayer.classList.add("is-active");
-    activeBgLayer.classList.remove("is-active");
-    [activeBgLayer, inactiveBgLayer] = [inactiveBgLayer, activeBgLayer];
+function updateActiveSectionUI() {
+  document.querySelectorAll(".hero-tile").forEach((tile, index) => {
+    tile.classList.toggle("is-active", index === activeSectionIndex);
+    tile.setAttribute("aria-pressed", index === activeSectionIndex ? "true" : "false");
+  });
+}
+
+function updateActivePropertyUI() {
+  document.querySelectorAll(".hero-dot").forEach((dot, index) => {
+    dot.classList.toggle("is-active", index === activePropertyIndex);
+    dot.setAttribute("aria-selected", index === activePropertyIndex ? "true" : "false");
+  });
+}
+
+function updateCopy(property) {
+  if (!heroCopy) return;
+  heroCopy.classList.add("is-changing");
+  window.setTimeout(() => {
+    const heading = heroCopy.querySelector("h2");
+    heading.textContent = "";
+    const link = document.createElement("a");
+    link.href = property.url;
+    link.textContent = property.title;
+    heading.append(link);
+    heroCopy.querySelector("p").textContent = property.meta;
+    heroCopy.classList.remove("is-changing");
+  }, prefersReducedMotion ? 0 : 230);
+}
+
+// Switch to a different SECTION (tile) of the currently active property —
+// only the hero background and the active-tile highlight move; the
+// property's title, meta and tile images stay exactly the same.
+function setActiveSection(sectionIndex) {
+  const property = heroProperties[activePropertyIndex];
+  const nextIndex = (sectionIndex + property.sections.length) % property.sections.length;
+
+  if (nextIndex !== activeSectionIndex || !activeBgLayer.classList.contains("is-active")) {
+    swapBackground(property.sections[nextIndex].image);
   }
 
-  if (heroCopy) {
-    heroCopy.classList.add("is-changing");
-    window.setTimeout(() => {
-      heroCopy.querySelector("h2").textContent = slide.title;
-      heroCopy.querySelector("p").textContent = slide.meta;
-      heroCopy.classList.remove("is-changing");
-    }, prefersReducedMotion ? 0 : 230);
-  }
+  activeSectionIndex = nextIndex;
+  updateActiveSectionUI();
+}
 
-  document.querySelectorAll(".hero-tile").forEach((tile, tileIndex) => {
-    tile.classList.toggle("is-active", tileIndex === nextIndex);
-    tile.setAttribute("aria-pressed", tileIndex === nextIndex ? "true" : "false");
-  });
+// Switch to a different PROPERTY (dot) — swaps the hero background, all 3
+// tile images, and the title/meta copy, resetting to that property's first
+// section (its exterior shot).
+function setActiveProperty(propertyIndex) {
+  const nextIndex = (propertyIndex + heroProperties.length) % heroProperties.length;
+  const property = resolveHeroProperty(heroProperties[nextIndex]);
 
-  document.querySelectorAll(".hero-dot").forEach((dot, dotIndex) => {
-    dot.classList.toggle("is-active", dotIndex === nextIndex);
-    dot.setAttribute("aria-selected", dotIndex === nextIndex ? "true" : "false");
-  });
+  activePropertyIndex = nextIndex;
+  activeSectionIndex = 0;
 
-  activeHeroIndex = nextIndex;
+  renderTiles(property);
+  updateCopy(property);
+  updateActivePropertyUI();
+  updateActiveSectionUI();
+  swapBackground(property.sections[0].image);
 }
 
 function startHeroTimer() {
   if (prefersReducedMotion) return;
   heroTimer = window.setInterval(() => {
-    setHeroSlide(activeHeroIndex + 1);
+    setActiveProperty(activePropertyIndex + 1);
   }, 6400);
 }
 
 function restartHeroTimer() {
   window.clearInterval(heroTimer);
   startHeroTimer();
+}
+
+// Swipe left/right anywhere on the hero to move between properties (same
+// as tapping a dot) — touch/pen only (mouse users have the dots/tiles), so
+// this is aimed squarely at the tablet/mobile experience. Mirrors the
+// pointer-swipe pattern already used by the property gallery in
+// property-detail.js: a capture-phase click guard (heroDidSwipe) stops a
+// swipe that happens to end on top of a dot/tile/title link from ALSO
+// firing that element's own click.
+function setupHeroSwipe() {
+  const heroSection = document.querySelector(".hero");
+  if (!heroSection) return;
+
+  let swipePointerId = null;
+  let swipeStartX = 0;
+  let swipeStartY = 0;
+  let heroDidSwipe = false;
+
+  heroSection.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "mouse") return;
+    swipePointerId = event.pointerId;
+    swipeStartX = event.clientX;
+    swipeStartY = event.clientY;
+    heroDidSwipe = false;
+  });
+
+  heroSection.addEventListener("pointermove", (event) => {
+    if (swipePointerId !== event.pointerId) return;
+    const deltaX = event.clientX - swipeStartX;
+    const deltaY = event.clientY - swipeStartY;
+    if (Math.abs(deltaX) > 12 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      heroDidSwipe = true;
+    }
+  });
+
+  const finishSwipe = (event) => {
+    if (swipePointerId !== event.pointerId) return;
+    swipePointerId = null;
+
+    const deltaX = event.clientX - swipeStartX;
+    const deltaY = event.clientY - swipeStartY;
+    const isHorizontalSwipe = Math.abs(deltaX) > 42 && Math.abs(deltaX) > Math.abs(deltaY);
+    if (!isHorizontalSwipe) return;
+
+    heroDidSwipe = true;
+    setActiveProperty(activePropertyIndex + (deltaX < 0 ? 1 : -1));
+    restartHeroTimer();
+  };
+
+  heroSection.addEventListener("pointerup", finishSwipe);
+  heroSection.addEventListener("pointercancel", () => {
+    swipePointerId = null;
+  });
+
+  // Capture phase so this runs — and can stop() — before the dot/tile/title
+  // link's own click listener sees the click that follows a swipe's pointerup.
+  heroSection.addEventListener("click", (event) => {
+    if (!heroDidSwipe) return;
+    event.preventDefault();
+    event.stopPropagation();
+    heroDidSwipe = false;
+  }, true);
 }
 
 function setupMobileMenu() {
@@ -503,10 +683,15 @@ function setupForms() {
 }
 
 buildHeroControls();
-setBackgroundImage(heroCurrent, heroSlides[0].background);
+const initialHeroProperty = resolveHeroProperty(heroProperties[0]);
+setBackgroundImage(heroCurrent, initialHeroProperty.sections[0].image);
 heroCurrent.classList.add("is-active");
-setHeroSlide(0);
+renderTiles(initialHeroProperty);
+updateCopy(initialHeroProperty);
+updateActivePropertyUI();
+updateActiveSectionUI();
 startHeroTimer();
+setupHeroSwipe();
 setupMobileMenu();
 setupSearchFilters();
 setupCountryFilter();

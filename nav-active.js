@@ -10,9 +10,13 @@
 
     if (pageName === "rent.html") return "rent";
     if (
-      ["leasing-offices.html", "leasing-retail.html", "leasing-industrial.html", "leasing-land.html"].includes(
-        pageName
-      )
+      [
+        "leasing-properties.html",
+        "leasing-offices.html",
+        "leasing-retail.html",
+        "leasing-industrial.html",
+        "leasing-land.html"
+      ].includes(pageName)
     ) {
       return "leasing";
     }
@@ -23,7 +27,15 @@
     }
     if (
       isPropertyDetail ||
-      ["buy.html", "premium-properties.html", "exclusive-properties.html", "property.html"].includes(pageName)
+      [
+        "buy.html",
+        "buy-commercial.html",
+        "buy-land.html",
+        "buy-residential.html",
+        "premium-properties.html",
+        "exclusive-properties.html",
+        "property.html"
+      ].includes(pageName)
     ) {
       return "buy";
     }
