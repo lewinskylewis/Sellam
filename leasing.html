@@ -98,10 +98,17 @@
         </a>
 
         <ul class="desktop-nav" aria-label="Main menu">
-          <li><a href="buy.html">Buy</a></li>
+          <li class="nav-has-dropdown">
+            <a href="buy.html" aria-haspopup="true">Buy<span class="chevron" aria-hidden="true"></span></a>
+            <ul class="nav-dropdown">
+              <li><a href="buy-commercial.html">Commercial</a></li>
+              <li><a href="buy-land.html">Land</a></li>
+              <li><a href="buy-residential.html">Residential</a></li>
+            </ul>
+          </li>
           <li><a href="rent.html">Rent</a></li>
           <li class="nav-has-dropdown">
-            <a href="leasing-offices.html" aria-haspopup="true">Leasing<span class="chevron" aria-hidden="true"></span></a>
+            <a href="leasing-properties.html" aria-haspopup="true">Leasing<span class="chevron" aria-hidden="true"></span></a>
             <ul class="nav-dropdown">
               <li><a href="leasing-offices.html">Offices</a></li>
               <li><a href="leasing-retail.html">Retail</a></li>
@@ -139,10 +146,17 @@
           </div>
 
           <ul class="mobile-nav-list">
-            <li><a href="buy.html">Buy</a></li>
+            <li class="mobile-nav-has-sublist">
+              <a href="buy.html">Buy</a>
+              <ul class="mobile-nav-sublist">
+                <li><a href="buy-commercial.html">Commercial</a></li>
+                <li><a href="buy-land.html">Land</a></li>
+                <li><a href="buy-residential.html">Residential</a></li>
+              </ul>
+            </li>
             <li><a href="rent.html">Rent</a></li>
             <li class="mobile-nav-has-sublist">
-              <a href="leasing-offices.html">Leasing</a>
+              <a href="leasing-properties.html">Leasing</a>
               <ul class="mobile-nav-sublist">
                 <li><a href="leasing-offices.html">Offices</a></li>
                 <li><a href="leasing-retail.html">Retail</a></li>
@@ -203,16 +217,16 @@
     </main>
 
     <footer class="site-footer">
-      <div class="page-shell footer-grid">
+      <div class="page-shell footer-grid reveal">
         <div class="footer-contact">
-          <h2>Sellam Real Estate</h2>
+          <h2>Sellam</h2>
           <address>
-            ABC Place Waiyaki Way<br>
-            P.O Box 14090 - 00800<br>
+            Porshattam Towers<br>
+            P.O Box 50023 - 00100<br>
             Nairobi, Kenya<br>
-            +254 709 479 000
+            0700435000
           </address>
-          <a href="mailto:SellamRe@gmail.com">SellamRe@gmail.com</a>
+          <a href="mailto: office@sellamre.com"> office@sellamre.com</a>
         </div>
 
         <div class="footer-subscribe">
@@ -240,8 +254,7 @@
           <h2>Company</h2>
           <ul>
             <li><a href="services.html">Services</a></li>
-            <li><a href="#">Careers</a></li>
-            <li><a href="news.html">Sellam News</a></li>
+            <li><a href="blogs.html">Sellam News</a></li>
             <li><a href="contact.html">Get In Touch</a></li>
             <li><a href="privacy.html">Privacy Policy</a></li>
           </ul>
@@ -251,10 +264,10 @@
           <h2>Explore</h2>
           <ul>
             <li><a href="index.html">Sellam Home</a></li>
-            <li><a href="property-for-sale.html">Property For Sale</a></li>
-            <li><a href="property-to-let.html">Property To Let</a></li>
-            <li><a href="developments.html">Developments</a></li>
-            <li><a href="sellam-index.html">Sellam Index</a></li>
+            <li><a href="exclusive-properties.html">Exclusive Properties</a></li>
+            <li><a href="rent.html">Property For Rent</a></li>
+            <li><a href="buy-land.html">Buy Land</a></li>
+            <li><a href="testimonials.html">What People Say</a></li>
           </ul>
         </div>
       </div>

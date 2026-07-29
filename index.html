@@ -103,10 +103,17 @@
         </a>
 
         <ul class="desktop-nav" aria-label="Main menu">
-          <li><a href="buy.html">Buy</a></li>
+          <li class="nav-has-dropdown">
+            <a href="buy.html" aria-haspopup="true">Buy<span class="chevron" aria-hidden="true"></span></a>
+            <ul class="nav-dropdown">
+              <li><a href="buy-commercial.html">Commercial</a></li>
+              <li><a href="buy-land.html">Land</a></li>
+              <li><a href="buy-residential.html">Residential</a></li>
+            </ul>
+          </li>
           <li><a href="rent.html">Rent</a></li>
           <li class="nav-has-dropdown">
-            <a href="leasing-offices.html" aria-haspopup="true">Leasing<span class="chevron" aria-hidden="true"></span></a>
+            <a href="leasing-properties.html" aria-haspopup="true">Leasing<span class="chevron" aria-hidden="true"></span></a>
             <ul class="nav-dropdown">
               <li><a href="leasing-offices.html">Offices</a></li>
               <li><a href="leasing-retail.html">Retail</a></li>
@@ -144,10 +151,17 @@
           </div>
 
           <ul class="mobile-nav-list">
-            <li><a href="buy.html">Buy</a></li>
+            <li class="mobile-nav-has-sublist">
+              <a href="buy.html">Buy</a>
+              <ul class="mobile-nav-sublist">
+                <li><a href="buy-commercial.html">Commercial</a></li>
+                <li><a href="buy-land.html">Land</a></li>
+                <li><a href="buy-residential.html">Residential</a></li>
+              </ul>
+            </li>
             <li><a href="rent.html">Rent</a></li>
             <li class="mobile-nav-has-sublist">
-              <a href="leasing-offices.html">Leasing</a>
+              <a href="leasing-properties.html">Leasing</a>
               <ul class="mobile-nav-sublist">
                 <li><a href="leasing-offices.html">Offices</a></li>
                 <li><a href="leasing-retail.html">Retail</a></li>
@@ -658,7 +672,7 @@
           </a>
           <a class="feature-tile image-frame" href="insights.html" aria-label="Read Sellam insights">
             <img src="assets/images/card-insights.webp" alt="Digital analytics and SEO insights graphic">
-            <span>Insights</span>
+            <span>Bespoke<br>Search</span>
           </a>
           <a class="feature-tile image-frame" href="testimonials.html" aria-label="Read Sellam testimonials">
             <img src="assets/images/card-testimonials.webp" alt="Sellam client reviews card">
@@ -706,7 +720,7 @@
           <h2>Company</h2>
           <ul>
             <li><a href="services.html">Services</a></li>
-            <li><a href="news.html">Sellam News</a></li>
+            <li><a href="blogs.html">Sellam News</a></li>
             <li><a href="contact.html">Get In Touch</a></li>
             <li><a href="privacy.html">Privacy Policy</a></li>
           </ul>
@@ -716,11 +730,10 @@
           <h2>Explore</h2>
           <ul>
             <li><a href="index.html">Sellam Home</a></li>
-            <li><a href="property-for-sale.html">Property For Sale</a></li>
-            <li><a href="property-to-let.html">Property To Let</a></li>
-            <li><a href="developments.html">Developments</a></li>
-            <li><a href="off-market-deals.html">Off-Market Deals</a></li>
-            <li><a href="sellam-index.html">Sellam Index</a></li>
+            <li><a href="exclusive-properties.html">Exclusive Properties</a></li>
+            <li><a href="rent.html">Property For Rent</a></li>
+            <li><a href="buy-land.html">Buy Land</a></li>
+            <li><a href="testimonials.html">What People Say</a></li>
           </ul>
         </div>
       </div>
