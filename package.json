@@ -1,0 +1,26 @@
+{
+  "name": "sellam",
+  "version": "1.0.0",
+  "description": "A real Estate website selling premium property",
+  "main": "blogs.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lewinskylewis/Sellam.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lewinskylewis/Sellam/issues"
+  },
+  "homepage": "https://github.com/lewinskylewis/Sellam#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
