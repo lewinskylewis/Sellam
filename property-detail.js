@@ -670,11 +670,20 @@ function buildPriceRows(inventoryItem) {
 
   units.forEach((unit) => {
     const bedroomLabel = window.SellamUnits ? window.SellamUnits.unitLabel(unit) : "";
-    const bedrooms = bedroomLabel || (unit.bedrooms !== null && unit.bedrooms !== undefined ? countLabel(unit.bedrooms, "Bedroom") : "—");
+    // `residenceLabel` (e.g. "Villa 1") is a detail-page-only override for
+    // developments that sell distinct numbered residences of the same floor
+    // plan — it takes priority over the generic "N Bedroom(s)" wording here,
+    // but deliberately isn't read by data/property-units.js, so listing
+    // cards elsewhere still show the plain bedroom count.
+    const bedrooms = unit.residenceLabel || bedroomLabel || (unit.bedrooms !== null && unit.bedrooms !== undefined ? countLabel(unit.bedrooms, "Bedroom") : "—");
     const bathrooms = unit.bathrooms !== null && unit.bathrooms !== undefined ? countLabel(unit.bathrooms, "Bathroom") : "—";
+    // OPTIONAL internal floor area (e.g. "376 SQM") and a short note (e.g.
+    // "Fully Furnished") shown alongside a unit's price row.
+    const area = unit.area || "";
+    const note = unit.note || "";
 
-    if (unit.salePrice) rows.push({ bedrooms, bathrooms, price: formatKESValue(unit.salePrice) });
-    if (unit.rentPrice) rows.push({ bedrooms, bathrooms, price: `${formatKESValue(unit.rentPrice)} / month` });
+    if (unit.salePrice) rows.push({ bedrooms, bathrooms, area, note, price: formatKESValue(unit.salePrice) });
+    if (unit.rentPrice) rows.push({ bedrooms, bathrooms, area, note, price: `${formatKESValue(unit.rentPrice)} / month` });
   });
 
   if (!rows.length) rows.push({ bedrooms: "—", bathrooms: "—", price: "Price on application" });
@@ -799,9 +808,12 @@ function renderPriceTable(property) {
   rows.forEach((row) => {
     const item = document.createElement("div");
     item.className = "price-item";
+    const areaLine = row.area ? `<span class="price-item-meta">${row.area}</span>` : "";
+    const priceText = row.note ? `${row.price} (${row.note})` : row.price;
     item.innerHTML =
       `<span class="price-item-label">${row.bedrooms}</span>` +
-      `<span class="price-item-value">${PRICE_TAG_SVG}${row.price}</span>`;
+      areaLine +
+      `<span class="price-item-value">${PRICE_TAG_SVG}${priceText}</span>`;
     list.append(item);
   });
 }
@@ -904,9 +916,26 @@ const DEFAULT_FEATURE_HIGHLIGHTS = [
   { title: "Amenities Nearby:", text: "Close to banks, restaurants, malls, and hotels." }
 ];
 
+// Land listings use a stripped-down template (1-3 photos, one description
+// paragraph, and a size-vs-price table) — no narrative "story" sections and
+// no amenities/feature banner, since a bare plot doesn't have bedrooms,
+// finishes, or building amenities to describe. See setupPropertyStory() for
+// the matching story-section hide.
+function isLandProperty(property) {
+  return property.propertyType === "land";
+}
+
 function renderFeatureHighlights(property) {
+  const section = document.querySelector(".detail-features");
   const grid = document.querySelector("[data-feature-grid]");
   if (!grid) return;
+
+  if (isLandProperty(property)) {
+    if (section) section.hidden = true;
+    grid.replaceChildren();
+    return;
+  }
+  if (section) section.hidden = false;
 
   const items = property.featureHighlights?.length
     ? property.featureHighlights
@@ -1098,6 +1127,13 @@ function setStoryImage(button, image, fallbackLabel) {
 }
 
 function setupPropertyStory(property) {
+  const section = document.querySelector(".detail-story");
+  if (isLandProperty(property)) {
+    if (section) section.hidden = true;
+    return;
+  }
+  if (section) section.hidden = false;
+
   const story = buildStoryContent(property);
   const rows = document.querySelectorAll(".detail-story .story-row");
 

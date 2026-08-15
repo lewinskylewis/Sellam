@@ -713,156 +713,382 @@ window.SELLAM_PROPERTIES = [
       { percent: 0, label: "Interest" }
     ]
   },
-
-  /* --------------------------------------------------------------- EXCLUSIVE
-     Off-market / exclusive listings. */
-
+  
   {
     id: "sl-009",
-    slug: "dg-jkia-syokimau",
+    slug: "4-bedroom-luxury-villas-runda",
     status: "available",
-    collection: "exclusive",
-    title: "DG JKIA",
-    summary: "A strategically positioned Syokimau development near JKIA and key transport routes, suited to both owner-occupiers and investors.",
-    propertyType: "apartment",
-    community: "syokimau",
-    location: "Syokimau, Nairobi",
+    collection: "featured",
+    title: "4 Bedroom Luxury Villas-Runda",
+    summary: "Luxury 4-bedroom villas for sale in Runda, Nairobi, featuring en-suite bedrooms, private lifts, Bosch kitchens, smart infrastructure, premium finishes, 24-hour security, and Karura Forest views.",
+    propertyType: "villa",
+    community: "runda",
+    location: "UN Blue Zone, Runda, Nairobi",
     letting: "sale",
-    salePrice: 32000000,
-    rentPrice: null,
-    bedrooms: 4,
-    bathrooms: 3,
-    features: ["gym", "wifi", "security", "parking", "backup-generator"],
-    image: "assets/images/premium-kitchen.webp",
-    gallery: ["assets/images/premium-kitchen.webp"],
-    url: "property.html?id=dg-jkia-syokimau",
-    description: "A strategically positioned Syokimau development near JKIA and key transport routes, suited to both owner-occupiers and investors.",
-    featureLocation: "Strategic Syokimau address near JKIA, expressway routes, and emerging commercial hubs.",
-    listedDate: "2026-01-22"
+    // Four individually-priced villas of the same floor-plan type, sized
+    // and priced differently — see the "Residence Availability" table
+    // supplied by the client. `residenceLabel`/`area`/`note` are detail-page
+    // -only fields read directly by buildPriceRows() in property-detail.js;
+    // they don't feed the shared bedroom-count label logic in
+    // data/property-units.js, so listing cards still just show "4 Bedrooms".
+    units: [
+      { unitType: "4-bedroom", bedrooms: 4, bathrooms: 3, residenceLabel: "Villa 1", area: "376 SQM", salePrice: 140000000, rentPrice: null },
+      { unitType: "4-bedroom", bedrooms: 4, bathrooms: 3, residenceLabel: "Villa 2", area: "376 SQM", salePrice: 135000000, rentPrice: null },
+      { unitType: "4-bedroom", bedrooms: 4, bathrooms: 3, residenceLabel: "Villa 3", area: "377 SQM", salePrice: 150000000, rentPrice: null },
+      { unitType: "4-bedroom", bedrooms: 4, bathrooms: 3, residenceLabel: "Villa 4", area: "381 SQM", note: "Fully Furnished", salePrice: 165000000, rentPrice: null }
+    ],
+
+    image: "assets/images/4 Bedroom Luxury Villas- Runda (4).jpeg",
+    heroImage: "assets/images/4 Bedroom Luxury Villas- Runda Living room.jpeg",
+    gallery: [
+      "assets/images/4 Bedroom Luxury Villas- Runda.jpeg",
+      "assets/images/4 Bedroom Luxury Villas- Runda Living room.jpeg",
+      "assets/images/4 Bedroom Luxury Villas- Runda Living room (2).jpeg",
+      "assets/images/4 Bedroom Luxury Villas- Runda Living room (3).jpeg",
+      "assets/images/4 Bedroom Luxury Villas- Runda Kitchen.jpeg",
+      "assets/images/4 Bedroom Luxury Villas- Runda Dining area.jpeg",
+      "assets/images/4 Bedroom Luxury Villas- Runda Bedroom.jpeg",
+      "assets/images/4 Bedroom Luxury Villas- Runda Bedroom (2).jpeg",
+      "assets/images/4 Bedroom Luxury Villas- Runda Bedroom (3).jpeg",
+      "assets/images/4 Bedroom Luxury Villas- Runda Bedroom (4).jpeg",
+      "assets/images/4 Bedroom Luxury Villas- Runda study.jpeg",
+      "assets/images/4 Bedroom Luxury Villas- Runda study (2).jpeg",
+      "assets/images/4 Bedroom Luxury Villas- Runda (2).jpeg",
+      "assets/images/4 Bedroom Luxury Villas- Runda (3).jpeg"
+      ],
+
+    url: "property.html?id=4-bedroom-luxury-villas-runda",
+    description: {
+      body: "Nestled along Tala Road in the heart of Runda, this exclusive collection of four luxury villas offers refined living within one of Nairobi's most prestigious and secure residential neighbourhoods. Bordering the tranquil Karura Forest and positioned within the UN Blue Zone, the development combines privacy, architectural excellence, and exceptional connectivity, just minutes from diplomatic missions, international schools, premier shopping destinations, and world-class healthcare facilities."
+    },
+    featureLocation: "Borders Karura Forest within the UN Blue Zone in Runda, minutes from diplomatic missions, international schools, and premier shopping destinations.",
+     story: {
+      rows: [
+        { title: "Elegant Family Living", 
+          body: "Designed for modern family living, each villa features four generously proportioned en-suite bedrooms, a DSQ, expansive open-plan living and dining areas, and seamless indoor-outdoor spaces that maximize natural light and forest views. With only four residences in the development, homeowners enjoy an exceptional sense of privacy and exclusivity within a low-density setting." },
+        { title: "Contemporary Interiors", 
+          body: "Every residence is finished to an exceptional standard, combining timeless craftsmanship with modern functionality. Premium finishes include solid mahogany joinery, a fully fitted Bosch kitchen, custom-built wardrobes, elegant spa-inspired bathrooms, and expansive glazing that frames the surrounding greenery while creating bright, inviting interiors throughout the home." },
+        { title: "Security & Exclusive Setting", 
+          body: "Situated within Nairobi's highly sought-after UN Blue Zone, the development offers one of the city's most secure residential environments. Residents benefit from controlled access, 24-hour security, CCTV surveillance, and an electrified perimeter fence, while the limited collection of just four homes ensures exceptional privacy, tranquillity, and exclusivity." },
+          { title: "Prime Runda Location", 
+          body: "Ideally positioned for convenience, the development enjoys close proximity to Nairobi's diplomatic corridor, the United Nations Headquarters in Gigiri, and key business districts. Residents are within minutes of leading international schools including International School of Kenya, Rosslyn Academy, and the German School Nairobi, as well as premier healthcare facilities such as Aga Khan University Hospital and MP Shah Hospital. Lifestyle destinations including Village Market, Two Rivers Mall, Muthaiga Golf Club, and Windsor Golf Hotel & Country Club are also easily accessible." }
+        
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+      { title: "Security:", text: "Gas Reticulation System" },
+      { title: "Design:", text: "Solid Mahogany Joinery, Fully Fitted Bosch Kitchen, Centralised Air Conditioning, Custom Built Wardrobes, * Expansive Balconies, Large Open-Plan Living & Dining Areas, Dedicated DSQ  " },
+      { title: "Kitchen:", text: "Fully fitted Bosch kitchens" },
+      { title: "Technology:", text: "Smart home infrastructure throughout" },
+      { title: "Utilities:", text: "Standby Backup Generator, Solar Water Heating, Filtered Water Storage, " }
+    ]
   },
 
   {
     id: "sl-010",
-    slug: "crestpoint-karen",
+    slug: "6-bedroom-fully-en-suite-karen",
     status: "available",
-    collection: "exclusive",
-    title: "Crestpoint",
-    summary: "Crestpoint brings rare Karen privacy together with composed interiors, generous natural light, elegant finishes, and a setting designed for selective homeowners who value calm and discretion.",
-    propertyType: "apartment",
-    community: "karen",
+    collection: "featured",
+    title: "6 Bedroom Fully En-Suite House-Karen",
+    summary: "Luxury 4-bedroom villas for sale in Runda, Nairobi, featuring en-suite bedrooms, private lifts, Bosch kitchens, smart infrastructure, premium finishes, 24-hour security, and Karura Forest views.",
+    propertyType: "mansion",
+    community: "Karen",
     location: "Karen, Nairobi",
-    letting: "sale",
-    salePrice: 56000000,
-    rentPrice: null,
-    bedrooms: 3,
-    bathrooms: 3,
-    features: ["pool", "gym", "security", "parking", "garden"],
-    image: "assets/images/fax.jpeg",
-    gallery: ["assets/images/fax.jpeg"],
-    url: "property.html?id=crestpoint-karen",
-    description: "Crestpoint brings rare Karen privacy together with composed interiors, generous natural light, elegant finishes, and a setting designed for selective homeowners who value calm and discretion.",
-    featureLocation: "Quiet Karen setting near private schools, clubs, green compounds, and lifestyle amenities.",
-    listedDate: "2026-02-10"
+    letting: "rent",
+    // Four individually-priced villas of the same floor-plan type, sized
+    // and priced differently — see the "Residence Availability" table
+    // supplied by the client. `residenceLabel`/`area`/`note` are detail-page
+    // -only fields read directly by buildPriceRows() in property-detail.js;
+    // they don't feed the shared bedroom-count label logic in
+    // data/property-units.js, so listing cards still just show "4 Bedrooms".
+    units: [
+      { unitType: "6-bedroom", bedrooms: 6, bathrooms: 7, area: "600 SQM", salePrice: null, rentPrice: 350000 }
+     
+      
+    ],
+
+    image: "assets/images/6-bedroom-fully-en-suite-karen (8).jpeg",
+    heroImage: "assets/images/6-bedroom-fully-en-suite-karen (9).jpeg",
+    gallery: [
+      "assets/images/6-bedroom-fully-en-suite-karen (10).jpeg",
+      "assets/images/6-bedroom-fully-en-suite-karen (2).jpeg",
+      "assets/images/6-bedroom-fully-en-suite-karen (7).jpeg",
+      "assets/images/6-bedroom-fully-en-suite-karen (9).jpeg",
+      "assets/images/6-bedroom-fully-en-suite-karen (5).jpeg",
+      "assets/images6-bedroom-fully-en-suite-karen.jpeg"
+      ],
+
+    url: "property.html?id=6-bedroom-fully-en-suite-karen",
+    description: {
+      body: "Set within one of Karen's established gated communities, this elegant six-bedroom residence offers generous family living in a secure and tranquil environment. Designed with spacious interiors, quality finishes, and functional living spaces, the home provides an exceptional lifestyle for families, diplomats, and corporate executives seeking comfort, privacy, and convenience in one of Nairobi's most desirable residential addresses."
+    },
+    featureLocation: "Borders Karura Forest within the UN Blue Zone in Runda, minutes from diplomatic missions, international schools, and premier shopping destinations.",
+     story: {
+      rows: [
+        { title: "Spacious Family Living", 
+          body: "Thoughtfully designed across 600 square metres, the residence features expansive living and entertainment spaces complemented by large windows that fill the home with natural light. A grand double-volume lounge with high ceilings and a statement chandelier creates an impressive focal point, while the formal dining area provides an ideal setting for family gatherings and entertaining." },
+        { title: "Contemporary Interiors", 
+          body: "All six bedrooms are generously proportioned and fully en-suite, offering privacy and comfort for every member of the household. Warm wooden ceiling finishes, built-in wardrobes, and elegant spa-inspired bathrooms with glass shower cubicles and premium fittings create refined living spaces throughout. The spacious primary suite offers ample wardrobe storage and a luxurious en-suite bathroom." },
+        { title: "The Culinary Kitchen", 
+          body: "Designed to meet the demands of modern family living, the contemporary kitchen features a central island, generous cabinetry, a walk-in pantry, and ample preparation space, creating a practical and elegant environment for everyday cooking and entertaining." },
+        { title: "Outdoor Living & Everyday Comfort", 
+          body: "The property is complemented by well-maintained outdoor spaces and essential infrastructure that enhance day-to-day living, including a private garden, reliable water supply, and dedicated staff accommodation." }
+        
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+      { title: "Security:", text: "24-Hour Security, Secure Gated Community" },
+      { title: "Design:", text: "Formal Dining Area, Grand Double-Volume Lounge,High Ceilings, Statement Chandelier, Large Windows with Natural Lighting, Private Garden " },
+      { title: "Kitchen:", text: "Modern Kitchen with Island, Walk-In Pantry" },
+      { title: "Technology:", text: "Smart home infrastructure throughout" },
+      { title: "Utilities:", text: "Borehole Water Supply, Ample Water Storage, Service Charge Included, " }
+    ]
   },
 
   {
     id: "sl-011",
-    slug: "dg-west-westlands",
+    slug: "5-bedroom-family-residence",
     status: "available",
-    collection: "exclusive",
-    title: "DG West",
-    summary: "DG West is positioned for clients seeking elevated city living, panoramic convenience, secure access, premium amenities, and an address with strong long-term demand.",
-    propertyType: "apartment",
-    community: "westlands",
-    location: "Westlands, Nairobi",
+    collection: "featured",
+    title: " 5 Bedroom Family Residence",
+    summary: "Luxury 4-bedroom villas for sale in Runda, Nairobi, featuring en-suite bedrooms, private lifts, Bosch kitchens, smart infrastructure, premium finishes, 24-hour security, and Karura Forest views.",
+    propertyType: "mansion",
+    community: "runda",
+    location: "Runda, Nairobi",
     letting: "sale",
-    salePrice: 61000000,
-    rentPrice: null,
-    bedrooms: 4,
-    bathrooms: 3,
-    features: ["gym", "wifi", "security", "parking", "backup-generator"],
-    image: "assets/images/Fax2.jpg",
-    gallery: ["assets/images/Fax2.jpg"],
-    url: "property.html?id=dg-west-westlands",
-    description: "DG West is positioned for clients seeking elevated city living, panoramic convenience, secure access, premium amenities, and an address with strong long-term demand.",
-    featureLocation: "Prime Westlands address with fast access to business, dining, retail, and entertainment.",
-    listedDate: "2026-02-26"
+    // Four individually-priced villas of the same floor-plan type, sized
+    // and priced differently — see the "Residence Availability" table
+    // supplied by the client. `residenceLabel`/`area`/`note` are detail-page
+    // -only fields read directly by buildPriceRows() in property-detail.js;
+    // they don't feed the shared bedroom-count label logic in
+    // data/property-units.js, so listing cards still just show "4 Bedrooms".
+    units: [
+      { unitType: "5-bedroom", bedrooms: 5, bathrooms: 6, area: "2023 SQM", salePrice: 150000000, rentPrice: null }
+     
+      
+    ],
+
+    image: "assets/images/5-bedroom-family-residence (2).jpeg",
+    heroImage: "assets/images/5-bedroom-family-residence (5).jpeg",
+    gallery: [
+      "assets/images/5-bedroom-family-residence.jpeg",
+      "assets/images/5-bedroom-family-residence (6).jpeg",
+      
+      ],
+
+    url: "property.html?id=5-bedroom-family-residence",
+    description: {
+      body: "Nestled within the prestigious suburb of Runda, this distinguished family residence presents a rare opportunity to own an exceptional home in one of Nairobi's most exclusive addresses. Set on a beautifully landscaped half-acre, the property combines elegant architecture, expansive living spaces, and modern comforts within a private and secure environment, just minutes from Gigiri and the UN diplomatic precinct."
+    },
+    featureLocation: "Borders Karura Forest within the UN Blue Zone in Runda, minutes from diplomatic missions, international schools, and premier shopping destinations.",
+     story: {
+      rows: [
+        { title: "Elegant Family Living", 
+          body: "Designed for contemporary family living, the residence offers generous indoor and outdoor spaces that balance comfort with functionality. Expansive living areas, large windows, and an open veranda overlooking the manicured gardens create bright, welcoming interiors ideal for both everyday living and entertaining." },
+        { title: "Refined Interiors", 
+          body: "All five bedrooms are generously proportioned and fully en-suite, offering privacy and comfort for every member of the household. The home showcases contemporary architecture complemented by timeless detailing, including a striking white façade, elegant columned verandas, and a terracotta-tiled roof that enhances its enduring appeal." },
+        { title: "Lifestyle & Recreation", 
+          body: "Created to support modern lifestyles, the residence includes thoughtfully designed spaces for work, wellness, and family living. A dedicated home office provides the ideal professional workspace, while a private gym offers convenience for health and fitness within the comfort of home." },
+        { title: "Outdoor Living", 
+          body: "Occupying a beautifully landscaped half-acre, the property features mature gardens, expansive lawns, and inviting outdoor spaces designed for relaxation, entertaining, and family activities. The tranquil setting provides both privacy and the flexibility for future enhancements." }
+        
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+      { title: "Security:", text: "24-Hour Security, Secure Gated Community" },
+      { title: "Design:", text: "Formal Dining Area, Grand Double-Volume Lounge,High Ceilings, Statement Chandelier, Large Windows with Natural Lighting, Private Garden " },
+      { title: "Kitchen:", text: "Modern Kitchen with Island, Walk-In Pantry" },
+      { title: "Technology:", text: "Smart home infrastructure throughout" },
+      { title: "Utilities:", text: "Borehole Water Supply, Ample Water Storage, Service Charge Included, " }
+    ]
   },
 
   {
     id: "sl-012",
-    slug: "aum-residence-kileleshwa",
+    slug: "1-2-acre-land-thigiri-groove",
     status: "available",
-    collection: "exclusive",
-    title: "Aum Residence",
-    summary: "Aum Residence combines sculptural architecture, refined apartment living, secure access, and a privileged Kileleshwa setting designed for buyers who want exclusivity without excess.",
-    propertyType: "apartment",
-    community: "kileleshwa",
-    location: "Kileleshwa, Nairobi",
+    collection: "featured",
+    title: "1.2 Acre Land Thigiri Groove",
+    summary: "A 1.2-acre residential plot for sale in Thigiri Groove, Nairobi, offering a quiet, secure setting close to Runda and the UN Blue Zone for a private home or development.",
+    propertyType: "land",
+    community: "thigiri",
+    location: "Thigiri Groove, Nairobi",
     letting: "sale",
-    salePrice: 43000000,
-    rentPrice: null,
-    bedrooms: 3,
-    bathrooms: 3,
-    features: ["gym", "wifi", "security", "parking"],
-    image: "assets/images/aumout.jpeg",
-    gallery: ["assets/images/aumout.jpeg"],
-    url: "property.html?id=aum-residence-kileleshwa",
-    description: "Aum Residence combines sculptural architecture, refined apartment living, secure access, and a privileged Kileleshwa setting designed for buyers who want exclusivity without excess.",
-    featureLocation: "Kileleshwa address close to schools, shopping, hospitals, and Nairobi's core business routes.",
-    listedDate: "2026-03-11"
+
+    // Land is priced by size rather than bedroom count — `residenceLabel`
+    // shows the plot size ("1.2 Acres") in place of a bedroom count on the
+    // detail page's price table. See buildPriceRows() in property-detail.js.
+    units: [
+      { residenceLabel: "1.2 Acres", salePrice: 125000000, rentPrice: null }
+    ],
+
+    // Land listings use a stripped-down template (see isLandProperty() in
+    // property-detail.js) — 1-3 photos, no gallery carousel padding needed.
+    image: "assets/images/Thigiri.jpeg",
+    gallery: [
+      "assets/images/Thigiri.jpeg"
+    ],
+
+    url: "property.html?id=1-2-acre-land-thigiri-groove",
+    description: {
+      body: "✅Ready title, Slightly sloppy, Excellent drainage,  Easily Accessible, Proximity to social amenities like the New Muthaiga Mall"
+    },
+
+    listedDate: "2026-07-22"
   },
 
   {
     id: "sl-013",
-    slug: "kileleshwa-heights",
+    slug: "prime-old-kitisuru-1-1-acre-land",
     status: "available",
-    collection: "exclusive",
-    title: "Kileleshwa Heights",
-    summary: "Kileleshwa Heights offers a limited collection of premium apartments with green surroundings, strong connectivity, modern amenities, and polished residential comfort.",
-    propertyType: "apartment",
-    community: "kileleshwa",
-    location: "Kileleshwa, Nairobi",
+    collection: "featured",
+    title: "Prime Old kitisuru 1.1 acre land",
+    summary: "A 1.1-acre residential plot for sale in Old Kitisuru, Nairobi, offering a quiet, secure setting close to Runda and the UN Blue Zone for a private home or development.",
+    propertyType: "land",
+    community: "kitisuru",
+    location: "Prime Old Kitisuru, Nairobi",
     letting: "sale",
-    salePrice: 39000000,
-    rentPrice: null,
-    bedrooms: 3,
-    bathrooms: 3,
-    features: ["gym", "wifi", "security", "parking", "backup-generator"],
-    image: "assets/images/Kileout.png",
-    gallery: ["assets/images/Kileout.png", "assets/images/Kile.png"],
-    url: "property.html?id=kileleshwa-heights",
-    description: "Kileleshwa Heights offers a limited collection of premium apartments with green surroundings, strong connectivity, modern amenities, and polished residential comfort.",
-    featureLocation: "Central Kileleshwa address with easy access to Lavington, Kilimani, Westlands, and key schools.",
-    listedDate: "2026-03-24"
+
+    // Land is priced by size rather than bedroom count — `residenceLabel`
+    // shows the plot size ("1.1 Acres") in place of a bedroom count on the
+    // detail page's price table. See buildPriceRows() in property-detail.js.
+    units: [
+      { residenceLabel: "1.1 Acres", salePrice: 250000000, rentPrice: null }
+    ],
+
+    // Land listings use a stripped-down template (see isLandProperty() in
+    // property-detail.js) — 1-3 photos, no gallery carousel padding needed.
+    image: "assets/images/Prime Old kitisuru 1.1 acre land.jpeg",
+    gallery: [
+      "assets/images/Prime Old kitisuru 1.1 acre land (3).jpeg"      
+    ],
+
+    url: "property.html?id=prime-old-kitisuru-1-1-acre-land",
+    description: {
+      body: "Set within the quiet, established Thigiri Groove neighbourhood bordering Runda, this 1.2-acre plot offers a rare opportunity to secure a generous, ready-to-build parcel in one of Nairobi's most sought-after residential pockets, close to the UN Blue Zone, diplomatic missions, and international schools."
+    },
+
+    listedDate: "2026-07-22"
   },
 
-  {
+   {
     id: "sl-014",
-    slug: "crystal-oak-runda",
+    slug: "1-acre-land-thigiri-ridge",
     status: "available",
-    collection: "exclusive",
-    title: "Crystal Oak",
-    summary: "Crystal Oak is a discreet Runda address with generous space, refined detailing, privacy, and proximity to Nairobi's most established diplomatic and family neighborhoods.",
-    propertyType: "villa",
-    community: "runda",
-    location: "Runda, Nairobi",
+    collection: "featured",
+    title: "1 Acre Land Thigiri Ridge", 
+    summary: "A 1 acre residential plot for sale in Thigiri Ridge, Nairobi, offering a quiet, secure setting close to Runda and the UN Blue Zone for a private home or development.",
+    propertyType: "land",
+    community: "thigiri",
+    location: "Thigiri Ridge, Nairobi",
     letting: "sale",
-    salePrice: 145000000,
-    rentPrice: null,
-    bedrooms: 4,
-    bathrooms: 4,
-    features: ["pool", "garden", "security", "parking", "backup-generator"],
-    image: "assets/images/grosout.JPG",
-    gallery: ["assets/images/grosout.JPG", "assets/images/gros2.jpg"],
-    url: "property.html?id=crystal-oak-runda",
-    description: "Crystal Oak is a discreet Runda address with generous space, refined detailing, privacy, and proximity to Nairobi's most established diplomatic and family neighborhoods.",
-    featureLocation: "Runda setting near diplomatic zones, top schools, private clubs, and established family communities.",
-    listedDate: "2026-04-08"
+
+    // Land is priced by size rather than bedroom count — `residenceLabel`
+    // shows the plot size ("1.2 Acres") in place of a bedroom count on the
+    // detail page's price table. See buildPriceRows() in property-detail.js.
+    units: [
+      { residenceLabel: "1.2 Acres", salePrice: 150000000, rentPrice: null }
+    ],
+
+    // Land listings use a stripped-down template (see isLandProperty() in
+    // property-detail.js) — 1-3 photos, no gallery carousel padding needed.
+    image: "assets/images/1 acre thigiri ridge.jpeg",
+    gallery: [
+      "assets/images/1 acre thigiri ridge.jpeg"
+    ],
+
+    url: "property.html?id=1-2-acre-land-thigiri-ridge",
+    description: {
+      body: "✅Ready title, Slightly sloppy, Excellent drainage,  Easily Accessible, Proximity to social amenities like the New Muthaiga Mall"
+    },
+
+    listedDate: "2026-07-22"
   },
 
   {
     id: "sl-015",
+    // NOTE: slug/url must never contain a raw "&" — it's the query-string
+    // separator, so "?id=5-&-6-..." gets truncated by URLSearchParams into
+    // id="5-" (no match), silently falling back to the generic "DG West"
+    // placeholder property. Kept the "&" in `title` (safe — that's just
+    // display text) but stripped it from the id-bearing slug/url below.
+    slug: "5-6-bedroom-luxury-villas",
+    status: "available",
+    collection: "featured",
+    title: "5 & 6 Bedroom Luxury Villas",
+    summary: "5 & 6 bedroom luxury villas for sale in Kyuna, Westlands, featuring a grand double-volume lounge, en-suite bedrooms, a modern kitchen with island, smart home infrastructure, borehole water supply, and 24-hour gated security.",
+    propertyType: "mansion",
+    community: "westlands",
+    location: "Kyuna, Westlands, Nairobi",
+    letting: "sale",
+    // Two floor plans in this development — see data/property-units.js for
+    // how the rest of the site reads bedrooms/bathrooms/price off `units`.
+    units: [
+      { unitType: "5-bedroom", bedrooms: 5, bathrooms: 6, salePrice: 87000000, rentPrice: null },
+      { unitType: "6-bedroom", bedrooms: 6, bathrooms: 6, salePrice: 100000000, rentPrice: null }
+    ],
+
+    image: "assets/images/5 & 6 Bedroom Luxury Villas westlands.jpeg",
+    heroImage: "assets/images/5 & 6 Bedroom Luxury Villas Living room.jpeg",
+    gallery: [
+      "assets/images/5 & 6 Bedroom Luxury Villas.jpeg",
+      "assets/images/5 & 6 Bedroom Luxury Villas Living room.jpeg",
+      "assets/images/5 & 6 Bedroom Luxury Villas bedroom.jpeg",
+      "assets/images/5 & 6 Bedroom Luxury Villas bedroom (2).jpeg",
+      "assets/images/5 & 6 Bedroom Luxury Villas kitchen.jpeg",
+      "assets/images/5 & 6 Bedroom Luxury Villas kitchen (2).jpeg",
+      "assets/images/5 & 6 Bedroom Luxury Villas Closet.jpeg",
+      "assets/images/5 & 6 Bedroom Luxury Villas washroom.jpeg",
+      "assets/images/5 & 6 Bedroom Luxury Villas washroom (2).jpeg",
+      "assets/images/5 & 6 Bedroom Luxury Villas washroom (3).jpeg",
+      "assets/images/5 & 6 Bedroom Luxury Villas washroom (4).jpeg",
+      "assets/images/5 & 6 Bedroom Luxury Villas (2).jpeg",
+      "assets/images/5 & 6 Bedroom Luxury Villas (3).jpeg",
+      "assets/images/5 & 6 Bedroom Luxury Villas (4).jpeg",
+      "assets/images/5 & 6 Bedroom Luxury Villas (5).jpeg"
+      ],
+
+    url: "property.html?id=5-6-bedroom-luxury-villas",
+    description: {
+      body: "Set in the leafy, established neighbourhood of Kyuna, Westlands, these 5 & 6 bedroom luxury villas offer a rare opportunity to own an exceptional home in one of Nairobi's most sought-after residential pockets. Each residence combines elegant architecture, expansive living spaces, and modern comforts within a private, secure environment, just minutes from Westlands' business and lifestyle amenities."
+    },
+    featureLocation: "Kyuna, Westlands address with easy access to Westlands CBD, Sarit Centre, and Nairobi's key diplomatic and business districts.",
+     story: {
+      rows: [
+        { title: "Elegant Family Living",
+          body: "Designed for contemporary family living, the residence offers generous indoor and outdoor spaces that balance comfort with functionality. Expansive living areas, large windows, and an open veranda overlooking the manicured gardens create bright, welcoming interiors ideal for both everyday living and entertaining." },
+        { title: "Refined Interiors",
+          body: "All five bedrooms are generously proportioned and fully en-suite, offering privacy and comfort for every member of the household. The home showcases contemporary architecture complemented by timeless detailing, including a striking white façade, elegant columned verandas, and a terracotta-tiled roof that enhances its enduring appeal." },
+        { title: "Lifestyle & Recreation",
+          body: "Created to support modern lifestyles, the residence includes thoughtfully designed spaces for work, wellness, and family living. A dedicated home office provides the ideal professional workspace, while a private gym offers convenience for health and fitness within the comfort of home." },
+        { title: "Outdoor Living",
+          body: "The property features mature gardens, expansive lawns, and inviting outdoor spaces designed for relaxation, entertaining, and family activities. The tranquil setting provides both privacy and the flexibility for future enhancements." }
+        
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+      { title: "Security:", text: "24-Hour Security, Secure Gated Community" },
+      { title: "Design:", text: "Formal Dining Area, Grand Double-Volume Lounge,High Ceilings, Statement Chandelier, Large Windows with Natural Lighting, Private Garden " },
+      { title: "Kitchen:", text: "Modern Kitchen with Island, Walk-In Pantry" },
+      { title: "Technology:", text: "Smart home infrastructure throughout" },
+      { title: "Utilities:", text: "Borehole Water Supply, Ample Water Storage, Service Charge Included, " }
+    ]
+  },
+
+
+  /* --------------------------------------------------------------- EXCLUSIVE
+     Off-market / exclusive listings. */
+
+ 
+
+  
+
+  {
+    id: "sl-016",
     slug: "moon-valley-nyari",
     status: "available",
     collection: "exclusive",
@@ -886,7 +1112,7 @@ window.SELLAM_PROPERTIES = [
   },
 
   {
-    id: "sl-016",
+    id: "sl-017",
     slug: "grosvenor-westlands",
     status: "available",
     collection: "exclusive",
@@ -918,7 +1144,7 @@ window.SELLAM_PROPERTIES = [
      search result simply omit that line. */
 
   {
-    id: "sl-017",
+    id: "sl-018",
     slug: "gtc-office-tower",
     status: "available",
     collection: "featured",
@@ -987,9 +1213,72 @@ window.SELLAM_PROPERTIES = [
 ],
     closingParagraphs: "Whether purchasing office space as a long-term investment or leasing premises for your business, GTC Office Tower presents a rare opportunity within Nairobi's Grade A commercial market. Backed by premium specifications, an iconic business address, and sustained demand from leading local and international occupiers, it continues to set the benchmark for commercial real estate in East Africa."
   },
+
+{
+  id: "sl-019",
+    slug: "the-mandrake",
+    status: "available",
+    collection: "featured",
+    title: "The Mandrake",
+    summary: "A Grade A office suite in Westlands offering open-plan floor space, fast fibre connectivity, and full backup power for uninterrupted business operations.",
+    propertyType: "office",
+    community: "westlands",
+    location: "Westlands, Nairobi",
+    letting: "both",
+    salePrice: null,
+    rentPrice: 28000,
+    bedrooms: null,
+    bathrooms: null,
+    // PSF leasing rates converted from source quote (USD 1 = KES 129.5) —
+    // see leasePricing field reference above. Additive: rentPrice/letting/
+    // status above are unchanged and still drive the card, filters, and
+    // rent.html/leasing-offices.html as before.
+    leasePricing: {
+      saleAndLeaseAvailable: true,
+      fromPerSqFt: { min: 169, max: 246 },
+      spaceAvailable: { min: 2500, max: 17768, unit: "sq. ft." },
+      
+      serviceChargePerSqFt: 35,
+      serviceChargeNote: "+ VAT",
+      parkingRatio: "2 bays : 1,000 sq. ft.",
+      parkingNote: "at a cost"
+    },
+    features: ["wifi", "parking", "security", "backup-generator"],
+    image: "assets/images/The Mandrake.jpeg",
+    gallery: [
+      "assets/images/The Mandrake (2).jpeg",
+      "assets/images/The Mandrake (3).jpeg",
+      "assets/images/The Mandrake (4).jpeg",
+    
+      ],
+    url: "property.html?id=the-mandrake",
+    description: "Position your business within one of Nairobi's newest and most distinctive Grade A commercial developments. The Mandrake offers premium office spaces designed around sustainability, flexibility, and workplace wellbeing, combining contemporary architecture, intelligent building systems, and internationally recognised environmental standards. Whether establishing a regional headquarters or expanding your business, The Mandrake provides an exceptional environment for productivity, collaboration, and long-term growth.",
+    story: {
+      rows: [
+        { title: "Intelligent Workspaces", 
+          body: "Designed to accommodate businesses of every scale, The Mandrake features flexible office suites with expansive column-free floor plates, allowing complete workspace customization to meet diverse operational requirements. Floor-to-ceiling glazing maximizes natural daylight, creating bright, efficient working environments that enhance employee comfort and productivity." },
+        { title: "Sustainable Business Environment", 
+          body: "Developed to IFC EDGE Certified standards, The Mandrake integrates sustainable design principles that promote energy efficiency, environmental responsibility, and occupant wellbeing. Its signature vertical greenery, landscaped spaces, and modern façade create a healthier, more inspiring workplace while reducing operational costs for occupiers." },
+        { title: "Business Amenities", 
+          body: "Every aspect of The Mandrake has been thoughtfully designed to deliver an exceptional workplace experience, including:" },
+        
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+  { title: "Security:", text: "Electrified Perimeter Security, Advanced CCTV Surveillance, Fire Detection & Fire Suppression Systems" },
+  { title: "Connectivity:", text: "Fibre Optic Internet Connectivity, Advanced CCTV Surveillance" },
+  { title: "Community:", text: "Bar & lounge and Landscaped gardens" },
+  { title: "Amenities:", text: "Rooftop Terrace, Borehole Water Supply,  Hotel reception & concierge,Elegant arrival lobby" },
+  { title: "Pro Services:", text: "Grade A Office Space, Professional Property Management,Contemporary Workplace Destination." },
+  { title: "Power Backup:", text: "Full backup power Generator" },
+  { title: "Office Features:", text: "Full Floor Leasing Opportunities, Flexible Office Configurations, Column-Free Floor Plates, IFC EDGE Certified Green Building, Sustainable Architectural Design, Vertical Green Façade,Rooftop Terrace." }
+],
+    closingParagraphs: "Whether purchasing office space as a long-term investment or leasing premises for your business, GTC Office Tower presents a rare opportunity within Nairobi's Grade A commercial market. Backed by premium specifications, an iconic business address, and sustained demand from leading local and international occupiers, it continues to set the benchmark for commercial real estate in East Africa."
+  },
    
   {
-    id: "sl-018",
+    id: "sl-020",
     slug: "riverside-business-park-office",
     status: "available",
     collection: "featured",
@@ -1013,7 +1302,7 @@ window.SELLAM_PROPERTIES = [
   },
 
   {
-    id: "sl-019",
+    id: "sl-020",
     slug: "high-street-retail-unit-westlands",
     status: "available",
     collection: "featured",
@@ -1037,7 +1326,7 @@ window.SELLAM_PROPERTIES = [
   },
 
   {
-    id: "sl-020",
+    id: "sl-021",
     slug: "kilimani-mall-retail-space",
     status: "available",
     collection: "featured",
@@ -1061,7 +1350,7 @@ window.SELLAM_PROPERTIES = [
   },
 
   {
-    id: "sl-021",
+    id: "sl-022",
     slug: "syokimau-distribution-warehouse",
     status: "available",
     collection: "featured",
@@ -1085,7 +1374,7 @@ window.SELLAM_PROPERTIES = [
   },
 
   {
-    id: "sl-022",
+    id: "sl-023",
     slug: "ngong-road-light-industrial-unit",
     status: "available",
     collection: "featured",
@@ -1109,7 +1398,7 @@ window.SELLAM_PROPERTIES = [
   },
 
   {
-    id: "sl-023",
+    id: "sl-024",
     slug: "karen-commercial-land-plot",
     status: "available",
     collection: "featured",

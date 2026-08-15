@@ -1,0 +1,8 @@
+{
+  "name": "sellam-website",
+  "private": true,
+  "description": "SELLAM real estate website — static site plus the /api/enquiry Vercel Function that connects the enquiry form to Supabase and Resend.",
+  "engines": {
+    "node": ">=18.x"
+  }
+}

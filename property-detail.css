@@ -112,6 +112,16 @@
   font-weight: 500;
 }
 
+/* OPTIONAL internal floor area line (e.g. "376 SQM") — set via a unit's
+   `area` field in data/properties.js, see buildPriceRows() in
+   property-detail.js. Only rendered when a unit provides it. */
+.price-item-meta {
+  color: var(--muted, #6d7b80);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+}
+
 .price-item-value {
   display: flex;
   align-items: center;
@@ -480,6 +490,12 @@
   padding: 76px 0 118px;
 }
 
+/* Hidden entirely for land listings — see isLandProperty() in
+   property-detail.js. */
+.detail-story[hidden] {
+  display: none;
+}
+
 .story-row {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.74fr);
@@ -557,6 +573,12 @@
   padding: 56px 0 60px;
   color: var(--white);
   background: var(--teal);
+}
+
+/* Hidden entirely for land listings — see isLandProperty() in
+   property-detail.js. */
+.detail-features[hidden] {
+  display: none;
 }
 
 .feature-grid {
