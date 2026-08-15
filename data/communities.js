@@ -218,7 +218,7 @@ window.SELLAM_COMMUNITIES = [
   {
     key: "gigiri",
     label: "Gigiri",
-    image: "assets/images/Silva Gigigri Residences Exterior.jpeg",
+    image: "assets/images/Silva Gigiri Residences Exterior.jpeg",
     imageAlt: "Gigiri diplomatic enclave residential development",
     description: "Gigiri is Nairobi's prestigious diplomatic enclave, home to the United Nations Headquarters, international embassies, Village Market, and Karura Forest — offering internationally branded residences and some of the city's most secure, established addresses.",
     url: "communities/gigiri.html"

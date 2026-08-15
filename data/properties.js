@@ -145,6 +145,48 @@
                 property — `project` is only a label for grouping them (e.g.
                 "silva-gigiri-residences"), not a structural change. See
                 PROPERTY-GUIDE.md §2.5 for the full pattern.
+   leasePricing OPTIONAL. Additive per-sq-ft ("PSF") leasing rate breakdown
+                for office/commercial leasing, on top of — not instead of —
+                the regular rentPrice/salePrice/letting/status fields above,
+                which keep driving every existing card, filter, and page as
+                before. When set, property.html shows a dedicated "Leasing
+                rates" block below the usual price table; when omitted (the
+                default), that block doesn't render at all. All PSF figures
+                are in KES. Shape:
+                  leasePricing: {
+                    saleAndLeaseAvailable: true,   // shows a "Sale & Lease
+                                                    // Available" prefix
+                    fromPerSqFt: { min: 142, max: 207 }, // headline range
+                    period: "per sq. ft./month",   // OPTIONAL, this is the default
+                    spaceAvailable: { min: 3800, max: 17768, unit: "sq. ft." },
+                    zones: [   // floor-band pricing, in listed order
+                      { name: "Low Zone", floors: "F3–F16", minPerSqFt: 214, maxPerSqFt: 246 },
+                      { name: "Middle Zone", floors: "F18–F29", minPerSqFt: 246, maxPerSqFt: 311 },
+                      { name: "High Zone", floors: "F30–F41", minPerSqFt: 311, maxPerSqFt: 337 }
+                    ],
+                    serviceChargePerSqFt: 35,
+                    serviceChargeNote: "+ VAT",       // OPTIONAL
+                    parkingRatio: "2 bays : 1,000 sq. ft.",
+                    parkingNote: "at a cost"          // OPTIONAL
+                  }
+                Any of zones/spaceAvailable/fromPerSqFt/service charge/
+                parking may be omitted individually — each renders only when
+                present.
+   paymentPlan  OPTIONAL. Flexible payment schedule shown as its own block on
+                property.html, just above the enquiry form — mostly used for
+                off-plan/under-construction residential developments, NOT
+                every property. Omitted (the default) means the block simply
+                doesn't render, same as closingParagraphs. A flat array, one
+                row per line item, in display order:
+                  paymentPlan: [
+                    { percent: 15, label: "Reservation" },
+                    { percent: 15, label: "Upon Sale Agreement" },
+                    { percent: 50, label: "During construction (spread over 18 months)" },
+                    { percent: 20, label: "Before or upon handover" },
+                    { percent: 0, label: "Interest" }
+                  ]
+                Percentages aren't validated against 100 — copy the
+                developer's actual schedule as given.
    ============================================================================ */
 
 window.SELLAM_PROPERTIES = [
@@ -168,12 +210,10 @@ window.SELLAM_PROPERTIES = [
     // NOTE: salePrice is identical for both units in the source data (both
     // 5,000,000) — flagging in case the 2-bedroom price was meant to differ.
     units: [
-      { unitType: "bedsitter", bedrooms: 0, bathrooms: 1, salePrice: 3000000, rentPrice: null },
       { unitType: "studio", bedrooms: 0, bathrooms: 1, salePrice: 2000000, rentPrice: null },
-      { unitType: "mini-1-bedroom", bedrooms: 1, bathrooms: 1, salePrice: 10000000, rentPrice: null },
       { unitType: "1-bedroom", bedrooms: 1, bathrooms: 3, salePrice: 13000000, rentPrice: null },
       { unitType: "2-bedroom", bedrooms: 2, bathrooms: 2, salePrice: 20000000, rentPrice: null },
-      { unitType: "3-bedroom", bedrooms: 3, bathrooms: 3, salePrice: 30000000, rentPrice: null }
+      
     ],
     features: ["pool", "garden", "security", "parking", "backup-generator", "gym", "wifi", "restaurant", "spa", "lounge" ],
     image: "assets/images/Silva Gigiri Residences Exterior.jpeg",
@@ -326,7 +366,17 @@ window.SELLAM_PROPERTIES = [
           body: "Diplomat Residences extends well beyond the private apartment, creating an environment where hospitality and everyday living seamlessly come together. Carefully curated resident facilities promote wellness, productivity, relaxation, and community, delivering a lifestyle comparable to that of an internationally managed hotel while preserving the privacy of home ownership." }
       ]
     },
-    listedDate: "2026-07-22"
+    listedDate: "2026-07-22",
+    featureHighlights: [
+  { title: "Location:", text: "proximity to Westlands, Gigiri, Upper Hill, international schools, leading hospitals, and premium retail destinations" },
+  { title: "Security:", text: "24-hour security and controlled access" },
+  { title: "Connectivity:", text: "Modern high-speed elevators, Backup power, Smart home technology" },
+  { title: "Community:", text: "Rooftop swimming pool, Children's playground, Grand hotel-style arrival lobby, Rooftop restaurant " },
+  { title: "Amenities:", text: "Backup power,Borehole water supply,Heated water system,Ample resident parking, Meeting room and business facilities" },
+  { title: "Wellness:", text: "Fully equipped fitness centre" }
+],
+
+     closingParagraphs: "Peponi Road remains one of Nairobi's most established residential corridors, renowned for its mature surroundings, diplomatic presence, excellent connectivity, and proximity to leading commercial, retail, educational, and healthcare facilities. Residents enjoy immediate access to Westgate Mall, Sarit Centre, Westlands CBD, Gigiri, international schools, and major transport routes, making the development equally attractive for homeowners and international tenants. \n\nCombining a prime Westlands location, hospitality-led management, contemporary architecture, and executive-focused amenities, Diplomat Residences presents a compelling opportunity for both homeowners and investors. Strong demand from professionals, expatriates, diplomatic personnel, and corporate tenants supports long-term rental performance, while the development's quality, location, and management philosophy position it for sustained capital appreciation over time."
   },
 
 
@@ -389,7 +439,17 @@ window.SELLAM_PROPERTIES = [
           body: "Gaia Brookside Forest has been conceived as more than a residential development—it is a complete lifestyle destination. Landscaped courtyards, wellness facilities, sports amenities, and family-focused social spaces encourage residents to relax, connect, and enjoy an active, balanced way of life. The carefully curated amenities support every generation, from children's recreation to fitness, business, and leisure, creating a community where modern urban living meets the tranquillity of nature." }
       ]
     },
-    listedDate: "2026-07-23"
+    listedDate: "2026-07-23",
+
+    featureHighlights: [
+  { title: "Security:", text: "24-hour security and controlled access" },
+  { title: "Connectivity:", text: "Smart access systems,High-speed elevators,Ample resident parking" },
+  { title: "Community:", text: "Infinity swimming pool, Outdoor jacuzzis, Residents' lounge,Business centre,Private library & quiet reading lounge,Cinema,Landscaped gardens & courtyards,Jogging & walking track,Basketball court,Padel court,Games & recreation areas,Children's day care,Beauty salon,In-building retail convenience store and Laundry services" },
+  { title: "Amenities:", text: "Backup power,Borehole water supply,Heated water system,Ample resident parking, Meeting room and business facilities" },
+  { title: "Wellness:", text: "Fully equipped fitness centre,Spa & wellness centre,Yoga studio and Health bar" }
+],
+
+  closingParagraphs: "Brookside remains one of Nairobi's most established residential neighbourhoods, recognised for its mature tree-lined environment, low-density character, and exceptional connectivity. Residents enjoy convenient access to Westlands, Gigiri, Riverside, Lavington, international schools, healthcare facilities, premium shopping centres, and leading commercial districts, making Brookside one of the city's most desirable addresses for families and professionals alike. \n\nGaia Brookside Forest brings together spacious family residences, thoughtfully curated amenities, and a prime Westlands location to create a compelling long-term investment. The combination of limited large-format homes, strong owner-occupier demand, and the continued growth of Brookside as a premier residential neighbourhood positions the development for sustained capital appreciation and resilient rental performance."
   },
 
   {
@@ -408,10 +468,10 @@ window.SELLAM_PROPERTIES = [
     // NOTE: salePrice is identical for both units in the source data (both
     // 5,000,000) — flagging in case the 2-bedroom price was meant to differ.
     units: [
-      { bedrooms: 1, bathrooms: 3, salePrice: 6200000, rentPrice: null },
-      { bedrooms: 2, bathrooms: 3, salePrice: 50000000, rentPrice: null },
-      { bedrooms: 3, bathrooms: 3, salePrice: 60000000, rentPrice: null }
-      
+      { unitType: "studio", bedrooms: 0, bathrooms: 1, salePrice: 6200000, rentPrice: null},
+      {unitType: "1-bedroom", bedrooms: 1, bathrooms: 3, salePrice: 8000000, rentPrice: null},
+      {unitType: "2-bedroom", bedrooms: 2, bathrooms: 3, salePrice: 9000000, rentPrice: null},
+      {unitType: "3-bedroom", bedrooms: 3, bathrooms: 3, salePrice: 10000000, rentPrice: null},
     ],
     features: ["pool", "gym", "wifi", "security", "parking", "backup-generator", "garden"],
     image: "assets/images/Hephé Palace Swimming Pool (2).jpeg",
@@ -444,7 +504,17 @@ window.SELLAM_PROPERTIES = [
         { title: "Elevated Lifestyle", body: "Hephé Palace transforms everyday living through a carefully curated collection of hospitality-inspired amenities. From rooftop wellness experiences to vibrant social spaces, every facility has been designed to encourage relaxation, recreation, and connection while delivering the comfort of a luxury residence." }
       ]
     },
-    listedDate: "2026-07-23"
+    listedDate: "2026-07-23",
+
+  featureHighlights: [
+  { title: "Security:", text: "24-hour security & CCTV" },
+  { title: "Connectivity:", text: "High-speed elevators,Full backup power and Smart access control" },
+  { title: "Community:", text: "Restaurant & bar, Outdoor lounge spaces, Concierge reception, Children's play area, Mini golf, Padel court, Games & entertainment lounge" },
+  { title: "Amenities:", text: "Heated rooftop infinity swimming pool, Courtyard swimming pool, Sky garden & rooftop terrace" },
+  { title: "Wellness:", text: "Fully equipped gym and Yoga studio" }
+],
+
+  closingParagraphs: "Situated along Ring Road in Westlands, Hephé Palace enjoys one of Nairobi's most prestigious and well-connected locations. Residents are minutes from Westgate Mall, Sarit Centre, GTC, leading international schools, world-class healthcare facilities, premium restaurants, and major business districts, making it an address equally suited to modern city living and long-term investment. \n\n Hephé Palace combines timeless architecture, exceptional amenities, and a prime Westlands location to create a compelling investment opportunity. Flexible payment plans, strong rental demand, and the continued growth of Westlands as Nairobi's premier mixed-use district position the development for sustained capital appreciation and attractive rental returns."
   },
 
   {
@@ -463,7 +533,7 @@ window.SELLAM_PROPERTIES = [
     // NOTE: salePrice is identical for both units in the source data (both
     // 5,000,000) — flagging in case the 2-bedroom price was meant to differ.
     units: [
-      { bedrooms: 1, bathrooms: 3, salePrice: 6200000, rentPrice: null },
+      { bedrooms: 1, bathrooms: 3, salePrice: 7000000, rentPrice: null },
       { bedrooms: 2, bathrooms: 3, salePrice: 50000000, rentPrice: null }
            
     ],
@@ -472,12 +542,16 @@ window.SELLAM_PROPERTIES = [
     gallery: [
       "assets/images/Amethyst Residences (10).jpeg",
       "assets/images/Amethyst Residences Living Room (2).jpeg",
-      "assets/images/Premium properties/CROWN JEWEL (3).jpeg",
-      "assets/images/Premium properties/CROWN JEWEL (4).jpeg",
-      "assets/images/Premium properties/CROWN JEWEL (5).jpeg",
-      "assets/images/Premium properties/CROWN JEWEL (6).jpeg",
-      "assets/images/Premium properties/CROWN JEWEL (7).jpeg",
-      "assets/images/Premium properties/CROWN JEWEL (8).jpeg"
+      "assets/images/Amethyst Residences Dinning (2).jpeg",
+      "assets/images/Amethyst Residences Bedroom (2).jpeg",
+      "assets/images/Amethyst Residences Outdoors (2).jpeg",
+      "assets/images/Amethyst Residences Swimming Pool (2).jpeg",
+      "assets/images/Amethyst Residences (9).jpeg",
+      "assets/images/Amethyst Residences Living Room.jpeg",
+      "assets/images/Amethyst Residences Bedroom.jpeg",
+      "assets/images/Amethyst Residences Exterior (5).jpeg",
+      "assets/images/Amethyst Residences Lounge.jpeg",
+      "assets/images/Amethyst Residences Exterior (4).jpeg"
     ],
     url: "property.html?id=amethyst-residences",
     description: {
@@ -493,62 +567,151 @@ window.SELLAM_PROPERTIES = [
         { title: "Elevated Lifestyle", body: "Life at Amethyst extends beyond the residence. Every shared space has been thoughtfully curated to support wellness, creativity, productivity, and relaxation, creating a community where work, leisure, and everyday living exist in perfect balance. From rooftop experiences overlooking the city skyline to quiet wellness spaces below, every amenity has been designed to enrich the resident experience." }
       ]
     },
-    listedDate: "2026-07-23"
+    listedDate: "2026-07-23",
+     featureHighlights: [
+  { title: "Security:", text: "24-hour security & controlled access" },
+  { title: "Connectivity:", text: "High-speed elevators" },
+  { title: "Community:", text: "Rooftop infinity swimming pool, Skyline rooftop bar & lounge,Rooftop garden,Rooftop pickleball court" },
+  { title: "Amenities:", text: "Private cinema,Co-working space,Creative & podcast studio,Residents' lounge,Landscaped courtyard,Children's play area, Elegant reception & arrival lobby" },
+  { title: "Wellness:", text: "Fully equipped gym, Yoga studio & sauna, Spa & wellness rooms" }
+],
+
+  closingParagraphs: "Located on Maalim Juma Road, Amethyst places residents at the centre of one of Nairobi's most connected urban communities. International schools, leading hospitals, business hubs, cafés, restaurants, shopping destinations including Yaya Centre, Prestige Plaza, and Junction Mall, together with convenient transport links, are all within easy reach, making Kilimani one of Nairobi's most desirable places to live and invest. \n\n Kilimani continues to attract strong residential demand from homeowners, professionals, and investors seeking quality developments in a prime urban location. Combining thoughtful architecture, carefully curated amenities, and excellent connectivity, Amethyst is designed to deliver lasting appeal through both capital appreciation and sustained rental demand."
   },
 
   {
     id: "sl-007",
-    slug: "5-bedroom-super-villa-lower-kabete",
+    slug: "dg-west",
     status: "available",
     collection: "featured",
-    title: "5 Bedroom Super Villa",
-    summary: "A super villa in Lower Kabete blending scale and comfort, with landscaped gardens, secure parking and generous en-suite accommodation.",
-    propertyType: "villa",
-    community: "lower-kabete",
-    location: "Lower Kabete, Nairobi",
-    letting: "both",
-    salePrice: 185000000,
-    rentPrice: 380000,
-    bedrooms: 5,
-    bathrooms: 6,
-    features: ["pool", "garden", "security", "parking", "wifi"],
-    image: "assets/images/Premium properties/Super Villa, Lower Kabete 2.jpeg",
-    gallery: [
-      "assets/images/Premium properties/Super Villa, Lower Kabete 2.jpeg",
-      "assets/images/Premium properties/Super Villa, Lower Kabete.jpeg",
-      "assets/images/Premium properties/Super Villa, Lower Kabete 3.jpeg",
-      "assets/images/Premium properties/Super Villa, Lower Kabete 4.jpeg",
-      "assets/images/Premium properties/Super Villa, Lower Kabete 5.jpeg",
-      "assets/images/Premium properties/Super Villa, Lower Kabete 6.jpeg"
+    title: "DG West",
+    summary: "DG West offers luxury hotel apartments for sale in Westlands, Nairobi, featuring premium amenities, flexible payment plans, strong rental income potential, capital appreciation, and professionally managed modern city living.",
+    propertyType: "apartment",
+    community: "westlands",
+    location: "Sports road, Westlands, Nairobi",
+    letting: "sale",
+    // Two floor plans in this development — see data/property-units.js for
+    // how the rest of the site reads bedrooms/bathrooms/price off `units`.
+    // NOTE: salePrice is identical for both units in the source data (both
+    // 5,000,000) — flagging in case the 2-bedroom price was meant to differ.
+    units: [
+      { unitType: "studio", bedrooms: 0, bathrooms: 1, salePrice: 11700000, rentPrice: null },
+      { unitType: "1-bedroom", bedrooms: 1, bathrooms: 3, salePrice: 13000000, rentPrice: null },
+      { unitType: "2-bedroom", bedrooms: 2, bathrooms: 2, salePrice: 20000000, rentPrice: null },
+      
     ],
-    url: "property.html?id=5-bedroom-super-villa-lower-kabete",
-    description: "A super villa in Lower Kabete blending scale and comfort, with landscaped gardens, secure parking and generous en-suite accommodation.",
-    featureLocation: "Lower Kabete address with access to Westlands, schools, private clubs, and established family neighborhoods.",
-    listedDate: "2026-04-14"
+    
+    image: "assets/images/Dg West (11).jpeg",
+    heroImage: "assets/images/Dg West (4).jpeg",
+    gallery: [
+      "assets/images/Dg West (6).jpeg",
+      "assets/images/Dg West (3).jpeg",
+      "assets/images/Dg West (8).jpeg",
+      "assets/images/Dg West (9).jpeg",
+      "assets/images/Dg West (10).jpeg",
+      "assets/images/Dg West (11).jpeg",
+      "assets/images/Dg West (12).jpeg",
+      "assets/images/Dg West (13).jpeg"
+      ],
+
+    url: "property.html?id=dg-west",
+    description: {
+      title: "Where Investment Meets Lifestyle:",
+      body: "Situated along the vibrant Sports Road in the heart of Westlands, DG West introduces a new generation of luxury hotel and residential apartments designed for contemporary city living. Developed by Reportage Kenya, the landmark tower combines sophisticated residences, premium hospitality services, and world-class lifestyle amenities in one of Nairobi's most established commercial and residential districts. Whether purchasing a city residence or an income-generating investment, DG West offers a compelling opportunity in one of East Africa's fastest-growing property markets."
+    },
+    featureLocation: "2 Minutes to Westgate Shopping Mall, 3 Minutes to Sarit Centre, 5 Minutes to Westlands CBD, Near The Oval, Delta Corner & major corporate offices, Close to Aga Khan University Hospital",
+    story: {
+      rows: [
+        { title: "Contemporary Urban Residences", 
+          body: "Every residence has been carefully planned to maximise comfort, efficiency, and modern living. Intelligent layouts, expansive glazing, quality finishes, and open-plan interiors create bright, functional homes that complement today's urban lifestyle. From stylish studio apartments to spacious two-bedroom residences, every home reflects thoughtful design and lasting quality." },
+        { title: "Modern Culinary Spaces", 
+          body: "The kitchens blend elegant finishes with everyday functionality, featuring premium cabinetry, quality worktops, integrated appliances, and practical layouts that make cooking and entertaining equally enjoyable. Contemporary detailing and efficient use of space ensure every residence feels refined and welcoming." },
+        { title: "Comfortable Private Retreats", 
+          body: "Designed for comfort and relaxation, every bedroom offers generous natural light, quality finishes, built-in wardrobes, and carefully considered layouts. Selected residences enjoy panoramic city views, creating peaceful spaces above the energy of Westlands." },
+        { title: "Hospitality-Inspired Living", 
+          body: "DG West extends beyond the residence to deliver a complete lifestyle experience. Residents enjoy professionally managed amenities that support wellness, productivity, recreation, and everyday convenience, creating an environment where luxury living and hospitality seamlessly come together." }
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+  { title: "Security:", text: "24-hour security with controlled access" },
+  { title: "Connectivity:", text: "High-speed lifts, Full backup power for common areas" },
+  { title: "Community:", text: "Children's daycare and Pet daycare" },
+  { title: "Amenities:", text: "Infinity swimming pool, jacuzzi,Restaurant & café, Business lounge, Landscaped gardens" },
+  { title: "Wellness:", text: "Fully equipped fitness centre, Yoga & wellness facilities and Spa" }
+],
+    closingParagraphs: "Located on Sports Road, DG West places residents within Nairobi's premier commercial and lifestyle district. Westgate Mall, Sarit Centre, GTC, leading hotels, international offices, healthcare facilities, restaurants, and entertainment venues are all moments away, while excellent connectivity to Gigiri, Upper Hill, the CBD, and Jomo Kenyatta International Airport makes Westlands one of Nairobi's most desirable addresses for both living and investment\n\nDG West has been conceived to meet the growing demand for professionally managed hotel apartments in Nairobi. Combining a prime Westlands location, premium hospitality services, and flexible ownership options, the development is designed to deliver attractive rental income alongside long-term capital appreciation. The developer projects up to 20% annual return on investment, making it particularly appealing to local and international investors seeking passive income opportunities."
   },
 
-  {
+   {
     id: "sl-008",
-    slug: "grosvenor-karen",
+    slug: "dg-jkia-hotel-apartments",
     status: "available",
     collection: "featured",
-    title: "Grosvenor",
-    summary: "Well-appointed apartments in Karen offering secure, low-maintenance living with quality shared amenities and quick access to the city.",
+    title: " DG JKIA Hotel Apartments",
+    summary: "DG JKIA offers fully furnished hotel apartments near Jomo Kenyatta International Airport, Nairobi, featuring professional management, premium amenities, strong occupancy potential, hassle-free rental income, and returns of up to 25%.",
     propertyType: "apartment",
-    community: "karen",
-    location: "Karen, Nairobi",
-    letting: "both",
-    salePrice: 48000000,
-    rentPrice: 220000,
-    bedrooms: 3,
-    bathrooms: 3,
-    features: ["gym", "wifi", "security", "parking", "backup-generator"],
-    image: "assets/images/premium-page-grosvenor-towers.jpg",
-    gallery: ["assets/images/premium-page-grosvenor-towers.jpg"],
-    url: "property.html?id=grosvenor-karen",
-    description: "Well-appointed apartments in Karen offering secure, low-maintenance living with quality shared amenities and quick access to the city.",
-    featureLocation: "Karen address near green compounds, international schools, private clubs, and lifestyle amenities.",
-    listedDate: "2026-04-28"
+    community: "syokimau",
+    location: "JKIA | Mombasa Road",
+    letting: "sale",
+    // Two floor plans in this development — see data/property-units.js for
+    // how the rest of the site reads bedrooms/bathrooms/price off `units`.
+    // NOTE: salePrice is identical for both units in the source data (both
+    // 5,000,000) — flagging in case the 2-bedroom price was meant to differ.
+    units: [
+      { unitType: "studio", bedrooms: 0, bathrooms: 1, salePrice: 11700000, rentPrice: null },
+      { unitType: "1-bedroom", bedrooms: 1, bathrooms: 3, salePrice: 13000000, rentPrice: null },
+      
+    ],
+    
+    image: "assets/images/DG JKIA swimming pool.jpeg",
+    heroImage: "assets/images/DG JKIA Lounge (6).jpeg",
+    gallery: [
+      "assets/images/DG JKIA Lounge (3).jpeg",
+      "assets/images/DG JKIA Studio.jpeg",
+      "assets/images/DG JKIA (8).jpeg",
+      "assets/images/DG JKIA Lounge (5).jpeg",
+      "assets/images/DG JKIA Salon.jpeg",
+      "assets/images/DG JKIA Gym (2).jpeg",
+      "assets/images/DG JKIA exterior (3).jpeg",
+      "assets/images/DG JKIA boardroom.jpeg"
+      ],
+
+    url: "property.html?id=dg-jkia-hotel-apartments",
+    description: {
+      title: "Hospitality Investment, Redefined:",
+      body: "Positioned directly opposite Jomo Kenyatta International Airport along Mombasa Road, DG JKIA introduces a new generation of fully furnished and professionally managed hotel apartments designed for investors seeking consistent returns without the demands of day-to-day property management. Developed through a collaboration between SSS Developers and Reportage Properties, the development combines contemporary residences, premium hospitality services, and an unrivalled airport location to create one of Nairobi's most compelling investment opportunities. With immediate access to the Nairobi Expressway, SGR Terminus, and key business districts, DG JKIA is strategically placed to serve business travellers, airline crews, diplomats, transit passengers, and international visitors."
+    },
+    featureLocation: "2 Minutes to Westgate Shopping Mall, 3 Minutes to Sarit Centre, 5 Minutes to Westlands CBD, Near The Oval, Delta Corner & major corporate offices, Close to Aga Khan University Hospital",
+    story: {
+      rows: [
+        { title: "Fully Furnished Contemporary Residences", 
+          body: "Every apartment is delivered fully furnished and serviced, allowing investors to begin generating income without the need for additional fit-out. Available in four intelligently designed layouts, each residence combines efficient planning, premium finishes, private balconies, integrated wardrobes, double-glazed windows, high-speed internet connectivity, and modern interiors designed for short and extended stays." },
+        { title: "Designed for Effortless Living", 
+          body: "Every residence has been thoughtfully equipped to meet international hospitality standards. Contemporary kitchens, quality imported sanitary ware, gypsum ceilings, solar-heated water systems, and elegant finishes create comfortable spaces that balance functionality with modern design, ensuring a seamless experience for every guest." },
+        { title: "A Professionally Managed Hospitality Experience", 
+          body: "DG JKIA has been conceived as a hospitality-led investment rather than a conventional apartment development. Experienced hotel operators oversee the day-to-day management of the property, allowing owners to benefit from a professionally operated rental programme while enjoying hassle-free ownership. The pooled income model is designed to maximise occupancy and deliver consistent long-term performance." }
+        
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+  { title: "Security:", text: "24-hour security with controlled access" },
+  { title: "Connectivity:", text: "High-speed Wi-Fi, High-speed elevators" },
+  { title: "Community:", text: "Bar & lounge and Landscaped gardens" },
+  { title: "Amenities:", text: "Outdoor swimming pool, Hotel reception & concierge,Elegant arrival lobby" },
+  { title: "Wellness:", text: "Rooftop yoga garden,Fully equipped fitness centre, Spa, massage rooms, steam & sauna" }
+],
+    closingParagraphs: "Located opposite Hilton Garden Inn JKIA, DG JKIA enjoys one of Nairobi's most strategic addresses. Residents and guests are only minutes from JKIA, the Nairobi Expressway, the SGR Terminus, Nairobi National Park, Capital Centre, Upper Hill, and Westlands, making the development an ideal base for international travellers and business professionals alike.\n\nDG JKIA has been purpose-built for investors seeking stable, professionally managed hospitality income. The combination of a globally connected airport location, fully furnished residences, hotel management, and a growing demand for quality accommodation places the development in a strong position for sustained occupancy and long-term capital growth. According to the developer, the project is structured to target up to 23% net ROI, while Reportage highlights investment potential of 25%+, reflecting the project's hospitality-focused model.",
+    // Flexible off-plan payment schedule — see paymentPlan field reference
+    // above. OPTIONAL: most properties omit this entirely.
+    paymentPlan: [
+      { percent: 15, label: "Reservation" },
+      { percent: 15, label: "Upon Sale Agreement" },
+      { percent: 50, label: "During construction (spread over 18 months)" },
+      { percent: 20, label: "Before or upon handover" },
+      { percent: 0, label: "Interest" }
+    ]
   },
 
   /* --------------------------------------------------------------- EXCLUSIVE
@@ -756,28 +919,75 @@ window.SELLAM_PROPERTIES = [
 
   {
     id: "sl-017",
-    slug: "grade-a-office-suite-westlands",
+    slug: "gtc-office-tower",
     status: "available",
     collection: "featured",
-    title: "Grade A Office Suite",
+    title: "GTC Office Tower",
     summary: "A Grade A office suite in Westlands offering open-plan floor space, fast fibre connectivity, and full backup power for uninterrupted business operations.",
     propertyType: "office",
     community: "westlands",
     location: "Westlands, Nairobi",
-    letting: "rent",
+    letting: "both",
     salePrice: null,
-    rentPrice: 280000,
+    rentPrice: 28000,
     bedrooms: null,
     bathrooms: null,
+    // PSF leasing rates converted from source quote (USD 1 = KES 129.5) —
+    // see leasePricing field reference above. Additive: rentPrice/letting/
+    // status above are unchanged and still drive the card, filters, and
+    // rent.html/leasing-offices.html as before.
+    leasePricing: {
+      saleAndLeaseAvailable: true,
+      fromPerSqFt: { min: 142, max: 207 },
+      spaceAvailable: { min: 3800, max: 17768, unit: "sq. ft." },
+      zones: [
+        { name: "Low Zone", floors: "F3–F16", minPerSqFt: 214, maxPerSqFt: 246 },
+        { name: "Middle Zone", floors: "F18–F29", minPerSqFt: 246, maxPerSqFt: 311 },
+        { name: "High Zone", floors: "F30–F41", minPerSqFt: 311, maxPerSqFt: 337 }
+      ],
+      serviceChargePerSqFt: 35,
+      serviceChargeNote: "+ VAT",
+      parkingRatio: "2 bays : 1,000 sq. ft.",
+      parkingNote: "at a cost"
+    },
     features: ["wifi", "parking", "security", "backup-generator"],
-    image: "assets/images/buy/commercial.jpg",
-    gallery: ["assets/images/buy/commercial.jpg"],
-    url: "property.html?id=grade-a-office-suite-westlands",
-    description: "A Grade A office suite in Westlands offering open-plan floor space, fast fibre connectivity, and full backup power for uninterrupted business operations.",
-    featureLocation: "Westlands address with strong visibility, easy client access, and proximity to Nairobi's core business district.",
-    listedDate: "2026-05-14"
+    image: "assets/images/GTC Office Tower.jpeg",
+    gallery: [
+      "assets/images/GTC Office Tower (6).jpeg",
+      "assets/images/GTC Office Tower (3).jpeg",
+      "assets/images/GTC Office Tower (10).jpeg",
+      "assets/images/GTC Office Tower (11).jpeg",
+      "assets/images/GTC Office Tower (2).jpeg",
+      "assets/images/GTC Office Tower (4).jpeg",
+      "assets/images/GTC Office Tower (12).jpeg",
+      "assets/images/GTC Office Tower (7).jpeg"
+      ],
+    url: "property.html?id=gtc-office-tower",
+    description: "Position your business at one of East Africa's most distinguished commercial addresses. GTC Office Tower offers world-class Grade A office spaces within Nairobi's premier mixed-use development, combining contemporary architecture, intelligent workplace design, and exceptional business amenities. Whether acquiring office space or leasing for immediate occupation, GTC provides an environment designed for productivity, collaboration, and long-term business growth.",
+    story: {
+      rows: [
+        { title: "Intelligent Workspaces", 
+          body: "Designed to meet the evolving needs of modern businesses, GTC Office Tower offers flexible office spaces delivered in a core & shell configuration, allowing complete interior customization to suit individual business requirements. For businesses seeking immediate occupancy, fully furnished, turnkey office solutions are also available, providing a seamless move-in experience." },
+        { title: "International Business Standards", 
+          body: "Inspired by modern architectural principles, the tower features an elegant Low-E coated glass façade that maximizes natural daylight while improving energy efficiency. Its striking contemporary design, expansive floor plates, and impressive vertical profile establish GTC as one of Nairobi's defining commercial landmarks." },
+        { title: "Integrated Business Destination", 
+          body: "As part of the Global Trade Centre development, businesses benefit from immediate access to an integrated mixed-use environment comprising premium hospitality, retail, restaurants, cafés, banking services, residential apartments, and lifestyle amenities. This creates a seamless environment where business, hospitality, and everyday convenience come together within one internationally recognised address." },
+        {  title: "Prime Commercial Address", 
+          body: "Strategically located in Westlands along Waiyaki Way, GTC Office Tower provides exceptional connectivity to Nairobi's Central Business District, Upper Hill, Gigiri, diplomatic missions, major transport corridors, and the Nairobi Expressway. Its prestigious address continues to attract multinational corporations, financial institutions, technology firms, professional practices, and international organisations." },
+        
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+  { title: "Security:", text: "24-hour security with controlled access" },
+  { title: "Connectivity:", text: "High-speed Wi-Fi, High-speed elevators" },
+  { title: "Community:", text: "Bar & lounge and Landscaped gardens" },
+  { title: "Amenities:", text: "Outdoor swimming pool, Hotel reception & concierge,Elegant arrival lobby" },
+  { title: "Wellness:", text: "Rooftop yoga garden,Fully equipped fitness centre, Spa, massage rooms, steam & sauna" }
+],
+    closingParagraphs: "Whether purchasing office space as a long-term investment or leasing premises for your business, GTC Office Tower presents a rare opportunity within Nairobi's Grade A commercial market. Backed by premium specifications, an iconic business address, and sustained demand from leading local and international occupiers, it continues to set the benchmark for commercial real estate in East Africa."
   },
-
+   
   {
     id: "sl-018",
     slug: "riverside-business-park-office",

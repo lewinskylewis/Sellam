@@ -131,6 +131,83 @@
   fill: currentColor;
 }
 
+/* Optional per-sq-ft leasing rate breakdown — see leasePricing in
+   data/properties.js. Hidden by default (property.html sets [hidden]);
+   renderLeasePricing() in property-detail.js reveals it only when a
+   property provides the data, leaving the plain price-list above untouched
+   for every property that doesn't use PSF pricing. */
+.lease-pricing-section {
+  margin: 0 0 40px;
+  padding: 24px 28px;
+  border: 1px solid rgba(6, 53, 69, 0.15);
+  background: rgba(6, 53, 69, 0.03);
+}
+
+.lease-pricing-headline {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: clamp(16px, 1.05vw, 19px);
+  font-weight: 600;
+}
+
+.lease-pricing-space {
+  margin: 0 0 18px;
+  color: var(--ink);
+  font-size: 14px;
+  opacity: 0.75;
+}
+
+.lease-pricing-zones {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 0 18px;
+}
+
+.lease-zone-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(6, 53, 69, 0.1);
+}
+
+.lease-zone-row:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.lease-zone-name {
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 15px;
+}
+
+.lease-zone-floors {
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+.lease-zone-price {
+  color: var(--gold);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.lease-pricing-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink);
+  font-size: 13.5px;
+  opacity: 0.75;
+}
+
 .detail-gallery-section {
   padding: 48px 0 0;
 }
@@ -525,6 +602,56 @@
 
 .detail-closing[hidden] {
   display: none;
+}
+
+/* Optional flexible off-plan payment schedule — see paymentPlan in
+   data/properties.js. Hidden by default (property.html sets [hidden]);
+   renderPaymentPlan() in property-detail.js reveals it only when a
+   property provides the data. Sits just above the enquiry form. */
+.detail-payment-plan {
+  padding: 64px 0 0;
+  background: var(--white);
+}
+
+.detail-payment-plan[hidden] {
+  display: none;
+}
+
+.payment-plan-heading {
+  margin: 0 0 22px;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 2.2vw, 32px);
+  font-weight: 600;
+}
+
+.payment-plan-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 28px 32px;
+  background: var(--ink-deep);
+}
+
+.payment-plan-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex: 1 1 260px;
+}
+
+.payment-plan-percent {
+  flex: none;
+  color: var(--gold);
+  font-family: var(--font-serif);
+  font-size: clamp(17px, 1.15vw, 20px);
+  font-weight: 700;
+}
+
+.payment-plan-label {
+  color: var(--white);
+  font-size: 14px;
+  opacity: 0.92;
 }
 
 .enquiry-section {

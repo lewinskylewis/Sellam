@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sellam | Cookies Policy</title>
+    <meta
+      name="description"
+      content="SELLAM's cookie policy — how we use cookies and similar tracking technologies on our website, and how you can control them."
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@100;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    >
+    <link href="https://fonts.googleapis.com/css2?family=Gabriela&display=swap" rel="stylesheet">
+    <link rel="preload" href="Fonts/Optima%20Medium.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="Fonts/OPTIMA_B.TTF" as="font" type="font/ttf" crossorigin>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="service-detail.css">
+    <script>
+      /* Motion bootstrap — same scroll-reveal engine as the homepage. Runs before
+         first paint so content never flashes in. Only engages when
+         IntersectionObserver is available and reduced motion is not requested;
+         otherwise the CSS fail-safe leaves everything visible. */
+      (function () {
+        var root = document.documentElement;
+        var mq = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
+        if ((mq && mq.matches) || !("IntersectionObserver" in window)) {
+          return;
+        }
+        root.classList.add("motion-ready");
+
+        function reveal(el) {
+          el.classList.add("is-visible");
+          var items = el.querySelectorAll(
+            ".image-card, .community-card, .diaspora-card, .feature-tile, .category-card, .service-card"
+          );
+          for (var i = 0; i < items.length; i++) {
+            items[i].classList.add("motion-item-visible");
+          }
+        }
+
+        function start() {
+          try {
+            var nodes = document.querySelectorAll(".reveal");
+            var targets = [];
+            for (var i = 0; i < nodes.length; i++) {
+              var el = nodes[i];
+              if (el.closest(".hero") || el.classList.contains("search-bar")) continue;
+              targets.push(el);
+            }
+            var io = new IntersectionObserver(
+              function (entries, obs) {
+                for (var j = 0; j < entries.length; j++) {
+                  if (entries[j].isIntersecting) {
+                    reveal(entries[j].target);
+                    obs.unobserve(entries[j].target);
+                  }
+                }
+              },
+              { rootMargin: "0px 0px -10% 0px", threshold: 0.12 }
+            );
+            for (var k = 0; k < targets.length; k++) io.observe(targets[k]);
+
+            window.addEventListener("load", function () {
+              var vh = window.innerHeight || root.clientHeight;
+              for (var m = 0; m < targets.length; m++) {
+                var t = targets[m];
+                if (t.classList.contains("is-visible")) continue;
+                var r = t.getBoundingClientRect();
+                if (r.top < vh && r.bottom > 0) {
+                  reveal(t);
+                  io.unobserve(t);
+                }
+              }
+            });
+          } catch (err) {
+            root.classList.remove("motion-ready");
+          }
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", start);
+        } else {
+          start();
+        }
+      })();
+    </script>
+    <script src="site-motion.js"></script>
+  </head>
+  <body class="service-detail-page">
+    <header class="site-header" aria-label="Primary navigation">
+      <nav class="nav-shell">
+        <a class="brand" href="index.html" aria-label="Sellam home">
+          <img src="assets/logos/sellam-logo.png" alt="SELLAM">
+        </a>
+
+        <ul class="desktop-nav" aria-label="Main menu">
+          <li class="nav-has-dropdown">
+            <a href="buy.html" aria-haspopup="true">Buy<span class="chevron" aria-hidden="true"></span></a>
+            <ul class="nav-dropdown">
+              <li><a href="buy-commercial.html">Commercial</a></li>
+              <li><a href="buy-land.html">Land</a></li>
+              <li><a href="buy-residential.html">Residential</a></li>
+            </ul>
+          </li>
+          <li><a href="rent.html">Rent</a></li>
+          <li class="nav-has-dropdown">
+            <a href="leasing-properties.html" aria-haspopup="true">Leasing<span class="chevron" aria-hidden="true"></span></a>
+            <ul class="nav-dropdown">
+              <li><a href="leasing-offices.html">Offices</a></li>
+              <li><a href="leasing-retail.html">Retail</a></li>
+              <li><a href="leasing-industrial.html">Industrial</a></li>
+              <li><a href="leasing-land.html">Land</a></li>
+            </ul>
+          </li>
+          <li><a href="services.html">Services</a></li>
+        </ul>
+
+        <a class="whatsapp desktop-whatsapp" href="https://wa.me/254700435000" aria-label="Contact Sellam on WhatsApp">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12.04 2.25a9.63 9.63 0 0 0-8.22 14.62L2.75 21.75l4.99-1.04a9.62 9.62 0 1 0 4.3-18.46Zm0 1.88a7.74 7.74 0 0 1 6.45 12.02 7.71 7.71 0 0 1-9.04 2.63l-.36-.16-3.82.8.82-3.72-.2-.39a7.74 7.74 0 0 1 6.15-11.18Zm-3.12 3.9c-.17 0-.43.06-.66.31-.22.25-.86.84-.86 2.06 0 1.21.88 2.38 1 2.54.13.16 1.7 2.73 4.22 3.72 2.09.82 2.52.66 2.98.62.45-.04 1.46-.6 1.67-1.18.2-.58.2-1.08.14-1.18-.06-.11-.23-.17-.48-.3-.26-.13-1.51-.75-1.74-.83-.23-.09-.4-.13-.57.13-.17.25-.65.83-.8 1-.15.17-.3.19-.55.06-.26-.13-1.08-.4-2.05-1.26-.76-.68-1.27-1.52-1.42-1.77-.15-.26-.02-.4.11-.52.12-.12.26-.3.39-.45.13-.15.17-.25.26-.42.08-.17.04-.32-.02-.45-.06-.13-.57-1.37-.78-1.88-.2-.49-.41-.42-.57-.43h-.47Z"/>
+          </svg>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </nav>
+
+      <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <div class="mobile-menu-panel">
+          <div class="mobile-menu-top">
+            <a class="mobile-brand" href="index.html" aria-label="Sellam home">
+              <img src="assets/logos/sellam-logo.png" alt="SELLAM">
+            </a>
+            <button class="menu-close" type="button" aria-label="Close menu">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m6.34 5 12.66 12.66-1.34 1.34L5 6.34 6.34 5Zm12.66 1.34L6.34 19 5 17.66 17.66 5 19 6.34Z"/>
+              </svg>
+            </button>
+          </div>
+
+          <ul class="mobile-nav-list">
+            <li class="mobile-nav-has-sublist">
+              <a href="buy.html">Buy</a>
+              <ul class="mobile-nav-sublist">
+                <li><a href="buy-commercial.html">Commercial</a></li>
+                <li><a href="buy-land.html">Land</a></li>
+                <li><a href="buy-residential.html">Residential</a></li>
+              </ul>
+            </li>
+            <li><a href="rent.html">Rent</a></li>
+            <li class="mobile-nav-has-sublist">
+              <a href="leasing-properties.html">Leasing</a>
+              <ul class="mobile-nav-sublist">
+                <li><a href="leasing-offices.html">Offices</a></li>
+                <li><a href="leasing-retail.html">Retail</a></li>
+                <li><a href="leasing-industrial.html">Industrial</a></li>
+                <li><a href="leasing-land.html">Land</a></li>
+              </ul>
+            </li>
+            <li><a href="services.html">Services</a></li>
+            <li>
+              <a class="mobile-whatsapp" href="https://wa.me/254700435000">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12.04 2.25a9.63 9.63 0 0 0-8.22 14.62L2.75 21.75l4.99-1.04a9.62 9.62 0 1 0 4.3-18.46Zm0 1.88a7.74 7.74 0 0 1 6.45 12.02 7.71 7.71 0 0 1-9.04 2.63l-.36-.16-3.82.8.82-3.72-.2-.39a7.74 7.74 0 0 1 6.15-11.18Z"/>
+                </svg>
+                WhatsApp Us
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="service-detail" aria-label="Cookies Policy">
+        <div class="page-shell">
+          <div class="service-detail-content reveal">
+            <h1 class="service-detail-title">Cookies Policy</h1>
+            <p class="policy-updated">Last updated 15 August 2026</p>
+
+            <p>
+              This Cookie Policy explains how Sellam Investments Management Limited ("Company") uses cookies and
+              similar technologies to recognize you when you visit our website. It explains what these
+              technologies are and why we use them, as well as your rights to control our use of them.
+            </p>
+            <p>
+              In some cases we may use cookies to collect personal information, or that becomes personal
+              information if we combine it with other information.
+            </p>
+
+            <h2 class="service-subsection-title">What Are Cookies?</h2>
+            <p>
+              Cookies are small data files that are placed on your computer or mobile device when you visit a
+              website. Cookies are widely used by website owners in order to make their websites work, or to work
+              more efficiently, as well as to provide reporting information.
+            </p>
+            <p>
+              Cookies set by the website owner are called "first-party cookies". Cookies set by parties other than
+              the website owner are called "third-party cookies." Third-party cookies enable third-party features
+              or functionality to be provided on or through the website (e.g., advertising, interactive content,
+              and analytics). The parties that set these third-party cookies can recognize your computer both when
+              it visits the website in question and also when it visits certain other websites.
+            </p>
+
+            <h2 class="service-subsection-title">Why Do We Use Cookies?</h2>
+            <p>
+              We use first-party and third-party cookies for several reasons. Some cookies are required for
+              technical reasons in order for our website to operate, and we refer to these as "essential" or
+              "strictly necessary" cookies. Other cookies also enable us to track and target the interests of our
+              users to enhance the experience on our online property listings. Third parties serve cookies through
+              our websites for advertising, analytics, and other purposes.
+            </p>
+
+            <h2 class="service-subsection-title">How Can I Control Cookies?</h2>
+            <p>
+              You have the right to decide whether to accept or reject cookies. You can exercise your cookie
+              rights by setting your preferences in the Cookie Consent Manager. The Cookie Consent Manager allows
+              you to select which categories of cookies you accept or reject. Essential cookies cannot be rejected
+              as they are strictly necessary to provide you with services.
+            </p>
+            <p>
+              The Cookie Consent Manager can be found in the notification banner and on our website. If you choose
+              to reject cookies, you may still use our website though your access to some functionality and areas
+              of our website may be restricted. You may also set or amend your web browser controls to accept or
+              refuse cookies.
+            </p>
+            <p>
+              The specific types of first- and third-party cookies served through our website and the purposes
+              they perform are described below (please note that the specific cookies served may vary depending on
+              the specific Online Properties you visit):
+            </p>
+            <ul>
+              <li><strong>(a) Essential website cookies.</strong> These cookies are strictly necessary to provide you with services available through our Websites and to use some of its features, such as access to secure areas.</li>
+              <li><strong>(b) Performance and functionality cookies.</strong> These cookies are used to enhance the performance and functionality of our website but are non-essential to their use. However, without these cookies, certain functionality (like videos) may become unavailable.</li>
+              <li><strong>(c) Analytics and customization cookies.</strong> These cookies collect information that is used either in aggregate form to help us understand how our website is being used or how effective our marketing campaigns are, or to help us customize our website for you.</li>
+              <li><strong>(d) Advertising cookies.</strong> These cookies are used to make advertising messages more relevant to you. They perform functions like preventing the same ad from continuously reappearing, ensuring that ads are properly displayed for advertisers, and in some cases selecting advertisements that are based on your interests.</li>
+              <li><strong>(e) Social networking cookies.</strong> These cookies are used to enable you to share pages and content that you find interesting on our website through third-party social networking and other websites. These cookies may also be used for advertising purposes.</li>
+              <li><strong>(f) Unclassified cookies.</strong> These are cookies that have not yet been categorized. We are in the process of classifying these cookies with the help of their providers.</li>
+            </ul>
+
+            <h2 class="service-subsection-title">How to Control Cookies on Your Browser</h2>
+            <p>
+              As the means by which you can refuse cookies through your web browser controls vary from browser to
+              browser, you should visit your browser's help menu for more information.
+            </p>
+            <p>In addition, most advertising networks offer you a way to opt out of targeted advertising.</p>
+
+            <h2 class="service-subsection-title">Other Tracking Technologies</h2>
+            <p>
+              Cookies are not the only way to recognize or track visitors to a website. We may use other, similar
+              technologies from time to time, like web beacons (sometimes called "tracking pixels" or "clear
+              gifs"). These are tiny graphics files that contain a unique identifier that enables us to recognize
+              when someone has visited our Websites or opened an email including them. This allows us, for
+              example, to monitor the traffic patterns of users from one page within a website to another, to
+              deliver or communicate with cookies, to understand whether you have come to the website from an
+              online advertisement displayed on a third-party website, to improve site performance, and to measure
+              the success of email marketing campaigns. In many instances, these technologies are reliant on
+              cookies to function properly, and so declining cookies will impair their functioning.
+            </p>
+
+            <h2 class="service-subsection-title">Flash Cookies and Local Shared Objects</h2>
+            <p>
+              The website may also use "Flash Cookies" (also known as Local Shared Objects or "LSOs") to, among
+              other things, collect and store information about your use of our services, fraud prevention, and
+              for other site operations.
+            </p>
+            <p>
+              If you do not want Flash Cookies stored on your computer, you can adjust the settings of your Flash
+              player to block Flash Cookies storage.
+            </p>
+            <p>
+              Please note that setting the Flash Player to restrict or limit acceptance of Flash Cookies may
+              reduce or impede the functionality of some Flash applications, including, potentially, Flash
+              applications used in connection with our services or online content.
+            </p>
+
+            <h2 class="service-subsection-title">Third Party Cookies</h2>
+            <p>
+              Third parties may serve cookies on your computer or mobile device to serve advertising through our
+              Websites. These companies may use information about your visits to this and other websites in order
+              to provide relevant advertisements about goods and services that you may be interested in. They may
+              also employ technology that is used to measure the effectiveness of advertisements. They can
+              accomplish this by using cookies or web beacons to collect information about your visits to this and
+              other sites in order to provide relevant advertisements about goods and services of potential
+              interest to you. The information collected through this process does not enable us or them to
+              identify your name, contact details, or other details that directly identify you unless you choose
+              to provide these.
+            </p>
+
+            <h2 class="service-subsection-title">Updating Cookie Policy</h2>
+            <p>
+              We may update this Cookie Policy from time to time in order to reflect, for example, changes to the
+              cookies we use or for other operational, legal, or regulatory reasons. Please therefore revisit this
+              Cookie Policy regularly to stay informed about our use of cookies and related technologies.
+            </p>
+
+            <h2 class="service-subsection-title">Where Can I Get Further Information?</h2>
+            <p>
+              If you have any questions about our use of cookies or other technologies, please contact us at
+              <a href="mailto: office@sellamre.com">office@sellamre.com</a> or 0700435000, or by visiting our
+              <a href="contact.html">Contact page</a>. You can also read our <a href="privacy.html">Privacy
+              Policy</a> and <a href="terms.html">Terms &amp; Conditions</a> for more on how we handle your
+              information.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="page-shell footer-grid reveal">
+        <div class="footer-contact">
+          <h2>Sellam</h2>
+          <address>
+            Porshattam Towers<br>
+            P.O Box 50023 - 00100<br>
+            Nairobi, Kenya<br>
+            <a href="tel:+254700435000">0700435000</a>
+          </address>
+          <a href="mailto: office@sellamre.com"> office@sellamre.com</a>
+        </div>
+
+        <div class="footer-subscribe">
+          <h2>Subscribe</h2>
+          <form action="#" method="post">
+            <label class="visually-hidden" for="email">Email address</label>
+            <input id="email" type="email" placeholder="Enter Your Email Here*" required>
+            <button type="submit">Submit</button>
+          </form>
+          <h3>Socials</h3>
+          <ul class="socials" aria-label="Social links">
+            <li><a href="#" aria-label="Facebook">f</a></li>
+            <li><a href="#" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm5.3-2.75a1.05 1.05 0 1 1 0 2.1 1.05 1.05 0 0 1 0-2.1Z"/></svg>
+            </a></li>
+            <li><a href="#" aria-label="LinkedIn">in</a></li>
+            <li><a href="#" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 7.2s-.19-1.36-.78-1.96c-.75-.79-1.58-.79-1.96-.84C16.12 4.2 12 4.2 12 4.2h-.01s-4.12 0-6.86.2c-.38.05-1.21.05-1.96.84-.59.6-.78 1.96-.78 1.96S2.2 8.8 2.2 10.4v1.5c0 1.6.19 3.2.19 3.2s.19 1.36.78 1.96c.75.79 1.73.76 2.17.85 1.58.15 6.66.2 6.66.2s4.12-.01 6.86-.21c.38-.05 1.21-.05 1.96-.84.59-.6.78-1.96.78-1.96s.2-1.6.2-3.2v-1.5c0-1.6-.2-3.2-.2-3.2ZM9.98 13.73V8.18l5.3 2.79-5.3 2.76Z"/></svg>
+            </a></li>
+            <li><a href="#" aria-label="X">X</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h2>Company</h2>
+          <ul>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="blogs.html">Sellam News</a></li>
+            <li><a href="contact.html">Get In Touch</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms &amp; Conditions</a></li>
+            <li><a href="cookies.html">Cookies Policy</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h2>Explore</h2>
+          <ul>
+            <li><a href="index.html">Sellam Home</a></li>
+            <li><a href="exclusive-properties.html">Exclusive Properties</a></li>
+            <li><a href="rent.html">Property For Rent</a></li>
+            <li><a href="buy-land.html">Buy Land</a></li>
+            <li><a href="testimonials.html">What People Say</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <script src="buy.js"></script>
+    <script src="nav-active.js"></script>
+  </body>
+</html>

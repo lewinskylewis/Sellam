@@ -616,10 +616,55 @@ button {
   font-weight: 400;
 }
 
+.community-kicker {
+  margin: 0 0 10px;
+  color: var(--gold);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.community-page-title {
+  margin: 0 0 18px;
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 3.6vw, 48px);
+  line-height: 1.08;
+  font-weight: 600;
+  color: var(--ink);
+}
+
 .properties-list {
   position: relative;
   z-index: 1;
   padding: 40px 0 108px;
+}
+
+.community-section + .community-section {
+  padding-top: 0;
+}
+
+.listing-section-title {
+  margin: 0 0 32px;
+  font-family: var(--font-serif);
+  font-size: clamp(22px, 2vw, 30px);
+  line-height: 1.15;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.community-empty-state {
+  margin: 0;
+  padding: 30px 0 60px;
+  color: var(--muted);
+  font-size: clamp(15px, 1.15vw, 18px);
+  line-height: 1.5;
+}
+
+.community-empty-state a {
+  color: var(--gold);
+  font-weight: 600;
 }
 
 .property-rows {

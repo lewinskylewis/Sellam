@@ -35,6 +35,72 @@
   margin-bottom: 0;
 }
 
+/* Legal-document pages (e.g. Privacy Policy) nest a nun-numbered "Personal
+   Data" / "Usage Data" style sub-heading under each numbered section — one
+   level down from .service-subsection-title, ink instead of gold so the two
+   levels stay visually distinct at a glance. */
+.service-detail-content h3 {
+  margin: clamp(26px, 2.8vw, 38px) 0 clamp(12px, 1.3vw, 16px);
+  font-family: var(--font-serif);
+  font-size: clamp(19px, 1.4vw, 23px);
+  line-height: 1.15;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.service-detail-content h2 + h3 {
+  margin-top: 0;
+}
+
+.service-detail-content .policy-updated {
+  margin: 0 0 clamp(24px, 2.6vw, 36px);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: #58666b;
+}
+
+.service-detail-content ul {
+  margin: 0 0 clamp(18px, 1.9vw, 28px);
+  padding-left: 22px;
+  font-size: var(--section-copy-size);
+  line-height: 1.62;
+  color: var(--black);
+}
+
+.service-detail-content li {
+  margin-bottom: 10px;
+}
+
+.service-detail-content li:last-child {
+  margin-bottom: 0;
+}
+
+.service-detail-content li > ul {
+  margin: 8px 0 0;
+}
+
+/* Cookie-type entries (Type / Administered by / Purpose) — a compact,
+   unbulleted key-value list nested inside each cookie's <li>. */
+.cookie-meta {
+  list-style: none;
+  margin: 8px 0 0 !important;
+  padding-left: 0 !important;
+}
+
+.cookie-meta li {
+  margin-bottom: 4px;
+}
+
+.cookie-meta li:last-child {
+  margin-bottom: 0;
+}
+
+.cookie-meta span {
+  font-weight: 600;
+  color: var(--ink);
+  margin-right: 4px;
+}
+
 /* ---- Homepage-style reveal: title + paragraphs float up, staggered ---- */
 .service-detail-content.reveal,
 .service-detail-content.reveal.is-visible {

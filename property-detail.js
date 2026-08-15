@@ -723,7 +723,16 @@ function inventoryToLegacyShape(inventoryItem) {
     // Used to pick residential vs. commercial wording in buildStoryContent(),
     // and to choose the enquiry heading ("To Buy Now" vs "To Lease Now").
     propertyType: inventoryItem.propertyType,
-    letting: inventoryItem.letting
+    letting: inventoryItem.letting,
+    // OPTIONAL per-sq-ft leasing rate breakdown (zone pricing, service
+    // charge, parking) — see leasePricing in data/properties.js field
+    // reference. Passed through unchanged; renderLeasePricing() handles
+    // absence by hiding its section entirely.
+    leasePricing: inventoryItem.leasePricing,
+    // OPTIONAL flexible off-plan payment schedule — see paymentPlan in
+    // data/properties.js field reference. Passed through unchanged;
+    // renderPaymentPlan() handles absence by hiding its section entirely.
+    paymentPlan: inventoryItem.paymentPlan
   };
 }
 
@@ -797,6 +806,82 @@ function renderPriceTable(property) {
   });
 }
 
+function formatPSFRange(min, max, suffix) {
+  const fmt = (value) => Number(value).toLocaleString("en-KE");
+  return `KES ${fmt(min)} – ${fmt(max)}${suffix || ""}`;
+}
+
+// OPTIONAL per-sq-ft leasing rate breakdown for office/commercial leasing —
+// see leasePricing in data/properties.js field reference. This is additive:
+// it renders in its own section alongside (not instead of) the regular
+// price table above, and the section stays hidden entirely for every
+// property that doesn't set `leasePricing`, same pattern as
+// renderClosingParagraphs().
+function renderLeasePricing(property) {
+  const section = document.querySelector("[data-lease-pricing-section]");
+  if (!section) return;
+
+  const lp = property.leasePricing;
+  if (!lp) {
+    section.hidden = true;
+    return;
+  }
+
+  const headline = document.querySelector("[data-lease-pricing-headline]");
+  if (headline) {
+    const badge = lp.saleAndLeaseAvailable ? "Sale & Lease Available | " : "";
+    const range = lp.fromPerSqFt
+      ? `Leasing from ${formatPSFRange(lp.fromPerSqFt.min, lp.fromPerSqFt.max, ` ${lp.period || "per sq. ft./month"}`)}`
+      : "";
+    headline.textContent = `${badge}${range}`;
+  }
+
+  const space = document.querySelector("[data-lease-pricing-space]");
+  if (space) {
+    const hasSpace = !!lp.spaceAvailable;
+    space.hidden = !hasSpace;
+    if (hasSpace) {
+      const fmt = (value) => Number(value).toLocaleString("en-KE");
+      space.textContent =
+        `Space Available: ${fmt(lp.spaceAvailable.min)} – ${fmt(lp.spaceAvailable.max)} ${lp.spaceAvailable.unit || "sq. ft."}`;
+    }
+  }
+
+  const zonesEl = document.querySelector("[data-lease-pricing-zones]");
+  if (zonesEl) {
+    zonesEl.replaceChildren();
+    (lp.zones || []).forEach((zone) => {
+      const row = document.createElement("div");
+      row.className = "lease-zone-row";
+      const floors = zone.floors ? ` <span class="lease-zone-floors">(${zone.floors})</span>` : "";
+      row.innerHTML =
+        `<span class="lease-zone-name">${zone.name}${floors}</span>` +
+        `<span class="lease-zone-price">${formatPSFRange(zone.minPerSqFt, zone.maxPerSqFt, " PSF")}</span>`;
+      zonesEl.append(row);
+    });
+  }
+
+  const notesEl = document.querySelector("[data-lease-pricing-notes]");
+  if (notesEl) {
+    notesEl.replaceChildren();
+    const notes = [];
+    if (lp.serviceChargePerSqFt) {
+      const amount = Number(lp.serviceChargePerSqFt).toLocaleString("en-KE");
+      notes.push(`Service Charge: KES ${amount} PSF${lp.serviceChargeNote ? ` ${lp.serviceChargeNote}` : ""}`);
+    }
+    if (lp.parkingRatio) {
+      notes.push(`Parking: ${lp.parkingRatio}${lp.parkingNote ? ` (${lp.parkingNote})` : ""}`);
+    }
+    notes.forEach((text) => {
+      const li = document.createElement("li");
+      li.textContent = text;
+      notesEl.append(li);
+    });
+  }
+
+  section.hidden = false;
+}
+
 // Single universal icon used for every feature-banner item — a feature can
 // be anything (location, parking, amenities...), so one neutral check-circle
 // mark reads correctly for all of them instead of a house glyph that only
@@ -855,12 +940,45 @@ function renderClosingParagraphs(property) {
   section.hidden = false;
 }
 
+// OPTIONAL flexible off-plan payment schedule (e.g. 15% reservation / 15%
+// on agreement / 50% during construction / 20% on handover) — see
+// paymentPlan in data/properties.js field reference. Not every property
+// offers this, so the section stays hidden entirely (no empty gap) unless
+// a property sets `paymentPlan`, same pattern as renderClosingParagraphs().
+function renderPaymentPlan(property) {
+  const section = document.querySelector("[data-payment-plan-section]");
+  if (!section) return;
+
+  const plan = property.paymentPlan;
+  if (!Array.isArray(plan) || !plan.length) {
+    section.hidden = true;
+    return;
+  }
+
+  const list = document.querySelector("[data-payment-plan-list]");
+  if (list) {
+    list.replaceChildren();
+    plan.forEach((row) => {
+      const item = document.createElement("div");
+      item.className = "payment-plan-item";
+      item.innerHTML =
+        `<span class="payment-plan-percent">${row.percent}%</span>` +
+        `<span class="payment-plan-label">${row.label}</span>`;
+      list.append(item);
+    });
+  }
+
+  section.hidden = false;
+}
+
 function setupPropertyContent(property) {
   document.title = `Sellam | ${property.title}`;
   setText("[data-property-title]", property.title);
   renderDescription("[data-property-description]", property.description);
   renderPriceTable(property);
+  renderLeasePricing(property);
   renderFeatureHighlights(property);
+  renderPaymentPlan(property);
   renderClosingParagraphs(property);
 
   const hero = document.querySelector("[data-hero-image]");
