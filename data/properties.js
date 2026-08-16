@@ -456,7 +456,7 @@ window.SELLAM_PROPERTIES = [
     id: "sl-005",
     slug: "hephé-palace",
     status: "available",
-    collection: "featured",
+    collection: "exclusive",
     title: "Hephé Palace",
     summary: "Hephé Palace offers luxury residences in Westlands, Nairobi, featuring contemporary design, premium amenities, and a prime location near Westgate, Sarit Centre, and GTC, delivering exceptional lifestyle, convenience, and long-term investment value.",
     propertyType: "mansion",
@@ -521,7 +521,7 @@ window.SELLAM_PROPERTIES = [
     id: "sl-006",
     slug: "amethyst-residences",
     status: "available",
-    collection: "featured",
+    collection: "exclusive",
     title: "Amethyst Residences",
     summary: "Amethyst offers contemporary apartments in Kilimani, Nairobi, combining elegant design, premium amenities, and exceptional connectivity to deliver sophisticated urban living and strong long-term investment potential in one of the city's most desirable locations.",
     propertyType: "mansion",
@@ -793,7 +793,7 @@ window.SELLAM_PROPERTIES = [
     title: "6 Bedroom Fully En-Suite House-Karen",
     summary: "Luxury 4-bedroom villas for sale in Runda, Nairobi, featuring en-suite bedrooms, private lifts, Bosch kitchens, smart infrastructure, premium finishes, 24-hour security, and Karura Forest views.",
     propertyType: "mansion",
-    community: "Karen",
+    community: "karen",
     location: "Karen, Nairobi",
     letting: "rent",
     // Four individually-priced villas of the same floor-plan type, sized
@@ -1079,6 +1079,246 @@ window.SELLAM_PROPERTIES = [
     ]
   },
 
+  /* ------------------------------------------------------- HOMEPAGE FEATURED
+     The 5 cards on the homepage "Featured Properties" carousel. These used
+     to be five hand-coded standalone pages (properties/*.html) on an older,
+     one-off template with no data source — migrated here 2026-08-16 onto the
+     same template/schema as every other listing. Edit title/price/bedrooms/
+     description/gallery/etc. directly below; property.html?id=<slug> now
+     renders them like any other property. */
+
+  {
+    id: "sl-027",
+    slug: "4-bedroom-maisonette-runda-nairobi",
+    status: "available",
+    collection: "featured",
+    title: "4 Bedroom Maisonette, Runda",
+    summary: "A private 4-bedroom maisonette for sale in Runda, Nairobi, offering generous rooms, refined finishes, and a calm setting within one of Nairobi's most established neighbourhoods.",
+    propertyType: "townhouse",
+    community: "runda",
+    location: "Runda, Nairobi",
+    letting: "sale",
+    bedrooms: 4,
+    // Bathroom count wasn't given on the old page — confirm and update.
+    bathrooms: null,
+    salePrice: 350000000,
+    rentPrice: null,
+    image: "assets/images/Premium properties/RundaMansion3.jpeg",
+    gallery: [
+      "assets/images/Premium properties/RundaMansion2.jpeg",
+      "assets/images/Premium properties/RundaMansion.jpeg",
+      "assets/images/Premium properties/RundaMansion4.jpeg",
+      "assets/images/Premium properties/RundaMansion3.jpeg"
+    ],
+    url: "property.html?id=4-bedroom-maisonette-runda-nairobi",
+    description: "This 4 Bedroom Maisonette in Runda presents a private residential address with generous rooms, refined finishes, and a calm setting within one of Nairobi's most established neighborhoods. The home is designed for families and discerning buyers who value space, security, privacy, and access to diplomatic, school, and lifestyle conveniences. The property combines elegant indoor living with outdoor leisure spaces, making it suitable for entertaining, daily family life, and long-term premium investment in Runda.",
+    featureLocation: "Runda address near diplomatic zones, international schools, private clubs, and premium family neighborhoods.",
+    story: {
+      rows: [
+        { title: "4 Bedroom Maisonette Residence",
+          body: "4 Bedroom Maisonette is presented as a composed premium residence in Runda, Nairobi, with spaces planned for comfort, privacy, and everyday ease. The interiors and exterior setting work together to create a property experience that feels refined, practical, and ready for discerning buyers." },
+        { title: "Design And Finishes",
+          body: "The property brings together generous proportions, considered finishes, and strong visual character. Each image in the gallery reflects the quality and atmosphere of 4 Bedroom Maisonette, giving buyers a clearer sense of how the home supports family living, hosting, and long-term value." },
+        { title: "Lifestyle And Comfort",
+          body: "From relaxed daily routines to private entertaining, 4 Bedroom Maisonette is shaped around a comfortable premium lifestyle. The residence offers the kind of space, light, and calm expected from a carefully selected SELLAM property." },
+        { title: "Location Advantage",
+          body: "Runda, Nairobi gives this property a strong residential context, with access to established amenities, key routes, and the privacy buyers expect from a premium address. It is positioned for both lifestyle appeal and long-term investment confidence." }
+      ]
+    },
+    listedDate: "2026-07-24"
+  },
+
+  {
+    id: "sl-028",
+    slug: "modern-villas-lavington",
+    status: "available",
+    collection: "featured",
+    title: "Modern Villas, Lavington",
+    summary: "Modern villas for sale in Lavington, Nairobi, offering contemporary architecture, bright interiors, and a polished residential setting close to schools, shopping, and the city's core neighbourhoods.",
+    propertyType: "villa",
+    community: "lavington",
+    location: "Lavington, Nairobi",
+    letting: "sale",
+    // Bedroom/bathroom count and price weren't given on the old page — confirm and update.
+    bedrooms: null,
+    bathrooms: null,
+    salePrice: null,
+    rentPrice: null,
+    image: "assets/images/Premium properties/ModernVillas-Lavington9.jpeg",
+    gallery: [
+      "assets/images/Premium properties/ModernVillas-Lavington.jpeg",
+      "assets/images/Premium properties/ModernVillas-Lavington2.jpeg",
+      "assets/images/Premium properties/ModernVillas-Lavington3.jpeg",
+      "assets/images/Premium properties/ModernVillas-Lavington4.jpeg",
+      "assets/images/Premium properties/ModernVillas-Lavington5.jpeg",
+      "assets/images/Premium properties/ModernVillas-Lavington6.jpeg",
+      "assets/images/Premium properties/ModernVillas-Lavington7.jpeg",
+      "assets/images/Premium properties/ModernVillas-Lavington8.jpeg",
+      "assets/images/Premium properties/ModernVillas-Lavington10.jpeg",
+      "assets/images/Premium properties/ModernVillas-Lavington11.jpeg",
+      "assets/images/Premium properties/ModernVillas-Lavington12.jpeg"
+    ],
+    url: "property.html?id=modern-villas-lavington",
+    description: "Modern Villas in Lavington offer a composed residential experience with contemporary architecture, bright interiors, and practical family planning. The address is selected for buyers seeking privacy, strong connectivity, and a polished urban lifestyle close to schools, shopping, and Nairobi's core neighborhoods. Each residence is presented for clients who want refined finishes, secure living, and the convenience of one of Nairobi's most desirable residential suburbs.",
+    featureLocation: "Lavington location with access to schools, malls, restaurants, hospitals, and key city routes.",
+    story: {
+      rows: [
+        { title: "Modern Villas Residence",
+          body: "Modern Villas is presented as a composed premium residence in Lavington, Nairobi, with spaces planned for comfort, privacy, and everyday ease. The interiors and exterior setting work together to create a property experience that feels refined, practical, and ready for discerning buyers." },
+        { title: "Design And Finishes",
+          body: "The property brings together generous proportions, considered finishes, and strong visual character. Each image in the gallery reflects the quality and atmosphere of Modern Villas, giving buyers a clearer sense of how the home supports family living, hosting, and long-term value." },
+        { title: "Lifestyle And Comfort",
+          body: "From relaxed daily routines to private entertaining, Modern Villas is shaped around a comfortable premium lifestyle. The residence offers the kind of space, light, and calm expected from a carefully selected SELLAM property." },
+        { title: "Location Advantage",
+          body: "Lavington, Nairobi gives this property a strong residential context, with access to established amenities, key routes, and the privacy buyers expect from a premium address. It is positioned for both lifestyle appeal and long-term investment confidence." }
+      ]
+    },
+    listedDate: "2026-07-25"
+  },
+
+  {
+    id: "sl-029",
+    slug: "ostrea-villas-karen-nairobi",
+    status: "available",
+    collection: "featured",
+    title: "Ostrea Villas, Karen",
+    summary: "Signature villas for sale in Karen, Nairobi, set in a serene green residential enclave with refined finishes, generous planning, and long-term residential value.",
+    propertyType: "villa",
+    community: "karen",
+    location: "Karen, Nairobi",
+    letting: "sale",
+    // Bedroom/bathroom count wasn't given on the old page — confirm and update.
+    bedrooms: null,
+    bathrooms: null,
+    salePrice: 165000000,
+    rentPrice: null,
+    image: "assets/images/Premium properties/OSTREA Karen Villas (6).jpeg",
+    gallery: [
+      "assets/images/Premium properties/OSTREA Karen Villas.jpeg",
+      "assets/images/Premium properties/OSTREA Karen Villas (2).jpeg",
+      "assets/images/Premium properties/OSTREA Karen Villas (3).jpeg",
+      "assets/images/Premium properties/OSTREA Karen Villas (4).jpeg",
+      "assets/images/Premium properties/OSTREA Karen Villas (5).jpeg",
+      "assets/images/Premium properties/OSTREA Karen Villas (7).jpeg",
+      "assets/images/Premium properties/OSTREA Karen Villas (8).jpeg",
+      "assets/images/Premium properties/OSTREA Karen Villas (9).jpeg",
+      "assets/images/Premium properties/OSTREA Karen Villas (10).jpeg",
+      "assets/images/Premium properties/OSTREA Karen Villas (11).jpeg",
+      "assets/images/Premium properties/OSTREA Karen Villas (12).jpeg",
+      "assets/images/Premium properties/OSTREA Karen Villas (13).jpeg",
+      "assets/images/Premium properties/OSTREA Karen Villas (14).jpeg",
+      "assets/images/Premium properties/OSTREA Karen Villas (15).jpeg",
+      "assets/images/Premium properties/OSTREA Karen Villas (16).jpeg",
+      "assets/images/Premium properties/OSTREA Karen Villas (17).jpeg"
+    ],
+    url: "property.html?id=ostrea-villas-karen-nairobi",
+    description: "Ostrea Villas in Karen bring signature villa living to a serene, green residential setting. The homes are crafted for privacy, comfort, and everyday elegance, with generous planning and finishes that support both family life and refined entertaining. Positioned in Karen, the property gives buyers access to leafy surroundings, private schools, lifestyle amenities, and long-term residential value in one of Nairobi's most established addresses.",
+    featureLocation: "Karen address near international schools, private clubs, green compounds, and lifestyle destinations.",
+    story: {
+      rows: [
+        { title: "Ostrea Villas Residence",
+          body: "Ostrea Villas is presented as a composed premium residence in Karen, Nairobi, with spaces planned for comfort, privacy, and everyday ease. The interiors and exterior setting work together to create a property experience that feels refined, practical, and ready for discerning buyers." },
+        { title: "Design And Finishes",
+          body: "The property brings together generous proportions, considered finishes, and strong visual character. Each image in the gallery reflects the quality and atmosphere of Ostrea Villas, giving buyers a clearer sense of how the home supports family living, hosting, and long-term value." },
+        { title: "Lifestyle And Comfort",
+          body: "From relaxed daily routines to private entertaining, Ostrea Villas is shaped around a comfortable premium lifestyle. The residence offers the kind of space, light, and calm expected from a carefully selected SELLAM property." },
+        { title: "Location Advantage",
+          body: "Karen, Nairobi gives this property a strong residential context, with access to established amenities, key routes, and the privacy buyers expect from a premium address. It is positioned for both lifestyle appeal and long-term investment confidence." }
+      ]
+    },
+    listedDate: "2026-07-26"
+  },
+
+  {
+    id: "sl-030",
+    slug: "naserian-karen-nairobi",
+    status: "available",
+    collection: "featured",
+    title: "Naserian, Karen",
+    summary: "A premium Karen, Nairobi residence shaped around space, privacy, and composed everyday living, with a quiet, established address and strong lifestyle access.",
+    propertyType: "villa",
+    community: "karen",
+    location: "Karen, Nairobi",
+    letting: "sale",
+    // Bedroom/bathroom count and price weren't given on the old page — confirm and update.
+    bedrooms: null,
+    bathrooms: null,
+    salePrice: null,
+    rentPrice: null,
+    image: "assets/images/Premium properties/Naserian Karen.jpeg",
+    gallery: [
+      "assets/images/Premium properties/Naserian Karen (2).jpeg",
+      "assets/images/Premium properties/Naserian Karen (3).jpeg",
+      "assets/images/Premium properties/Naserian Karen (4).jpeg",
+      "assets/images/Premium properties/Naserian Karen (5).jpeg",
+      "assets/images/Premium properties/Naserian Karen (6).jpeg",
+      "assets/images/Premium properties/Naserian Karen (7).jpeg",
+      "assets/images/Premium properties/Naserian Karen (8).jpeg",
+      "assets/images/Premium properties/Naserian Karen (9).jpeg"
+    ],
+    url: "property.html?id=naserian-karen-nairobi",
+    description: "Naserian in Karen is a premium residential opportunity shaped around space, privacy, and composed everyday living. Its setting suits buyers who want a quiet, established address with elegant homes and strong lifestyle access. The property is presented for families, investors, and homeowners looking for a refined Karen residence with secure surroundings and long-term value.",
+    featureLocation: "Karen location with proximity to schools, shopping, clubs, hospitals, and calm residential streets.",
+    story: {
+      rows: [
+        { title: "Naserian Residence",
+          body: "Naserian is presented as a composed premium residence in Karen, Nairobi, with spaces planned for comfort, privacy, and everyday ease. The interiors and exterior setting work together to create a property experience that feels refined, practical, and ready for discerning buyers." },
+        { title: "Design And Finishes",
+          body: "The property brings together generous proportions, considered finishes, and strong visual character. Each image in the gallery reflects the quality and atmosphere of Naserian, giving buyers a clearer sense of how the home supports family living, hosting, and long-term value." },
+        { title: "Lifestyle And Comfort",
+          body: "From relaxed daily routines to private entertaining, Naserian is shaped around a comfortable premium lifestyle. The residence offers the kind of space, light, and calm expected from a carefully selected SELLAM property." },
+        { title: "Location Advantage",
+          body: "Karen, Nairobi gives this property a strong residential context, with access to established amenities, key routes, and the privacy buyers expect from a premium address. It is positioned for both lifestyle appeal and long-term investment confidence." }
+      ]
+    },
+    listedDate: "2026-07-27"
+  },
+
+  {
+    id: "sl-031",
+    slug: "5-bedroom-mansion-lower-kabete",
+    status: "available",
+    collection: "featured",
+    title: "5 Bedroom Mansion, Lower Kabete",
+    summary: "A smart 5-bedroom, fully en-suite mansion for sale or rent in Lower Kabete, Nairobi, with automated security and lighting, a private outdoor jacuzzi, and premium family-focused finishes.",
+    propertyType: "mansion",
+    community: "lower-kabete",
+    location: "Lower Kabete, Nairobi",
+    letting: "both",
+    bedrooms: 5,
+    bathrooms: 5,
+    salePrice: 250000000,
+    // USD 10,000/month converted at KES 129.5/USD, the rate used elsewhere
+    // in this file for leasePricing — confirm against the current rate.
+    rentPrice: 1295000,
+    image: "assets/images/Premium properties/Lower Kabete 5 Bedroom (2).jpeg",
+    gallery: [
+      "assets/images/Premium properties/Lower Kabete 5 Bedroom.jpeg",
+      "assets/images/Premium properties/Lower Kabete 5 Bedroom (3).jpeg",
+      "assets/images/Premium properties/Lower Kabete 5 Bedroom (4).jpeg",
+      "assets/images/Premium properties/Lower Kabete 5 Bedroom (5).jpeg",
+      "assets/images/Premium properties/Lower Kabete 5 Bedroom (6).jpeg",
+      "assets/images/Premium properties/Lower Kabete 5 Bedroom (7).jpeg",
+      "assets/images/Premium properties/Lower Kabete 5 Bedroom (8).jpeg"
+    ],
+    url: "property.html?id=5-bedroom-mansion-lower-kabete",
+    description: "This 5 bed all en-suite, smart home has all the luxury a family needs for easy living. The large living room features curtain, light, and security automation that can be controlled from anywhere with WIFI connectivity, for complete peace of mind, alongside an outdoor jacuzzi for 8 people.",
+    featureLocation: "Lower Kabete address with access to Westlands, schools, private clubs, and established family neighborhoods.",
+    story: {
+      rows: [
+        { title: "The Culinary Atelier",
+          body: "The kitchen is thoughtfully designed to combine functionality with refined luxury. Premium granite countertops, high-end cabinetry, and integrated appliances—including a dishwasher, microwave, under-counter oven, gas hob, electric stove, and extractor fan—create a seamless cooking experience. A spacious breakfast nook, walk-in pantry, and dedicated laundry area complete a kitchen built for modern family living." },
+        { title: "Private Retreats",
+          body: "All five bedrooms are generously proportioned and en-suite, offering exceptional comfort and privacy. The soundproofed primary suite features Clipsal smart automation, a walk-in closet, bamboo flooring, and dedicated TV and telephone connectivity. The remaining bedrooms continue the home's premium standard with bamboo flooring, walk-in closets or built-in wardrobes, high ceilings, and integrated network and entertainment ports." },
+        { title: "Wellness Sanctuaries",
+          body: "From relaxed daily routines to private entertaining, 5 Bedroom Mansion is shaped around a comfortable premium lifestyle. The residence offers the kind of space, light, and calm expected from a carefully selected SELLAM property." },
+        { title: "Grand Living",
+          body: "Lower Kabete, Nairobi gives this property a strong residential context, with access to established amenities, key routes, and the privacy buyers expect from a premium address. It is positioned for both lifestyle appeal and long-term investment confidence." }
+      ]
+    },
+    listedDate: "2026-07-28"
+  },
+
 
   /* --------------------------------------------------------------- EXCLUSIVE
      Off-market / exclusive listings. */
@@ -1302,7 +1542,7 @@ window.SELLAM_PROPERTIES = [
   },
 
   {
-    id: "sl-020",
+    id: "sl-025",
     slug: "high-street-retail-unit-westlands",
     status: "available",
     collection: "featured",
@@ -1422,7 +1662,7 @@ window.SELLAM_PROPERTIES = [
   },
 
   {
-    id: "sl-024",
+    id: "sl-026",
     slug: "ngong-development-land",
     status: "available",
     collection: "featured",

@@ -370,6 +370,15 @@ const propertyData = {
   }
 };
 
+// Shared "Pricing option" the client gave for the 4 real international
+// listings below (ShomaBay, Brabus Villas, Afra Park, Indabyo Heights):
+// "10% Down Payment + 5% Discount, 1% Monthly Installments until completion".
+const INTERNATIONAL_PAYMENT_PLAN = [
+  { percent: 10, label: "Down payment" },
+  { percent: 5, label: "Discount for paying the down payment" },
+  { percent: 1, label: "Monthly installments until completion" }
+];
+
 Object.assign(propertyData, {
   "revenance-residency": {
     title: "Revenance Residency",
@@ -569,6 +578,151 @@ Object.assign(propertyData, {
       commonGallery[5],
       commonGallery[6],
       commonGallery[0]
+    ]
+  },
+
+  /* --------------------------------------------------------- REAL LISTINGS
+     Unlike the diaspora templates above, these 4 have real photography
+     (assets/images/International properties/) and real card copy already
+     written on index.html's diaspora-grid. Reached via property.html?id=<key>
+     — same root template as every other property on the site, not a
+     standalone page, so there's only ever one copy of the template to keep
+     in sync. Prices are plain USD strings (see INTERNATIONAL_PAYMENT_PLAN
+     below) — property.html/property-detail.js never runs these through the
+     KES formatter used for the Kenya inventory in data/properties.js, so
+     dollars display exactly as written with no conversion. */
+  "ShomaBay": {
+    title: "ShomaBay",
+    location: "Miami, USA",
+    price: "From USD 703,500",
+    // Unit mix confirmed by client: Studio, 1, 2 & 3 Bedroom. Only the
+    // Studio price was given (USD 703,500) — the rest show "Price on
+    // Application" until real figures are supplied; don't guess these in.
+    priceRows: [
+      { bedrooms: "Studio", price: "USD 703,500" },
+      { bedrooms: "1 Bedroom", price: "Price on Application" },
+      { bedrooms: "2 Bedroom", price: "Price on Application" },
+      { bedrooms: "3 Bedroom", price: "Price on Application" }
+    ],
+    paymentPlan: INTERNATIONAL_PAYMENT_PLAN,
+    hero: "assets/images/International properties/Shomabay,Miami (11).jpeg",
+    heroAlt: "ShomaBay exterior in Miami",
+    description:
+      "Shoma Bay consists of 333 condominium units where the design seamlessly melds a classic art-deco aesthetic with a modern facade while adding community-minded amenities such as a zen garden, grocery delivery room, wine cellar, and other dynamic features.",
+    featureLocation: "Prime Miami address with beach access, vibrant retail and dining, and strong international rental demand.",
+    featureHighlights: [
+      { title: "Location:", text: "Prime Miami address with beach access, vibrant retail and dining, and strong international rental demand." },
+      { title: "Amenities:", text: "Gym, Swimming Pool, Yoga space, Reception, Elevator" }
+    ],
+    gallery: [
+      { src: "assets/images/International properties/Shomabay,Miami (2).jpeg", alt: "ShomaBay interior" },
+      { src: "assets/images/International properties/Shomabay,Miami (3).jpeg", alt: "ShomaBay living space" },
+      { src: "assets/images/International properties/Shomabay,Miami (4).jpeg", alt: "ShomaBay amenity deck" },
+      { src: "assets/images/International properties/Shomabay,Miami (5).jpeg", alt: "ShomaBay bedroom" },
+      { src: "assets/images/International properties/Shomabay,Miami (6).jpeg", alt: "ShomaBay kitchen" },
+      { src: "assets/images/International properties/Shomabay,Miami (7).jpeg", alt: "ShomaBay pool deck" },
+      { src: "assets/images/International properties/Shomabay,Miami (8).jpeg", alt: "ShomaBay balcony view" },
+      { src: "assets/images/International properties/Shomabay,Miami (9).jpeg", alt: "ShomaBay lobby" },
+      { src: "assets/images/International properties/Shomabay,Miami (10).jpeg", alt: "ShomaBay exterior detail" },
+      { src: "assets/images/International properties/Shomabay,Miami (12).jpeg", alt: "ShomaBay amenity space" },
+      { src: "assets/images/International properties/Shomabay,Miami (13).jpeg", alt: "ShomaBay interior detail" },
+      { src: "assets/images/International properties/Shomabay,Miami (14).jpeg", alt: "ShomaBay residence detail" },
+      { src: "assets/images/International properties/Shomabay,Miami (15).jpeg", alt: "ShomaBay exterior" }
+    ]
+  },
+  "Brabus-Villas": {
+    title: "Brabus Villas",
+    location: "Brabus Island, UAE Dubai",
+    price: "From USD 1,200,000",
+    // Client gave unit COUNTS only (2BR: 256 units, 3BR: 80 units, 4BR: 16
+    // units) and explicitly asked to guess the prices pending real developer
+    // figures — these three are estimates for an ultra-luxury branded-island
+    // villa community, NOT confirmed pricing. Replace before relying on them
+    // for a real quote.
+    priceRows: [
+      { bedrooms: "2 Bedroom", note: "256 units, estimated", price: "USD 1,200,000" },
+      { bedrooms: "3 Bedroom", note: "80 units, estimated", price: "USD 1,650,000" },
+      { bedrooms: "4 Bedroom", note: "16 units, estimated", price: "USD 2,200,000" }
+    ],
+    paymentPlan: INTERNATIONAL_PAYMENT_PLAN,
+    hero: "assets/images/International properties/The Towers, Dubai (6).jpeg",
+    heroAlt: "Brabus Villas exterior",
+    description:
+      "Located within the exclusive BRABUS Island community, BRABUS Villas enjoy a private and prestigious setting in Abu Dhabi's waterfront landscape. Each residence offers seamless access to the city's most sought-after destinations, blending unmatched privacy with effortless connectivity.",
+    featureLocation: "Brabus Island address within the waterfront district, close to premier dining, retail, and lifestyle destinations.",
+    featureHighlights: [
+      { title: "Location:", text: "Brabus Island address within the waterfront district, close to premier dining, retail, and lifestyle destinations." },
+      { title: "Amenities:", text: "Gym, Swimming Pool, Yoga space, Reception, Elevator" }
+    ],
+    gallery: [
+      { src: "assets/images/International properties/The Towers, Dubai.jpeg", alt: "Brabus Villas overview" },
+      { src: "assets/images/International properties/The Towers, Dubai (2).jpeg", alt: "Brabus Villas exterior" },
+      { src: "assets/images/International properties/The Towers, Dubai (3).jpeg", alt: "Brabus Villas living space" },
+      { src: "assets/images/International properties/The Towers, Dubai (4).jpeg", alt: "Brabus Villas interior" },
+      { src: "assets/images/International properties/The Towers, Dubai (5).jpeg", alt: "Brabus Villas residence" },
+      { src: "assets/images/International properties/The Towers, Dubai (7).jpeg", alt: "Brabus Villas waterfront view" }
+    ]
+  },
+  "Afra-Park": {
+    title: "Afra Park",
+    location: "Istanbul, Turkey",
+    price: "From USD 420,000",
+    priceRows: [
+      { bedrooms: "2 Bedroom", price: "From USD 420,000" },
+      { bedrooms: "3 Bedroom", price: "From USD 480,000" },
+      { bedrooms: "4 Bedroom", price: "USD 570,000" }
+    ],
+    paymentPlan: INTERNATIONAL_PAYMENT_PLAN,
+    hero: "assets/images/International properties/Afra Park, Turkey (4).jpeg",
+    heroAlt: "Afra Park residence in Istanbul",
+    description:
+      "Afra Park is a contemporary high end modern design, a new concept of living brought by Reportage Turkiye, with a one of a kind design of townhouses, and villas, surrounded by a well planned typographical landscape. This project brings together a variety of factors, entertainment, seclusion, and socialization.",
+    featureLocation: "Istanbul address within a landscaped Reportage Türkiye community, offering townhouses and villas with resort-style surroundings.",
+    featureHighlights: [
+      { title: "Location:", text: "Istanbul address within a landscaped Reportage Türkiye community, offering townhouses and villas with resort-style surroundings." },
+      { title: "Amenities:", text: "Gym, Swimming Pool, Yoga space, Reception, Elevator" }
+    ],
+    gallery: [
+      { src: "assets/images/International properties/Afra Park, Turkey.jpeg", alt: "Afra Park overview" },
+      { src: "assets/images/International properties/Afra Park, Turkey (2).jpeg", alt: "Afra Park exterior" },
+      { src: "assets/images/International properties/Afra Park, Turkey (3).jpeg", alt: "Afra Park landscaped grounds" },
+      { src: "assets/images/International properties/Afra Park, Turkey (5).jpeg", alt: "Afra Park townhouse" },
+      { src: "assets/images/International properties/Afra Park, Turkey (6).jpeg", alt: "Afra Park villa" },
+      { src: "assets/images/International properties/Afra Park, Turkey (7).jpeg", alt: "Afra Park interior" },
+      { src: "assets/images/International properties/Afra Park, Turkey (8).jpeg", alt: "Afra Park living space" },
+      { src: "assets/images/International properties/Afra Park, Turkey (9).jpeg", alt: "Afra Park bedroom" },
+      { src: "assets/images/International properties/Afra Park, Turkey (10).jpeg", alt: "Afra Park kitchen" },
+      { src: "assets/images/International properties/Afra Park, Turkey (11).jpeg", alt: "Afra Park amenity space" },
+      { src: "assets/images/International properties/Afra Park, Turkey (12).jpeg", alt: "Afra Park courtyard" },
+      { src: "assets/images/International properties/Afra Park, Turkey (13).jpeg", alt: "Afra Park exterior detail" },
+      { src: "assets/images/International properties/Afra Park, Turkey (14).jpeg", alt: "Afra Park residence detail" },
+      { src: "assets/images/International properties/Afra Park, Turkey (15).jpeg", alt: "Afra Park landscape view" }
+    ]
+  },
+  "Indabyo-Heights": {
+    title: "Indabyo Heights",
+    location: "Kigali, Rwanda",
+    price: "From USD 81,109",
+    priceRows: [
+      { bedrooms: "1 Bedroom", price: "From USD 81,109" },
+      { bedrooms: "3 Bedroom", price: "From USD 199,475" },
+      { bedrooms: "4 Bedroom", price: "From USD 248,359" }
+    ],
+    paymentPlan: INTERNATIONAL_PAYMENT_PLAN,
+    hero: "assets/images/International properties/Indabyo Heights (2).jpeg",
+    heroAlt: "Indabyo Heights exterior in Kigali",
+    description:
+      "Rising gracefully above Kigali, Indabyo Heights sets a new standard for luxury and modern living. Each apartment and penthouse is thoughtfully designed for style, comfort, and elegance, reflecting Kigali's evolving skyline. More than just a home, it's a statement of refined living.",
+    featureLocation: "Kigali address with panoramic skyline views and access to the city's premier business and lifestyle districts.",
+    featureHighlights: [
+      { title: "Location:", text: "Kigali address with panoramic skyline views and access to the city's premier business and lifestyle districts." },
+      { title: "Amenities:", text: "Gym, Swimming Pool, Yoga space, Reception, Elevator" }
+    ],
+    gallery: [
+      { src: "assets/images/International properties/Indabyo Heights.jpeg", alt: "Indabyo Heights overview" },
+      { src: "assets/images/International properties/Indabyo Heights (3).jpeg", alt: "Indabyo Heights interior" },
+      { src: "assets/images/International properties/Indabyo Heights (4).jpeg", alt: "Indabyo Heights living space" },
+      { src: "assets/images/International properties/Indabyo Heights (5).jpeg", alt: "Indabyo Heights skyline view" }
     ]
   }
 });

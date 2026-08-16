@@ -582,8 +582,34 @@ button {
 }
 
 .exclusive-hero .premium-hero-image {
-  background-image: linear-gradient(rgba(4, 51, 65, 0.5), rgba(4, 51, 65, 0.5)), url("assets/images/Fax2.jpg");
+  background-image: linear-gradient(rgba(4, 51, 65, 0.5), rgba(4, 51, 65, 0.5)), url("assets/images/Amethyst Residences Outdoors (2).jpeg");
   background-position: center;
+}
+
+.featured-hero .premium-hero-image {
+  background-image: linear-gradient(rgba(4, 51, 65, 0.5), rgba(4, 51, 65, 0.5)), url("assets/images/Cheval Riverside Exterior (7).jpeg");
+  background-position: center;
+}
+
+.exclusive-hero-content {
+  position: relative;
+  z-index: 2;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.exclusive-hero-heading {
+  margin: 0;
+  max-width: 900px;
+  color: var(--white);
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 3.8vw, 52px);
+  font-weight: 600;
+  line-height: 1.2;
+  text-shadow: 0 2px 18px rgba(0, 20, 27, 0.48);
 }
 
 .buy-commercial-hero .premium-hero-image {
@@ -1270,6 +1296,10 @@ html:not(.motion-ready) .footer-grid.reveal > * {
     padding: 150px 0 54px;
   }
 
+  .exclusive-hero-content {
+    min-height: 700px;
+  }
+
   .rent-hero-copy {
     width: min(760px, 92%);
     margin-bottom: 38px;
@@ -1364,6 +1394,10 @@ html:not(.motion-ready) .footer-grid.reveal > * {
   .rent-hero-content {
     min-height: 840px;
     padding: 130px 0 34px;
+  }
+
+  .exclusive-hero-content {
+    min-height: 840px;
   }
 
   .rent-hero-copy {

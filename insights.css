@@ -26,6 +26,27 @@
     rgba(4, 51, 65, 0.3);
 }
 
+.insights-hero-content {
+  position: relative;
+  z-index: 1;
+  min-height: clamp(680px, 52vw, 980px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.insights-hero-heading {
+  margin: 0;
+  max-width: 900px;
+  color: var(--white);
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 3.8vw, 52px);
+  font-weight: 600;
+  line-height: 1.2;
+  text-shadow: 0 2px 18px rgba(0, 20, 27, 0.48);
+}
+
 .insights-intro {
   padding: clamp(70px, 6.2vw, 118px) 0 clamp(72px, 6.5vw, 126px);
   background: var(--white);
@@ -116,6 +137,10 @@
     min-height: 760px;
   }
 
+  .insights-hero-content {
+    min-height: 760px;
+  }
+
   .work-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 82px 58px;
@@ -124,6 +149,10 @@
 
 @media (max-width: 760px) {
   .insights-hero {
+    min-height: 620px;
+  }
+
+  .insights-hero-content {
     min-height: 620px;
   }
 

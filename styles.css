@@ -1089,7 +1089,10 @@ section {
 }
 
 .partners {
-  padding-block: var(--section-gap);
+  /* Top: 50% of the standard section gap. Bottom: 40% of it (a 60% cut) —
+     brings the logos closer to both edges of the banner than other sections. */
+  padding-top: calc(var(--section-gap) * 0.5);
+  padding-bottom: calc(var(--section-gap) * 0.4);
   background: var(--teal);
   color: var(--white);
   overflow: hidden;
@@ -1122,8 +1125,8 @@ section {
 
 .partner-track img {
   width: auto;
-  max-width: 490px;
-  height: clamp(76px, 7vw, 140px);
+  max-width: 840px;
+  height: clamp(106px, 9.8vw, 196px);
   object-fit: contain;
   opacity: 0.45;
   filter: brightness(0) invert(1);
@@ -2816,8 +2819,8 @@ html:not(.motion-ready) .motion-item-visible {
   }
 
   .partner-track img {
-    height: 58px;
-    max-width: 220px;
+    height: 81px;
+    max-width: 308px;
   }
 
   .community-carousel {
