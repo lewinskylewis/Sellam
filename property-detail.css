@@ -1059,3 +1059,39 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Floating WhatsApp button: only shown once the nav collapses behind the
+   mobile menu toggle, where the WhatsApp link is otherwise hidden inside it. */
+.floating-whatsapp {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .floating-whatsapp {
+    position: fixed;
+    right: 18px;
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25d366;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .floating-whatsapp:hover,
+  .floating-whatsapp:focus-visible {
+    transform: scale(1.06);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.36);
+  }
+
+  .floating-whatsapp svg {
+    width: 30px;
+    height: 30px;
+    fill: #fff;
+  }
+}

@@ -34,7 +34,7 @@
 
   function isExcluded(element) {
     return Boolean(
-      element.closest(".site-header, .mobile-menu, .enquiry-modal, [role='dialog']")
+      element.closest(".site-header, .mobile-menu, .enquiry-modal, [role='dialog'], .site-footer")
     );
   }
 

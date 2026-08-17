@@ -857,6 +857,7 @@ button {
   background: var(--footer);
   color: var(--white);
   padding: 41px 0;
+  font-family: var(--font-sans);
 }
 
 .footer-grid {
@@ -941,7 +942,6 @@ button {
   color: var(--white);
   background: transparent;
   border-radius: 0;
-  font-family: Arial, Helvetica, sans-serif;
   font-size: 24px;
   font-weight: 900;
   line-height: 1;
@@ -1015,28 +1015,11 @@ button {
   --motion-delay: 0.09s;
 }
 
-.footer-grid.reveal {
+.footer-grid.reveal,
+.footer-grid.reveal > * {
   opacity: 1;
   animation: none;
-}
-
-.footer-grid.reveal > * {
-  --motion-translate-x: -90px;
-  --motion-translate-y: 0px;
-  opacity: 0;
-}
-
-.footer-grid.reveal > :nth-child(even) {
-  --motion-translate-x: 90px;
-}
-
-.footer-grid.reveal > :nth-child(2) { --motion-delay: 0.07s; }
-.footer-grid.reveal > :nth-child(3) { --motion-delay: 0.14s; }
-.footer-grid.reveal > :nth-child(4) { --motion-delay: 0.21s; }
-
-.footer-grid.reveal.is-visible > * {
-  opacity: 1;
-  animation: motion-glideIn var(--motion-duration) var(--motion-glide-ease) var(--motion-delay) backwards;
+  transform: none;
 }
 
 @keyframes motion-floatIn {

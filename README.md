@@ -59,3 +59,44 @@ needs. Never expose `SUPABASE_SECRET_KEY` to the browser, and never grant
 `anon`/`authenticated` direct table access as a shortcut — that would let
 anyone with the public Supabase URL read every enquiry (names, phone
 numbers, emails) directly from the browser console.
+
+## Newsletter subscribe → Supabase → Resend
+
+The "Subscribe" email field in the site footer (present on every page, since
+the footer is shared) POSTs to `/api/subscribe` (`api/subscribe.js`, a
+Vercel Function). `newsletter.js` (loaded on every page) wires the form: it
+adds a honeypot field, prevents the default `<form action="#">` navigation,
+submits the email as JSON, and shows an inline status message. Same
+resilience shape as the enquiry flow:
+
+1. Validates the email server-side (format, honeypot, same-origin check,
+   JSON content-type, size cap).
+2. Upserts it into the `public.newsletter_subscribers` table in Supabase
+   (`supabase/migrations/202608171200_create_newsletter_subscribers.sql`)
+   with `status = "new"` — re-submitting the same email updates the existing
+   row instead of erroring, so resubscribing is safe.
+3. Emails the team via Resend with the new subscriber's address, then sends
+   the subscriber a short welcome email, then updates the row to
+   `status = "notified"` (or `"email_failed"` if Resend failed — the
+   subscription itself is never lost even if Resend is down). The welcome
+   email failing on its own does not affect the team notification or the
+   stored subscription.
+
+### Required environment variables
+
+Same Supabase/Resend variables as the enquiry flow above, plus one more:
+
+| Variable | Value | Where to get it |
+|---|---|---|
+| `NEWSLETTER_RECIPIENT_EMAIL` | `office@sellamre.com` | The inbox that should receive new-subscriber notifications. Accepts a comma-separated list. |
+
+`SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `RESEND_API_KEY`, and
+`RESEND_FROM_EMAIL` are shared with `/api/enquiry` — no separate values
+needed. If any required variable is missing or malformed, `/api/subscribe`
+fails closed with a 503 and logs the reason server-side.
+
+`newsletter_subscribers` has Row Level Security enabled with the same
+`service_role`-only access pattern as `property_enquiries` — see "Building
+the future admin dashboard" above; the same constraints apply to any future
+subscriber-list UI. There is currently no unsubscribe endpoint — this only
+covers signup.

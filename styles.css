@@ -1574,6 +1574,7 @@ section {
   padding-block: 41px;
   color: var(--white);
   background: #003546;
+  font-family: var(--font-sans);
 }
 
 .footer-grid {
@@ -3390,4 +3391,14 @@ html.site-motion-all .reveal.is-visible:not(.reveal-from-left):not(.reveal-from-
 
 html.site-motion-all .listing-row > .reveal:nth-child(2) {
   --motion-delay: 0.09s;
+}
+
+/* Interior pages must never animate the footer — it should render exactly
+   like the (untouched) homepage footer, fully visible with no scroll-reveal.
+   Scoped to site-motion-all so the homepage itself is unaffected. */
+html.site-motion-all .footer-grid.reveal,
+html.site-motion-all .footer-grid.reveal > * {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
 }
