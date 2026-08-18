@@ -1,0 +1,392 @@
+/* ============================================================================
+   SELLAM — COOKIE CONSENT MANAGER (styles)
+   ============================================================================
+   Loaded by cookie-consent.js (which injects this file's <link> tag itself —
+   no page needs to reference it directly). Uses the same design tokens as the
+   rest of the site (see :root in styles.css) so the banner and preferences
+   panel read as part of Sellam rather than a bolted-on plugin.
+   ========================================================================== */
+
+body.cookie-modal-open {
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------------ banner */
+
+.cookie-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 400;
+  display: flex;
+  justify-content: center;
+  padding: clamp(14px, 2vw, 22px) clamp(16px, 3vw, 40px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(14px);
+  transition: opacity 320ms ease, visibility 320ms ease, transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.cookie-banner.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.cookie-banner-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(14px, 2vw, 28px);
+  width: min(1100px, 100%);
+  padding: clamp(18px, 2vw, 26px) clamp(20px, 2.4vw, 32px);
+  border-radius: clamp(16px, 1.6vw, 24px);
+  color: var(--white, #fff);
+  background: var(--ink-deep, #002f3f);
+  box-shadow: 0 -18px 48px rgba(0, 18, 25, 0.32), 0 8px 30px rgba(0, 18, 25, 0.28);
+}
+
+.cookie-banner-copy {
+  flex: 1 1 360px;
+  min-width: 240px;
+}
+
+.cookie-banner-copy h2 {
+  margin: 0 0 6px;
+  color: var(--white, #fff);
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.cookie-banner-copy p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.55;
+}
+
+.cookie-banner-copy a {
+  color: var(--gold, #d3a23b);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.cookie-banner-copy a:hover,
+.cookie-banner-copy a:focus-visible {
+  color: var(--white, #fff);
+}
+
+.cookie-banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+/* ------------------------------------------------------------------ buttons
+   Deliberately equal size/shape for all three actions so "Reject" is never
+   visually harder to find or tap than "Accept". Only the fill differs. */
+
+.cookie-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 12px 22px;
+  border: 1.5px solid transparent;
+  border-radius: 999px;
+  white-space: nowrap;
+  text-transform: uppercase;
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 200ms ease, border-color 200ms ease, color 200ms ease, transform 200ms ease;
+}
+
+.cookie-btn:hover {
+  transform: translateY(-1px);
+}
+
+.cookie-btn:focus-visible {
+  outline: 2px solid var(--gold, #d3a23b);
+  outline-offset: 2px;
+}
+
+.cookie-btn-solid {
+  color: var(--ink-deep, #002f3f);
+  background: var(--gold, #d3a23b);
+}
+
+.cookie-btn-solid:hover,
+.cookie-btn-solid:focus-visible {
+  background: var(--white, #fff);
+}
+
+.cookie-btn-outline {
+  color: var(--white, #fff);
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.cookie-btn-outline:hover,
+.cookie-btn-outline:focus-visible {
+  border-color: var(--gold, #d3a23b);
+  color: var(--gold, #d3a23b);
+}
+
+/* Preferences panel uses the same buttons on a light surface. */
+.cookie-modal .cookie-btn-outline {
+  color: var(--ink, #063545);
+  border-color: var(--line, rgba(3, 48, 64, 0.34));
+}
+
+.cookie-modal .cookie-btn-outline:hover,
+.cookie-modal .cookie-btn-outline:focus-visible {
+  border-color: var(--gold, #d3a23b);
+  color: var(--ink, #063545);
+}
+
+/* ------------------------------------------------------------------- modal */
+
+.cookie-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 410;
+  display: grid;
+  place-items: center;
+  padding: clamp(18px, 3vw, 46px);
+  background: rgba(0, 18, 25, 0.4);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 260ms ease, visibility 260ms ease;
+}
+
+.cookie-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.cookie-modal-dialog {
+  position: relative;
+  width: clamp(340px, 42vw, 620px);
+  max-height: calc(100svh - 44px);
+  overflow-y: auto;
+  padding: clamp(28px, 2.7vw, 44px);
+  border-radius: clamp(20px, 2vw, 30px);
+  color: var(--ink, #063545);
+  background: var(--cream, #f7f6f3);
+  box-shadow: 0 34px 90px rgba(0, 18, 25, 0.42);
+  transform: translateY(18px) scale(0.985);
+  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.cookie-modal.is-open .cookie-modal-dialog {
+  transform: translateY(0) scale(1);
+}
+
+.cookie-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line, rgba(3, 48, 64, 0.34));
+  border-radius: 50%;
+  color: var(--ink, #063545);
+  background: transparent;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 200ms ease, border-color 200ms ease, transform 200ms ease;
+}
+
+.cookie-modal-close:hover,
+.cookie-modal-close:focus-visible {
+  color: var(--gold, #d3a23b);
+  border-color: currentColor;
+  transform: rotate(90deg);
+}
+
+.cookie-modal-close:focus-visible {
+  outline: 2px solid var(--gold, #d3a23b);
+  outline-offset: 2px;
+}
+
+.cookie-modal-dialog h2 {
+  margin: 0 0 10px;
+  padding-right: 40px;
+  color: var(--ink-deep, #002f3f);
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+  font-size: clamp(19px, 1.6vw, 24px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cookie-modal-intro {
+  margin: 0 0 clamp(18px, 2vw, 26px);
+  color: var(--teal, #174f61);
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.55;
+}
+
+.cookie-modal-intro a {
+  color: var(--ink-deep, #002f3f);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.cookie-category-list {
+  display: grid;
+  gap: 14px;
+  margin-bottom: clamp(20px, 2.4vw, 30px);
+}
+
+.cookie-category {
+  padding: 16px 18px;
+  border: 1px solid var(--line, rgba(3, 48, 64, 0.34));
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.cookie-category-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cookie-category-name {
+  color: var(--ink-deep, #002f3f);
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cookie-category-state {
+  color: var(--teal, #174f61);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cookie-category-desc {
+  margin: 8px 0 0;
+  color: var(--teal, #174f61);
+  font-size: 13.5px;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+.cookie-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* ------------------------------------------------------------------ toggle */
+
+.cookie-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.cookie-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.cookie-toggle-track {
+  display: inline-flex;
+  align-items: center;
+  width: 44px;
+  height: 26px;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(3, 48, 64, 0.22);
+  transition: background 200ms ease;
+}
+
+.cookie-toggle-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--white, #fff);
+  box-shadow: 0 2px 6px rgba(0, 18, 25, 0.28);
+  transition: transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.cookie-toggle input:checked + .cookie-toggle-track {
+  background: var(--gold, #d3a23b);
+}
+
+.cookie-toggle input:checked + .cookie-toggle-track .cookie-toggle-thumb {
+  transform: translateX(18px);
+}
+
+.cookie-toggle input:focus-visible + .cookie-toggle-track {
+  outline: 2px solid var(--gold, #d3a23b);
+  outline-offset: 2px;
+}
+
+/* -------------------------------------------------------------- responsive */
+
+@media (max-width: 760px) {
+  .cookie-banner {
+    padding: 12px;
+  }
+
+  .cookie-banner-inner {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .cookie-banner-actions {
+    flex-direction: column;
+  }
+
+  .cookie-banner-actions .cookie-btn {
+    width: 100%;
+  }
+
+  .cookie-modal-dialog {
+    width: min(94vw, 460px);
+    max-height: calc(100svh - 24px);
+    padding: 26px 20px 22px;
+  }
+
+  .cookie-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .cookie-modal-actions .cookie-btn {
+    width: 100%;
+  }
+}

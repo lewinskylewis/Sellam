@@ -1,5 +1,5 @@
 (function () {
-  const pageName = window.location.pathname.split("/").pop().toLowerCase() || "index.html";
+  const pageName = window.location.pathname.split("/").pop().toLowerCase() || "index";
   const isPropertyDetail = window.location.pathname.toLowerCase().includes("/properties/");
 
   function getActiveSection() {
@@ -8,33 +8,33 @@
       return hashSection;
     }
 
-    if (pageName === "rent.html") return "rent";
+    if (pageName === "rent") return "rent";
     if (
       [
-        "leasing-properties.html",
-        "leasing-offices.html",
-        "leasing-retail.html",
-        "leasing-industrial.html",
-        "leasing-land.html"
+        "leasing-properties",
+        "leasing-offices",
+        "leasing-retail",
+        "leasing-industrial",
+        "leasing-land"
       ].includes(pageName)
     ) {
       return "leasing";
     }
     if (
-      ["services.html", "operations-management.html", "property-sales.html", "leasing.html"].includes(pageName)
+      ["services", "operations-management", "property-sales", "leasing"].includes(pageName)
     ) {
       return "services";
     }
     if (
       isPropertyDetail ||
       [
-        "buy.html",
-        "buy-commercial.html",
-        "buy-land.html",
-        "buy-residential.html",
-        "premium-properties.html",
-        "exclusive-properties.html",
-        "property.html"
+        "buy",
+        "buy-commercial",
+        "buy-land",
+        "buy-residential",
+        "premium-properties",
+        "exclusive-properties",
+        "property"
       ].includes(pageName)
     ) {
       return "buy";

@@ -3,10 +3,10 @@
   window.__sellamSiteMotionInitialized = true;
 
   var root = document.documentElement;
-  var pageName = window.location.pathname.split("/").pop().toLowerCase() || "index.html";
+  var pageName = window.location.pathname.split("/").pop().toLowerCase().replace(/\.html$/i, "") || "index";
 
   // The homepage remains the reference implementation and keeps its own engine.
-  if (pageName === "index.html") return;
+  if (pageName === "index") return;
 
   var reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
   if ((reducedMotion && reducedMotion.matches) || !("IntersectionObserver" in window)) return;

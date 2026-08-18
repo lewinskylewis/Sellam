@@ -1,8 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
+  "cleanUrls": true,
   "rewrites": [
-    { "source": "/property.html", "destination": "/api/property" }
+    { "source": "/property.html", "destination": "/api/property" },
+    { "source": "/property", "destination": "/api/property" }
   ],
   "git": {
     "deploymentEnabled": {

@@ -34,10 +34,10 @@ window.SELLAM_COMMUNITIES = [
   {
     key: "runda",
     label: "Runda",
-    image: "assets/images/community-runda.webp",
+    image: "assets/images/runda community.jpeg",
     imageAlt: "Runda skyline and green community",
     description: "Expansive villas and townhouses in Runda offer luxury, privacy, and convenience near diplomatic zones, top schools, and amenities.",
-    url: "communities/runda.html"
+    url: "communities/runda"
   },
   {
     key: "muthaiga",
@@ -45,39 +45,39 @@ window.SELLAM_COMMUNITIES = [
     image: "assets/images/community-muthaiga.webp",
     imageAlt: "Muthaiga luxury apartment tower",
     description: "Gracious villas on landscaped grounds offer privacy, elegance, and prestige near diplomatic zones, hospitals, and elite clubs in Nairobi.",
-    url: "communities/muthaiga.html"
+    url: "communities/muthaiga"
   },
   {
     key: "ridgeways",
     label: "Ridgeways",
-    image: "assets/images/community-ridgeways.webp",
+    image: "assets/images/ridgeways community.jpeg",
     imageAlt: "Ridgeways curved apartment tower",
     description: "Ridgeways offers modern homes in a serene setting, near malls, top schools, and highways - ideal for families and professionals.",
-    url: "communities/ridgeways.html"
+    url: "communities/ridgeways"
   },
   {
     key: "nyari",
     label: "Nyari",
-    image: "assets/images/community-nyari.webp",
+    image: "assets/images/Nyari community.jpeg",
     imageAlt: "Nyari premium residential tower",
     description: "Elegant villas and townhouses with top security, lush greenery, and gated living near diplomatic zones, offering space and community.",
-    url: "communities/nyari.html"
+    url: "communities/nyari"
   },
   {
     key: "karen",
     label: "Karen",
-    image: "assets/images/diaspora-miami.webp",
+    image: "assets/images/Premium properties/OSTREA Karen Villas.jpeg",
     imageAlt: "Karen contemporary villa exterior",
     description: "Generous homes, calm streets, and leafy compounds create a refined residential setting for families and private retreats.",
-    url: "communities/karen.html"
+    url: "communities/karen"
   },
   {
     key: "lavington",
     label: "Lavington",
-    image: "assets/images/diaspora-manchester.webp",
+    image: "assets/images/Premium properties/ModernVillas-Lavington4.jpeg",
     imageAlt: "Lavington modern townhouse frontage",
     description: "Modern residences, easy access, and composed urban living define this sought-after address for elegant daily life.",
-    url: "communities/lavington.html"
+    url: "communities/lavington"
   },
   {
     key: "kileleshwa",
@@ -85,23 +85,23 @@ window.SELLAM_COMMUNITIES = [
     image: "assets/images/hero-kileleshwa.webp",
     imageAlt: "Kileleshwa apartment tower",
     description: "Elegant apartment living, green streets, and easy access to Nairobi's lifestyle corridors make Kileleshwa highly desirable.",
-    url: "communities/kileleshwa.html"
+    url: "communities/kileleshwa"
   },
   {
     key: "kilimani",
     label: "Kilimani",
-    image: "assets/images/premium-living.webp",
+    image: "assets/images/Amethyst Residences Exterior (2).jpeg",
     imageAlt: "Kilimani refined apartment interior",
     description: "Connected, vibrant, and central, Kilimani offers polished apartments close to dining, retail, business, and leisure.",
-    url: "communities/kilimani.html"
+    url: "communities/kilimani"
   },
   {
     key: "westlands",
     label: "Westlands",
-    image: "assets/images/premium-bedroom.webp",
+    image: "assets/images/westlands community.jpeg",
     imageAlt: "Westlands contemporary apartment suite",
     description: "Westlands brings premium apartments, business access, nightlife, shopping, and high-demand investment potential together.",
-    url: "communities/westlands.html"
+    url: "communities/westlands"
   },
   {
     key: "thigiri",
@@ -109,7 +109,7 @@ window.SELLAM_COMMUNITIES = [
     image: "assets/images/diaspora-new-york.webp",
     imageAlt: "Thigiri serene residential estate",
     description: "Quiet streets, mature greenery, and diplomatic convenience make Thigiri a composed address for private family living.",
-    url: "communities/thigiri.html"
+    url: "communities/thigiri"
   },
   {
     key: "rosslyn",
@@ -117,7 +117,7 @@ window.SELLAM_COMMUNITIES = [
     image: "assets/images/hero-runda.webp",
     imageAlt: "Rosslyn premium residential greenery",
     description: "Rosslyn blends generous homes, secure compounds, embassy proximity, and easy access to schools, malls, and diplomatic hubs.",
-    url: "communities/rosslyn.html"
+    url: "communities/rosslyn"
   },
   {
     key: "parklands",
@@ -125,7 +125,7 @@ window.SELLAM_COMMUNITIES = [
     image: "assets/images/Kile.png",
     imageAlt: "Parklands urban apartment community",
     description: "Parklands offers connected apartment living near commerce, education, healthcare, and Nairobi's established urban corridors.",
-    url: "communities/parklands.html"
+    url: "communities/parklands"
   },
   {
     key: "lower-kabete",
@@ -133,7 +133,7 @@ window.SELLAM_COMMUNITIES = [
     image: "assets/images/Premium properties/Lower Kabete 5 Bedroom (2).jpeg",
     imageAlt: "Lower Kabete premium family residence",
     description: "Lower Kabete is known for spacious homes, leafy privacy, school access, and calm residential streets close to key city routes. It also offers elevated family estates, secure compounds, and a quiet premium setting close to established amenities.",
-    url: "communities/lower-kabete.html"
+    url: "communities/lower-kabete"
   },
   {
     key: "muthangari",
@@ -141,15 +141,15 @@ window.SELLAM_COMMUNITIES = [
     image: "assets/images/premium-page-grosvenor-towers.jpg",
     imageAlt: "Muthangari refined residential tower",
     description: "Muthangari offers a polished residential setting near Westlands, with apartments, townhomes, and excellent urban access.",
-    url: "communities/muthangari.html"
+    url: "communities/muthangari"
   },
   {
     key: "kitisuru",
     label: "Kitisuru",
-    image: "assets/images/hero-moon-valley.webp",
+    image: "assets/images/kitisuru community.jpeg",
     imageAlt: "Kitisuru serene green residential area",
     description: "Kitisuru brings quiet prestige, generous plots, private residences, and easy reach to schools, shopping, and diplomatic zones.",
-    url: "communities/kitisuru.html"
+    url: "communities/kitisuru"
   },
   {
     key: "spring-valley",
@@ -157,7 +157,7 @@ window.SELLAM_COMMUNITIES = [
     image: "assets/images/property-detail-arrival.jpg",
     imageAlt: "Spring Valley refined residential entry",
     description: "Spring Valley offers understated prestige, green compounds, quiet roads, and convenient access to Westlands and diplomatic areas.",
-    url: "communities/spring-valley.html"
+    url: "communities/spring-valley"
   },
   {
     key: "loresho",
@@ -165,7 +165,7 @@ window.SELLAM_COMMUNITIES = [
     image: "assets/images/Premium properties/Loresho 4 Bedroom Villas (10).jpeg",
     imageAlt: "Loresho premium villa community",
     description: "Loresho is a calm villa neighborhood with family homes, green surroundings, privacy, and quick access to Westlands corridors.",
-    url: "communities/loresho.html"
+    url: "communities/loresho"
   },
   {
     key: "riverside",
@@ -173,7 +173,7 @@ window.SELLAM_COMMUNITIES = [
     image: "assets/images/grosvenor.jpg",
     imageAlt: "Riverside modern residential tower",
     description: "Riverside blends apartment convenience, embassies, offices, dining, and central access in one of Nairobi's strongest addresses.",
-    url: "communities/riverside.html"
+    url: "communities/riverside"
   },
   {
     key: "nyali",
@@ -181,7 +181,7 @@ window.SELLAM_COMMUNITIES = [
     image: "assets/images/premium-page-seaview-tower.jpg",
     imageAlt: "Nyali coastal residential tower",
     description: "Nyali offers coastal apartments and homes close to beaches, shopping, schools, hospitality, and Mombasa's leisure lifestyle.",
-    url: "communities/nyali.html"
+    url: "communities/nyali"
   },
   {
     key: "vipingo",
@@ -189,7 +189,7 @@ window.SELLAM_COMMUNITIES = [
     image: "assets/images/diaspora-miami.webp",
     imageAlt: "Vipingo coastal resort-style residence",
     description: "Vipingo is shaped by coastal calm, resort-style living, golf, beaches, and long-term lifestyle investment appeal.",
-    url: "communities/vipingo.html"
+    url: "communities/vipingo"
   },
 
   /* -------------------------------------------------------------------------
@@ -205,7 +205,7 @@ window.SELLAM_COMMUNITIES = [
     image: "assets/images/premium-page-grosvenor-ngong.jpg",
     imageAlt: "Ngong residential estate",
     description: "Ngong offers spacious family estates and emerging light-industrial and commercial space, with growing infrastructure and easy access to Nairobi via Ngong Road.",
-    url: "communities/ngong.html"
+    url: "communities/ngong"
   },
   {
     key: "syokimau",
@@ -213,7 +213,7 @@ window.SELLAM_COMMUNITIES = [
     image: "assets/images/premium-page-dg-jkia-pool.jpg",
     imageAlt: "Syokimau residential and commercial development",
     description: "Syokimau combines convenient residential living with strong commercial and logistics appeal, thanks to its proximity to JKIA, the SGR terminus, and the Mombasa Road corridor.",
-    url: "communities/syokimau.html"
+    url: "communities/syokimau"
   },
   {
     key: "gigiri",
@@ -221,7 +221,7 @@ window.SELLAM_COMMUNITIES = [
     image: "assets/images/Silva Gigiri Residences Exterior.jpeg",
     imageAlt: "Gigiri diplomatic enclave residential development",
     description: "Gigiri is Nairobi's prestigious diplomatic enclave, home to the United Nations Headquarters, international embassies, Village Market, and Karura Forest — offering internationally branded residences and some of the city's most secure, established addresses.",
-    url: "communities/gigiri.html"
+    url: "communities/gigiri"
   }
 ];
 
