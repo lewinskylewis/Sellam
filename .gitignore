@@ -1,6 +1,9 @@
 # Claude Code local config
 .claude/
 
+# Installed dependencies (npm install regenerates this from package.json)
+node_modules/
+
 # Temporary files / design mockups
 tmp/
 

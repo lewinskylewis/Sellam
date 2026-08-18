@@ -1,8 +1,11 @@
 {
   "name": "sellam-website",
   "private": true,
-  "description": "SELLAM real estate website — static site plus the /api/enquiry Vercel Function that connects the enquiry form to Supabase and Resend.",
+  "description": "SELLAM real estate website — static site plus Vercel Functions: /api/enquiry (Supabase + Resend), /api/subscribe, and /api/property (server-renders property.html?id= so the correct listing is in the page on first load, no client-side placeholder swap).",
   "engines": {
     "node": ">=18.x"
+  },
+  "dependencies": {
+    "jsdom": "^25.0.1"
   }
 }

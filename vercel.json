@@ -1,6 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
+  "rewrites": [
+    { "source": "/property.html", "destination": "/api/property" }
+  ],
   "git": {
     "deploymentEnabled": {
       "main": true
