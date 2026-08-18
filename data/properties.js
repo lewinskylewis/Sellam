@@ -1696,10 +1696,10 @@ window.SELLAM_PROPERTIES = [
     status: "available",
     collection: "featured",
     title: "ENZO Residence",
-    summary: "5 & 6 bedroom luxury villas for sale in Kyuna, Westlands, featuring a grand double-volume lounge, en-suite bedrooms, a modern kitchen with island, smart home infrastructure, borehole water supply, and 24-hour gated security.",
+    summary: "ENZO Residence Riverside offers contemporary apartments in Nairobi with landscaped terraces, modern architecture, luxury amenities, secure parking, premium finishes, wellness facilities, and strong long-term investment potential in prestigious Riverside.",
     propertyType: "apartment",
     community: "riverside",
-    location: "Kyuna, Westlands, Nairobi",
+    location: "Riverside, Nairobi",
     letting: "sale",
     // Two floor plans in this development — see data/property-units.js for
     // how the rest of the site reads bedrooms/bathrooms/price off `units`.
