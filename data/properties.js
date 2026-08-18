@@ -1692,7 +1692,7 @@ window.SELLAM_PROPERTIES = [
     // id="5-" (no match), silently falling back to the generic "DG West"
     // placeholder property. Kept the "&" in `title` (safe — that's just
     // display text) but stripped it from the id-bearing slug/url below.
-    slug: "enzo-residence-kyuna-westlands",
+    slug: "enzo-residence-riverside",
     status: "available",
     collection: "featured",
     title: "ENZO Residence",
@@ -1725,11 +1725,11 @@ window.SELLAM_PROPERTIES = [
       
       ],
 
-    url: "property?id=enzo-residence-kyuna-westlands",
+    url: "property?id=enzo-residence-riverside",
     description: {
       body: "Positioned within the prestigious Riverside district, ENZO Residence introduces a new generation of contemporary urban living where architecture, nature, and lifestyle exist in perfect harmony. Rising gracefully above Riverside Park, the development has been carefully designed around open spaces, landscaped terraces, and elegant contemporary architecture that brings residents closer to both the city and nature. Every residence is thoughtfully planned to maximise comfort, natural light, and functionality, creating an address that offers exceptional living today while presenting strong long-term investment potential."
     },
-    featureLocation: "Kyuna, Westlands address with easy access to Westlands CBD, Sarit Centre, and Nairobi's key diplomatic and business districts.",
+    featureLocation: "Riverside, Nairobi address with easy access to Westlands CBD, Sarit Centre, and Nairobi's key diplomatic and business districts.",
      story: {
       rows: [
         { title: "Contemporary Architecture",
