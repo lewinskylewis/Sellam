@@ -217,14 +217,14 @@ window.SELLAM_PROPERTIES = [
     // NOTE: salePrice is identical for both units in the source data (both
     // 5,000,000) — flagging in case the 2-bedroom price was meant to differ.
     units: [
-      { unitType: "studio", bedrooms: 0, bathrooms: 1, salePrice: 2000000, rentPrice: null },
-      { unitType: "1-bedroom", bedrooms: 1, bathrooms: 3, salePrice: 13000000, rentPrice: null },
-      { unitType: "2-bedroom", bedrooms: 2, bathrooms: 2, salePrice: 20000000, rentPrice: null },
+      { unitType: "studio", bedrooms: 0, bathrooms: 1, salePrice: 13000000, rentPrice: null },
+      { unitType: "1-bedroom", bedrooms: 1, bathrooms: 3, salePrice: 19300000, rentPrice: null },
+      { unitType: "2-bedroom", bedrooms: 2, bathrooms: 2, salePrice: 30500000, rentPrice: null },
       
     ],
     features: ["pool", "garden", "security", "parking", "backup-generator", "gym", "wifi", "restaurant", "spa", "lounge" ],
     image: "assets/images/Silva Gigiri Residences Exterior.jpeg",
-    heroImage: "assets/images/Silva Gigiri Residences Living room.jpeg",
+    heroImage: "assets/images/Silva Gigiri Residences Exteriorpng (6).png",
     gallery: [
       "assets/images/Silva Gigiri Residences Gym (2).jpeg",
       "assets/images/Silva Gigiri Residences Living room.jpeg",
