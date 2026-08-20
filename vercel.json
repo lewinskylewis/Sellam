@@ -4,7 +4,8 @@
   "cleanUrls": true,
   "rewrites": [
     { "source": "/property.html", "destination": "/api/property" },
-    { "source": "/property", "destination": "/api/property" }
+    { "source": "/property", "destination": "/api/property" },
+    { "source": "/:slug", "destination": "/api/property?id=:slug" }
   ],
   "git": {
     "deploymentEnabled": {

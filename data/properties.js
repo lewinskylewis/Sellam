@@ -12,8 +12,10 @@
      • leasing-retail.html     -> propertyType "retail",     letting rent/both
      • leasing-industrial.html -> propertyType "industrial", letting rent/both
      • leasing-land.html       -> propertyType "land",       letting rent/both
-     • property.html?id=X      -> the single property-detail template, looked
-                                   up by `id` (query param) or `slug`
+     • /<slug> (clean URL)     -> vercel.json rewrites it to
+                                   /api/property?id=<slug>, which renders the
+                                   single property-detail template, looking
+                                   the property up by `id` or `slug`
 
    DATA ONLY — no logic lives here. This shape is also the future database
    row / API response, so an admin dashboard can write to it unchanged.
@@ -26,7 +28,9 @@
    FIELD REFERENCE  (all values in KES)
    ---------------------------------------------------------------------------
    id           Stable unique key. NEVER change once set (dashboard/routing).
-   slug         URL-friendly name; also the `?id=` value for property.html.
+   slug         URL-friendly name; this is what appears in the clean URL
+                (sellamre.com/<slug>) and is also accepted as the `?id=`
+                value on /api/property directly.
    status       "available" | "under-offer" | "sold" | "let"
    collection   "featured" | "exclusive"
    title        Display name.
@@ -105,7 +109,10 @@
                            role) — add as many real photos as you have.
                 Fewer than 8? Nothing breaks — images just repeat to fill
                 the story/wide/pair slots rather than showing blank space.
-   url          Link target for the card — property.html?id=<slug>
+   url          Link target for the card — clean slug only (matches `slug`
+                above), e.g. "cheval-riverside". A vercel.json rewrite maps
+                /<slug> -> /api/property?id=<slug>, so this must NEVER be
+                prefixed with "property?id=" or the link 404s.
    description  LONG marketing copy for the detail page's intro paragraph(s)
                 — this is the lengthy version. Separate blank lines start a
                 new paragraph. Don't reuse `summary` here or vice versa.
@@ -285,7 +292,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/Cheval Riverside Swimming pool (2).jpeg",
       "assets/images/Cheval Riverside Exterior (2).jpeg"
     ],
-    url: "property?id=cheval-riverside",
+    url: "cheval-riverside",
     description: "A New Landmark on Riverside: Inspired by the timeless elegance of luxury yachts, Cheval Riverside introduces a distinctive collection of contemporary residences within one of Nairobi's most prestigious residential addresses. Combining refined architecture, thoughtfully designed interiors, and hospitality-inspired living, the development creates an exceptional environment for homeowners, expatriates, and investors seeking quality, convenience, and enduring value. Positioned along Riverside Drive, residents enjoy immediate access to Westlands, the CBD, Gigiri, international schools, diplomatic missions, premier shopping destinations, and Nairobi's leading business districts, making Cheval Riverside both an outstanding place to live and a compelling long-term investment.",
     featureLocation: "Riverside address near international schools, private clubs, green compounds, and lifestyle destinations.",
     story: {
@@ -351,7 +358,7 @@ window.SELLAM_PROPERTIES = [
         "assets/images/Diplomat Residences Lounge.jpeg"
       ],
 
-    url: "property?id=diplomat-residences",
+    url: "diplomat-residences",
     description: "Executive Living, Reimagined: Diplomat Residences introduces a new benchmark for executive living along Peponi Road, where the sophistication of a luxury hotel meets the comfort and permanence of home. Developed by Wonder Properties and professionally managed with a hospitality-first approach, the development has been conceived for professionals, diplomats, expatriates, and investors seeking an exceptional residential experience in one of Nairobi's most established addresses. Positioned moments from Westgate Mall, Sarit Centre, leading international schools, hospitals, diplomatic missions, and the Westlands business district, Diplomat Residences offers a lifestyle defined by convenience, connectivity, and enduring value.",
     featureLocation: "2 Minutes to Westgate Shopping Mall, 3 Minutes to Sarit Centre, 5 Minutes to Westlands CBD, Near The Oval, Delta Corner & major corporate offices, Close to Aga Khan University Hospital",
     story: {
@@ -424,7 +431,7 @@ window.SELLAM_PROPERTIES = [
 
     
     ],
-    url: "property?id=gaia-brookside-forest-nairobi",
+    url: "gaia-brookside-forest-nairobi",
     description: "Nature-Inspired Family Living: Nestled along the leafy Brookside Gardens Drive in Westlands, Gaia Brookside Forest introduces a new vision of contemporary family living where architecture, nature, and wellness exist in harmony. Developed by Wonder Properties, the project has been thoughtfully designed for homeowners seeking expansive living spaces, refined finishes, and a lifestyle centred on comfort, privacy, and community.",
     featureLocation: "Karen location with proximity to schools, shopping, clubs, hospitals, and calm residential streets.",
     story: {
@@ -490,7 +497,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/Hephé Palace Bedroom.jpeg",
       "assets/images/Hephé Palace Bedroom (2).jpeg"
     ],
-    url: "property?id=hephé-palace",
+    url: "hephé-palace",
     description: "Modern Grandeur. Lasting Value.Rising in the heart of Westlands, Hephé Palace is a landmark residential development inspired by timeless architecture and contemporary luxury. Designed around light, space, and refined living, the development brings together elegant residences, exceptional lifestyle amenities, and one of Nairobi's most connected addresses to create a destination for homeowners and investors alike. Positioned just moments from Westgate Mall, Sarit Centre, GTC, and Karura Forest, Hephé Palace places the city's finest conveniences within easy reach.",
     featureLocation: "Lower Kabete address with access to Westlands, schools, private clubs, and established family neighborhoods.",
     /* Bespoke narrative content, hand-authored for this property — preserved
@@ -553,7 +560,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/Amethyst Residences Lounge.jpeg",
       "assets/images/Amethyst Residences Exterior (4).jpeg"
     ],
-    url: "property?id=amethyst-residences",
+    url: "amethyst-residences",
     description: {
       title: "The Future of Kilimani Living.",
       body: "Positioned along Maalim Juma Road in the heart of Kilimani, Amethyst introduces a refined collection of contemporary residences designed for modern city living. Developed with a focus on timeless architecture, intelligent design, and everyday functionality, Amethyst creates a residential experience where elegant spaces, premium amenities, and exceptional connectivity come together in one of Nairobi's most established neighbourhoods. Whether purchasing your first home or expanding your investment portfolio, Amethyst offers a compelling balance of lifestyle and long-term value."
@@ -614,7 +621,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/Dg West (13).jpeg"
       ],
 
-    url: "property?id=dg-west",
+    url: "dg-west",
     description: {
       title: "Where Investment Meets Lifestyle:",
       body: "Situated along the vibrant Sports Road in the heart of Westlands, DG West introduces a new generation of luxury hotel and residential apartments designed for contemporary city living. Developed by Reportage Kenya, the landmark tower combines sophisticated residences, premium hospitality services, and world-class lifestyle amenities in one of Nairobi's most established commercial and residential districts. Whether purchasing a city residence or an income-generating investment, DG West offers a compelling opportunity in one of East Africa's fastest-growing property markets."
@@ -677,7 +684,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/DG JKIA boardroom.jpeg"
       ],
 
-    url: "property?id=dg-jkia-hotel-apartments",
+    url: "dg-jkia-hotel-apartments",
     description: {
       title: "Hospitality Investment, Redefined:",
       body: "Positioned directly opposite Jomo Kenyatta International Airport along Mombasa Road, DG JKIA introduces a new generation of fully furnished and professionally managed hotel apartments designed for investors seeking consistent returns without the demands of day-to-day property management. Developed through a collaboration between SSS Developers and Reportage Properties, the development combines contemporary residences, premium hospitality services, and an unrivalled airport location to create one of Nairobi's most compelling investment opportunities. With immediate access to the Nairobi Expressway, SGR Terminus, and key business districts, DG JKIA is strategically placed to serve business travellers, airline crews, diplomats, transit passengers, and international visitors."
@@ -757,7 +764,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/4 Bedroom Luxury Villas- Runda (3).jpeg"
       ],
 
-    url: "property?id=4-bedroom-luxury-villas-runda",
+    url: "4-bedroom-luxury-villas-runda",
     description: {
       body: "Nestled along Tala Road in the heart of Runda, this exclusive collection of four luxury villas offers refined living within one of Nairobi's most prestigious and secure residential neighbourhoods. Bordering the tranquil Karura Forest and positioned within the UN Blue Zone, the development combines privacy, architectural excellence, and exceptional connectivity, just minutes from diplomatic missions, international schools, premier shopping destinations, and world-class healthcare facilities."
     },
@@ -819,7 +826,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images6-bedroom-fully-en-suite-karen.jpeg"
       ],
 
-    url: "property?id=6-bedroom-fully-en-suite-karen",
+    url: "6-bedroom-fully-en-suite-karen",
     description: {
       body: "Set within one of Karen's established gated communities, this elegant six-bedroom residence offers generous family living in a secure and tranquil environment. Designed with spacious interiors, quality finishes, and functional living spaces, the home provides an exceptional lifestyle for families, diplomats, and corporate executives seeking comfort, privacy, and convenience in one of Nairobi's most desirable residential addresses."
     },
@@ -878,7 +885,7 @@ window.SELLAM_PROPERTIES = [
       
       ],
 
-    url: "property?id=5-bedroom-family-residence",
+    url: "5-bedroom-family-residence",
     description: {
       body: "Nestled within the prestigious suburb of Runda, this distinguished family residence presents a rare opportunity to own an exceptional home in one of Nairobi's most exclusive addresses. Set on a beautifully landscaped half-acre, the property combines elegant architecture, expansive living spaces, and modern comforts within a private and secure environment, just minutes from Gigiri and the UN diplomatic precinct."
     },
@@ -932,7 +939,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/Thigiri.jpeg"
     ],
 
-    url: "property?id=1-2-acre-land-thigiri-groove",
+    url: "1-2-acre-land-thigiri-groove",
     description: {
       body: "✅Ready title, Slightly sloppy, Excellent drainage,  Easily Accessible, Proximity to social amenities like the New Muthaiga Mall"
     },
@@ -966,7 +973,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/Prime Old kitisuru 1.1 acre land (3).jpeg"      
     ],
 
-    url: "property?id=prime-old-kitisuru-1-1-acre-land",
+    url: "prime-old-kitisuru-1-1-acre-land",
     description: {
       body: "Set within the quiet, established Thigiri Groove neighbourhood bordering Runda, this 1.2-acre plot offers a rare opportunity to secure a generous, ready-to-build parcel in one of Nairobi's most sought-after residential pockets, close to the UN Blue Zone, diplomatic missions, and international schools."
     },
@@ -1000,7 +1007,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/1 acre thigiri ridge.jpeg"
     ],
 
-    url: "property?id=1-2-acre-land-thigiri-ridge",
+    url: "1-2-acre-land-thigiri-ridge",
     description: {
       body: "✅Ready title, Slightly sloppy, Excellent drainage,  Easily Accessible, Proximity to social amenities like the New Muthaiga Mall"
     },
@@ -1051,7 +1058,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/5 & 6 Bedroom Luxury Villas (5).jpeg"
       ],
 
-    url: "property?id=5-6-bedroom-luxury-villas",
+    url: "5-6-bedroom-luxury-villas",
     description: {
       body: "Set in the leafy, established neighbourhood of Kyuna, Westlands, these 5 & 6 bedroom luxury villas offer a rare opportunity to own an exceptional home in one of Nairobi's most sought-after residential pockets. Each residence combines elegant architecture, expansive living spaces, and modern comforts within a private, secure environment, just minutes from Westlands' business and lifestyle amenities."
     },
@@ -1110,7 +1117,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/Premium properties/RundaMansion4.jpeg",
       "assets/images/Premium properties/RundaMansion3.jpeg"
     ],
-    url: "property?id=4-bedroom-maisonette-runda-nairobi",
+    url: "4-bedroom-maisonette-runda-nairobi",
     description: "This 4 Bedroom Maisonette in Runda presents a private residential address with generous rooms, refined finishes, and a calm setting within one of Nairobi's most established neighborhoods. The home is designed for families and discerning buyers who value space, security, privacy, and access to diplomatic, school, and lifestyle conveniences. The property combines elegant indoor living with outdoor leisure spaces, making it suitable for entertaining, daily family life, and long-term premium investment in Runda.",
     featureLocation: "Runda address near diplomatic zones, international schools, private clubs, and premium family neighborhoods.",
     story: {
@@ -1158,7 +1165,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/Premium properties/ModernVillas-Lavington11.jpeg",
       "assets/images/Premium properties/ModernVillas-Lavington12.jpeg"
     ],
-    url: "property?id=modern-villas-lavington",
+    url: "modern-villas-lavington",
     description: "Modern Villas in Lavington offer a composed residential experience with contemporary architecture, bright interiors, and practical family planning. The address is selected for buyers seeking privacy, strong connectivity, and a polished urban lifestyle close to schools, shopping, and Nairobi's core neighborhoods. Each residence is presented for clients who want refined finishes, secure living, and the convenience of one of Nairobi's most desirable residential suburbs.",
     featureLocation: "Lavington location with access to schools, malls, restaurants, hospitals, and key city routes.",
     story: {
@@ -1211,7 +1218,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/Premium properties/OSTREA Karen Villas (16).jpeg",
       "assets/images/Premium properties/OSTREA Karen Villas (17).jpeg"
     ],
-    url: "property?id=ostrea-villas-karen-nairobi",
+    url: "ostrea-villas-karen-nairobi",
     description: "Ostrea Villas in Karen bring signature villa living to a serene, green residential setting. The homes are crafted for privacy, comfort, and everyday elegance, with generous planning and finishes that support both family life and refined entertaining. Positioned in Karen, the property gives buyers access to leafy surroundings, private schools, lifestyle amenities, and long-term residential value in one of Nairobi's most established addresses.",
     featureLocation: "Karen address near international schools, private clubs, green compounds, and lifestyle destinations.",
     story: {
@@ -1256,7 +1263,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/Premium properties/Naserian Karen (8).jpeg",
       "assets/images/Premium properties/Naserian Karen (9).jpeg"
     ],
-    url: "property?id=naserian-karen-nairobi",
+    url: "naserian-karen-nairobi",
     description: "Naserian in Karen is a premium residential opportunity shaped around space, privacy, and composed everyday living. Its setting suits buyers who want a quiet, established address with elegant homes and strong lifestyle access. The property is presented for families, investors, and homeowners looking for a refined Karen residence with secure surroundings and long-term value.",
     featureLocation: "Karen location with proximity to schools, shopping, clubs, hospitals, and calm residential streets.",
     story: {
@@ -1301,7 +1308,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/Premium properties/Lower Kabete 5 Bedroom (7).jpeg",
       "assets/images/Premium properties/Lower Kabete 5 Bedroom (8).jpeg"
     ],
-    url: "property?id=5-bedroom-mansion-lower-kabete",
+    url: "5-bedroom-mansion-lower-kabete",
     description: "This 5 bed all en-suite, smart home has all the luxury a family needs for easy living. The large living room features curtain, light, and security automation that can be controlled from anywhere with WIFI connectivity, for complete peace of mind, alongside an outdoor jacuzzi for 8 people.",
     featureLocation: "Lower Kabete address with access to Westlands, schools, private clubs, and established family neighborhoods.",
     story: {
@@ -1345,7 +1352,7 @@ window.SELLAM_PROPERTIES = [
     features: ["pool", "garden", "gym", "security", "parking"],
     image: "assets/images/hero-moon-valley.webp",
     gallery: ["assets/images/hero-moon-valley.webp"],
-    url: "property?id=moon-valley-nyari",
+    url: "moon-valley-nyari",
     description: "Moon Valley brings rare off-market homes to Nyari, pairing privacy, elegant architecture, strong security, and a carefully selected residential environment.",
     featureLocation: "Nyari address with premium privacy, strong access, and proximity to diplomatic residential corridors.",
     listedDate: "2026-04-21"
@@ -1369,7 +1376,7 @@ window.SELLAM_PROPERTIES = [
     features: ["gym", "wifi", "security", "parking", "backup-generator"],
     image: "assets/images/grosvenor.jpg",
     gallery: ["assets/images/grosvenor.jpg"],
-    url: "property?id=grosvenor-westlands",
+    url: "grosvenor-westlands",
     description: "A prestigious Westlands location close to offices, restaurants, retail and lifestyle amenities.",
     featureLocation: "Prestigious Westlands location close to offices, restaurants, retail, and lifestyle amenities.",
     listedDate: "2026-05-06"
@@ -1428,7 +1435,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/GTC Office Tower (12).jpeg",
       "assets/images/GTC Office Tower (7).jpeg"
       ],
-    url: "property?id=gtc-office-tower",
+    url: "gtc-office-tower",
     description: "Position your business at one of East Africa's most distinguished commercial addresses. GTC Office Tower offers world-class Grade A office spaces within Nairobi's premier mixed-use development, combining contemporary architecture, intelligent workplace design, and exceptional business amenities. Whether acquiring office space or leasing for immediate occupation, GTC provides an environment designed for productivity, collaboration, and long-term business growth.",
     story: {
       rows: [
@@ -1491,7 +1498,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/The Mandrake (4).jpeg",
     
       ],
-    url: "property?id=the-mandrake",
+    url: "the-mandrake",
     description: "Position your business within one of Nairobi's newest and most distinctive Grade A commercial developments. The Mandrake offers premium office spaces designed around sustainability, flexibility, and workplace wellbeing, combining contemporary architecture, intelligent building systems, and internationally recognised environmental standards. Whether establishing a regional headquarters or expanding your business, The Mandrake provides an exceptional environment for productivity, collaboration, and long-term growth.",
     story: {
       rows: [
@@ -1535,7 +1542,7 @@ window.SELLAM_PROPERTIES = [
     features: ["wifi", "parking", "security"],
     image: "assets/images/premium-page-dg-west-tower.jpg",
     gallery: ["assets/images/premium-page-dg-west-tower.jpg"],
-    url: "property?id=riverside-business-park-office",
+    url: "riverside-business-park-office",
     description: "A flexible office floor in a well-managed Kilimani business park, suited to growing teams that need a professional, secure working environment.",
     featureLocation: "Kilimani location with quick access to Yaya Centre, Adlife Plaza, and the wider Kilimani/Upper Hill business corridor.",
     listedDate: "2026-05-19"
@@ -1559,7 +1566,7 @@ window.SELLAM_PROPERTIES = [
     features: ["wifi", "parking", "security"],
     image: "assets/images/grosvenor.jpg",
     gallery: ["assets/images/grosvenor.jpg"],
-    url: "property?id=high-street-retail-unit-westlands",
+    url: "high-street-retail-unit-westlands",
     description: "A high-visibility retail unit on a busy Westlands street front, ideal for a flagship store, showroom, or high-footfall food and beverage concept.",
     featureLocation: "Westlands high street with heavy pedestrian and vehicle traffic, close to malls, offices, and residential density.",
     listedDate: "2026-05-24"
@@ -1583,7 +1590,7 @@ window.SELLAM_PROPERTIES = [
     features: ["wifi", "parking", "security", "backup-generator"],
     image: "assets/images/premium-page-grosvenor-towers.jpg",
     gallery: ["assets/images/premium-page-grosvenor-towers.jpg"],
-    url: "property?id=kilimani-mall-retail-space",
+    url: "kilimani-mall-retail-space",
     description: "A ground-floor retail space within an established Kilimani shopping mall, benefiting from shared footfall, parking, and security.",
     featureLocation: "Kilimani address inside an active retail mall with consistent shopper traffic and shared amenities.",
     listedDate: "2026-05-29"
@@ -1607,7 +1614,7 @@ window.SELLAM_PROPERTIES = [
     features: ["parking", "security", "backup-generator"],
     image: "assets/images/premium-kitchen.webp",
     gallery: ["assets/images/premium-kitchen.webp"],
-    url: "property?id=syokimau-distribution-warehouse",
+    url: "syokimau-distribution-warehouse",
     description: "A large distribution warehouse near JKIA and the Standard Gauge Railway terminus, with generous loading access and yard space for logistics operations.",
     featureLocation: "Syokimau location with fast access to JKIA, the Mombasa Road corridor, and the SGR freight terminus.",
     listedDate: "2026-06-03"
@@ -1631,7 +1638,7 @@ window.SELLAM_PROPERTIES = [
     features: ["parking", "security"],
     image: "assets/images/Premium properties/CROWN JEWEL (5).jpeg",
     gallery: ["assets/images/Premium properties/CROWN JEWEL (5).jpeg"],
-    url: "property?id=ngong-road-light-industrial-unit",
+    url: "ngong-road-light-industrial-unit",
     description: "A light industrial and workshop unit along the Ngong Road corridor, suited to small-scale manufacturing, storage, or a trade workshop.",
     featureLocation: "Ngong Road address with straightforward access for goods vehicles and proximity to Nairobi's southern industrial belt.",
     listedDate: "2026-06-08"
@@ -1655,7 +1662,7 @@ window.SELLAM_PROPERTIES = [
     features: ["security"],
     image: "assets/images/buy/land.jpg",
     gallery: ["assets/images/buy/land.jpg"],
-    url: "property?id=karen-commercial-land-plot",
+    url: "karen-commercial-land-plot",
     description: "A fenced, commercially-zoned land plot in Karen available on a long-term lease, suited to a showroom, storage yard, or purpose-built development.",
     featureLocation: "Karen address with good road access and a quiet, established commercial and residential setting.",
     listedDate: "2026-06-13"
@@ -1679,7 +1686,7 @@ window.SELLAM_PROPERTIES = [
     features: ["security"],
     image: "assets/images/buy/developments.jpg",
     gallery: ["assets/images/buy/developments.jpg"],
-    url: "property?id=ngong-development-land",
+    url: "ngong-development-land",
     description: "An open land plot in Ngong available for lease, suited to temporary yard use, agribusiness, or a phased development project.",
     featureLocation: "Ngong location with growing infrastructure and easy access to Nairobi via Ngong Road.",
     listedDate: "2026-06-18"
@@ -1725,7 +1732,7 @@ window.SELLAM_PROPERTIES = [
       
       ],
 
-    url: "property?id=enzo-residence-riverside",
+    url: "enzo-residence-riverside",
     description: {
       body: "Positioned within the prestigious Riverside district, ENZO Residence introduces a new generation of contemporary urban living where architecture, nature, and lifestyle exist in perfect harmony. Rising gracefully above Riverside Park, the development has been carefully designed around open spaces, landscaped terraces, and elegant contemporary architecture that brings residents closer to both the city and nature. Every residence is thoughtfully planned to maximise comfort, natural light, and functionality, creating an address that offers exceptional living today while presenting strong long-term investment potential."
     },
@@ -1794,7 +1801,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/DG JKIA boardroom.jpeg"
       ],
 
-    url: "property?id=dg-jkia-hotel-apartments",
+    url: "dg-jkia-hotel-apartments",
     description: {
       title: "Hospitality Investment, Redefined:",
       body: "Positioned directly opposite Jomo Kenyatta International Airport along Mombasa Road, DG JKIA introduces a new generation of fully furnished and professionally managed hotel apartments designed for investors seeking consistent returns without the demands of day-to-day property management. Developed through a collaboration between SSS Developers and Reportage Properties, the development combines contemporary residences, premium hospitality services, and an unrivalled airport location to create one of Nairobi's most compelling investment opportunities. With immediate access to the Nairobi Expressway, SGR Terminus, and key business districts, DG JKIA is strategically placed to serve business travellers, airline crews, diplomats, transit passengers, and international visitors."
