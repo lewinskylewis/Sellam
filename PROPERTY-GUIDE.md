@@ -47,7 +47,7 @@ values are allowed.
 | Field | Type | Required | What it controls |
 |---|---|---|---|
 | `id` | string | ✅ | Stable unique key, e.g. `"sl-017"`. **Never change this once set** — it's what the enquiry form and the future dashboard use to identify the property. Just increment the number for new properties. |
-| `slug` | string | ✅ | URL-friendly name, e.g. `"the-oakwood-villa"`. Used in the property's link: `property.html?id=<slug>`. Use lowercase, hyphens, no spaces. |
+| `slug` | string | ✅ | URL-friendly name, e.g. `"the-oakwood-villa"`. This is the property's clean URL: `sellamre.com/<slug>` (a vercel.json rewrite maps it to `property.html?id=<slug>` behind the scenes). Use lowercase, hyphens, no spaces. |
 | `status` | string | ✅ | `"available"` \| `"under-offer"` \| `"sold"` \| `"let"`. Anything other than `"available"` or `"under-offer"` is **hidden from every listing page automatically** (see §6). |
 | `collection` | string | ✅ | `"featured"` or `"exclusive"`. Controls the Buy/Premium page vs. the Exclusive page. |
 | `title` | string | ✅ | The property's display name. |
@@ -64,7 +64,7 @@ values are allowed.
 | `features` | array of strings | ✅ | Any of: `wifi`, `pool`, `gym`, `backup-generator`, `parking`, `security`, `garden`. Can be empty `[]`. |
 | `image` | string | ✅ | Card thumbnail — **also** used as the detail page's hero banner. Pick a landscape photo; the hero is a wide banner, not a portrait crop. Deliberately independent from `gallery[0]` — see §2.4. |
 | `gallery` | array of strings | ✅ | Paths to every photo for the detail page's carousel + story sections. Any length works, 1 to 20+ — no hard cap, and nothing breaks or shows a blank placeholder with fewer than 20 (see §2.4). |
-| `url` | string | ✅ | Always `"property.html?id=<slug>"` (matching the `slug` field above). Don't point this anywhere else. |
+| `url` | string | ✅ | Always just `"<slug>"` (matching the `slug` field above, no `property.html?id=` prefix — that prefix 404s, since the clean-URL rewrite is what resolves it). Don't point this anywhere else. |
 | `description` | string \| `{title, body}` | ✅ | **Long** marketing copy for the detail page's intro paragraph(s). This is the lengthy version — don't reuse `summary` here or vice versa. See §2.4b. Plain string is the common case (no bold lead-in). Use `{ title: "...", body: "..." }` instead when the intro should open with a short bold title, e.g. `{ title: "The Future of Kilimani Living.", body: "Positioned along Maalim Juma Road..." }` — the title renders bold, inline, at the start of the first paragraph; `body` still supports multiple paragraphs (blank-line separated) exactly like a plain string does. |
 | `featureLocation` | string | ✅ | One sentence about the location, shown in the blue features banner on the detail page (e.g. *"Karen address near international schools, private clubs, green compounds, and lifestyle destinations."*). |
 | `story` | object | optional | Bespoke narrative content for the detail page's four "area" sections (kitchen, bedrooms, lifestyle, location). Omit it entirely for auto-generated text — see §2.3. The auto-generated text is automatically worded for a home when `propertyType` is residential, and worded for a commercial space (no "bedroom"/"buyers" language) when it's `office`/`retail`/`industrial`/`land`/`commercial`. |
@@ -308,7 +308,7 @@ the flat `bedrooms`/`bathrooms`/`salePrice`/`rentPrice` fields as before —
      plan, a `units` array instead (see §2.5).
    - `image` (landscape — this is also the detail page's hero), `gallery`
      (1 to 20+ photos, `image` again does not need to be repeated in here —
-     see §2.4), `url` (url = `"property.html?id=" + slug`).
+     see §2.4), `url` (url = `slug`, no prefix).
    - `summary` (short, for cards) **and** `description` (long, for the detail
      page) — these are two different fields, see §2.4b. `featureLocation`.
    - `listedDate` (today's date).
@@ -321,7 +321,7 @@ the flat `bedrooms`/`bathrooms`/`salePrice`/`rentPrice` fields as before —
    - On the Buy/Premium page, if `letting` is `"sale"` or `"both"` and
      `collection` is `"featured"`.
    - On the Exclusive page, if `collection` is `"exclusive"`.
-   - At its own detail page: `property.html?id=<slug>`.
+   - At its own clean-URL detail page: `sellamre.com/<slug>`.
 
 ### Minimal copy-paste template
 
@@ -344,7 +344,7 @@ the flat `bedrooms`/`bathrooms`/`salePrice`/`rentPrice` fields as before —
   features: ["pool", "security", "parking"],
   image: "assets/images/example-exterior.jpeg",
   gallery: ["assets/images/example-1.jpeg", "assets/images/example-2.jpeg"],
-  url: "property.html?id=example-property-slug",
+  url: "example-property-slug",
   description: "A longer marketing paragraph (or several) about the property, for the detail page's intro.",
   featureLocation: "One sentence about the location's access and lifestyle.",
   listedDate: "2026-07-21"
@@ -489,7 +489,9 @@ line shows the range across units (e.g. *"1-2 Bed"*) instead of one count.
 `property.html` is a **single template** used by every property. It works out
 *which* property to show like this, in order:
 
-1. `?id=<slug>` in the URL (e.g. `property.html?id=grosvenor-karen`).
+1. `?id=<slug>` in the URL — normally arrives via the clean URL
+   `sellamre.com/<slug>` (e.g. `sellamre.com/grosvenor-karen`), which
+   vercel.json rewrites to `property.html?id=<slug>` server-side.
 2. `data-property-key="<slug>"` on the page's `<body>` tag (used by the handful of
    properties that still have their own standalone HTML file, e.g.
    `properties/5-bedroom-mansion-lower-kabete.html` — for backwards-compatible
@@ -523,8 +525,8 @@ predating the price table — they don't have `[data-price-rows]`, so
 live-syncs from `data/properties.js`. Their static placeholder text still
 shows; it just won't update if you change the price in the inventory. Don't
 add new properties this way (see the note at the end of this section) — if
-one of these needs updating, migrate it to `property.html?id=<slug>` instead
-of patching the standalone file.
+one of these needs updating, migrate it to the inventory (clean URL
+`sellamre.com/<slug>`) instead of patching the standalone file.
 
 It also picks the enquiry section's heading based on `letting`: a pure
 `"rent"` listing gets **"Enquire To Lease Now"**; anything else (`"sale"` or
@@ -751,8 +753,9 @@ Double-check the exact spelling against §2.1/§2.2 — these are case-sensitive
 must match exactly, no plurals, no extra spaces.
 
 **"The detail page shows the wrong content, or generic placeholder text."**
-Confirm the `slug` in `data/properties.js` matches the `id=` in the URL you're
-visiting, and that `url` is set to `"property.html?id=<that same slug>"`.
+Confirm the `slug` in `data/properties.js` matches the URL you're visiting
+(`sellamre.com/<slug>`), and that `url` is set to `"<that same slug>"` with
+no `property.html?id=` prefix.
 
 **"I want a different price format (e.g. USD)."**
 Don't — the whole system (search filtering, price-range dropdowns, card display)
