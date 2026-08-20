@@ -233,7 +233,23 @@ window.SELLAM_PROPERTIES = [
       "assets/images/Silva Gigiri Residences Outdoors.jpeg",
       "assets/images/Silva Gigiri Residences Washrooms.jpeg",
       "assets/images/Silva Gigiri Residences Swimming pool.jpeg",
-      "assets/images/property-detail-gym.jpg"
+      "assets/images/property-detail-gym.jpg",
+      "assets/images/Silva Gigiri Residences Exterior (2).jpeg",
+      "assets/images/Silva Gigiri Residences Exterior (3).jpeg",
+      "assets/images/Silva Gigiri Residences Exterior (4).jpeg",
+      "assets/images/Silva Gigiri Residences Exterior (5).jpeg",
+      "assets/images/Silva Gigiri Residences Exterior (6).jpeg",
+      "assets/images/Silva Gigiri Residences Exterior (7).jpeg",
+      "assets/images/Silva Gigiri Residences Living room (2).jpeg",
+      "assets/images/Silva Gigiri Residences Living room (3).jpeg",
+      "assets/images/Silva Gigiri Residences Living room (4).jpeg",
+      "assets/images/Silva Gigiri Residences Bedroom (2).jpeg",
+      "assets/images/Silva Gigiri Residences Bedroom (3).jpeg",
+      "assets/images/Silva Gigiri Residences Bedroom (4).jpeg",
+      "assets/images/Silva Gigiri Residences Kitchen (2).jpeg",
+      "assets/images/Silva Gigiri Residences Gym.jpeg",
+      "assets/images/Silva Gigiri Residences (5).jpeg",
+      "assets/images/Silva Gigiri Residences (16).jpeg"
       ],
 
     url: "silva-gigiri-residences",
@@ -1767,74 +1783,5 @@ window.SELLAM_PROPERTIES = [
     ]
   },
 
-  {
-    id: "sl-008",
-    slug: "dg-jkia-hotel-apartments",
-    status: "available",
-    collection: "featured",
-    title: " DG JKIA Hotel Apartments",
-    summary: "DG JKIA offers fully furnished hotel apartments near Jomo Kenyatta International Airport, Nairobi, featuring professional management, premium amenities, strong occupancy potential, hassle-free rental income, and returns of up to 25%.",
-    propertyType: "apartment",
-    community: "syokimau",
-    location: "JKIA | Mombasa Road",
-    letting: "sale",
-    // Two floor plans in this development — see data/property-units.js for
-    // how the rest of the site reads bedrooms/bathrooms/price off `units`.
-    // NOTE: salePrice is identical for both units in the source data (both
-    // 5,000,000) — flagging in case the 2-bedroom price was meant to differ.
-    units: [
-      { unitType: "studio", bedrooms: 0, bathrooms: 1, salePrice: 11700000, rentPrice: null },
-      { unitType: "1-bedroom", bedrooms: 1, bathrooms: 3, salePrice: 13000000, rentPrice: null },
-      
-    ],
-    
-    image: "assets/images/DG JKIA swimming pool.jpeg",
-    heroImage: "assets/images/DG JKIA Lounge (6).jpeg",
-    gallery: [
-      "assets/images/DG JKIA Lounge (3).jpeg",
-      "assets/images/DG JKIA Studio.jpeg",
-      "assets/images/DG JKIA (8).jpeg",
-      "assets/images/DG JKIA Lounge (5).jpeg",
-      "assets/images/DG JKIA Salon.jpeg",
-      "assets/images/DG JKIA Gym (2).jpeg",
-      "assets/images/DG JKIA exterior (3).jpeg",
-      "assets/images/DG JKIA boardroom.jpeg"
-      ],
-
-    url: "dg-jkia-hotel-apartments",
-    description: {
-      title: "Hospitality Investment, Redefined:",
-      body: "Positioned directly opposite Jomo Kenyatta International Airport along Mombasa Road, DG JKIA introduces a new generation of fully furnished and professionally managed hotel apartments designed for investors seeking consistent returns without the demands of day-to-day property management. Developed through a collaboration between SSS Developers and Reportage Properties, the development combines contemporary residences, premium hospitality services, and an unrivalled airport location to create one of Nairobi's most compelling investment opportunities. With immediate access to the Nairobi Expressway, SGR Terminus, and key business districts, DG JKIA is strategically placed to serve business travellers, airline crews, diplomats, transit passengers, and international visitors."
-    },
-    featureLocation: "2 Minutes to Westgate Shopping Mall, 3 Minutes to Sarit Centre, 5 Minutes to Westlands CBD, Near The Oval, Delta Corner & major corporate offices, Close to Aga Khan University Hospital",
-    story: {
-      rows: [
-        { title: "Fully Furnished Contemporary Residences", 
-          body: "Every apartment is delivered fully furnished and serviced, allowing investors to begin generating income without the need for additional fit-out. Available in four intelligently designed layouts, each residence combines efficient planning, premium finishes, private balconies, integrated wardrobes, double-glazed windows, high-speed internet connectivity, and modern interiors designed for short and extended stays." },
-        { title: "Designed for Effortless Living", 
-          body: "Every residence has been thoughtfully equipped to meet international hospitality standards. Contemporary kitchens, quality imported sanitary ware, gypsum ceilings, solar-heated water systems, and elegant finishes create comfortable spaces that balance functionality with modern design, ensuring a seamless experience for every guest." },
-        { title: "A Professionally Managed Hospitality Experience", 
-          body: "DG JKIA has been conceived as a hospitality-led investment rather than a conventional apartment development. Experienced hotel operators oversee the day-to-day management of the property, allowing owners to benefit from a professionally operated rental programme while enjoying hassle-free ownership. The pooled income model is designed to maximise occupancy and deliver consistent long-term performance." }
-        
-      ]
-    },
-    listedDate: "2026-07-22",
-    featureHighlights: [
-  { title: "Security:", text: "24-hour security with controlled access" },
-  { title: "Connectivity:", text: "High-speed Wi-Fi, High-speed elevators" },
-  { title: "Community:", text: "Bar & lounge and Landscaped gardens" },
-  { title: "Amenities:", text: "Outdoor swimming pool, Hotel reception & concierge,Elegant arrival lobby" },
-  { title: "Wellness:", text: "Rooftop yoga garden,Fully equipped fitness centre, Spa, massage rooms, steam & sauna" }
-],
-    closingParagraphs: "Located opposite Hilton Garden Inn JKIA, DG JKIA enjoys one of Nairobi's most strategic addresses. Residents and guests are only minutes from JKIA, the Nairobi Expressway, the SGR Terminus, Nairobi National Park, Capital Centre, Upper Hill, and Westlands, making the development an ideal base for international travellers and business professionals alike.\n\nDG JKIA has been purpose-built for investors seeking stable, professionally managed hospitality income. The combination of a globally connected airport location, fully furnished residences, hotel management, and a growing demand for quality accommodation places the development in a strong position for sustained occupancy and long-term capital growth. According to the developer, the project is structured to target up to 23% net ROI, while Reportage highlights investment potential of 25%+, reflecting the project's hospitality-focused model.",
-    // Flexible off-plan payment schedule — see paymentPlan field reference
-    // above. OPTIONAL: most properties omit this entirely.
-    paymentPlan: [
-      { percent: 15, label: "Reservation" },
-      { percent: 15, label: "Upon Sale Agreement" },
-      { percent: 50, label: "During construction (spread over 18 months)" },
-      { percent: 20, label: "Before or upon handover" },
-      { percent: 0, label: "Interest" }
-    ]
-  },
+  
 ];
