@@ -229,7 +229,7 @@ window.SELLAM_PROPERTIES = [
       "assets/images/property-detail-gym.jpg"
       ],
 
-    url: "property?id=silva-gigiri-residences",
+    url: "silva-gigiri-residences",
     description: "An Internationally Branded Residential Sanctuary. Set within Nairobi's prestigious diplomatic enclave, Silva Gigiri redefines contemporary residential living through an exceptional blend of architecture, hospitality, and nature. Positioned moments from the United Nations Headquarters, international embassies, Village Market, and Karura Forest, the development offers a rare opportunity to own a home in one of East Africa's most established and secure addresses. Every residence is thoughtfully designed to deliver refined living, long-term investment value, and the service standards of a globally recognised hospitality brand.",
     featureLocation: "2 Minutes to Westgate Shopping Mall, 3 Minutes to Sarit Centre, 5 Minutes to Westlands CBD, Near The Oval, Delta Corner & major corporate offices, Close to Aga Khan University Hospital",
     story: {
