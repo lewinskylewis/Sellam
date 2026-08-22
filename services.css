@@ -4,13 +4,32 @@
   background: #ffffff;
 }
 
+/* Same OptimaLocal face the Buy/Leasing hero titles use (declared in
+   premium-properties.css, which this page doesn't load) — needed so the
+   services hero statement renders in the identical typeface. */
+@font-face {
+  font-family: OptimaLocal;
+  src: url("Fonts/OPTIMA.TTF") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: OptimaLocal;
+  src: url("Fonts/OPTIMA_B.TTF") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ---- Hero banner. The homepage floating navbar sits over it, so the media
    spans the full viewport width and the statement clears the navbar. ---- */
 .services-hero {
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  min-height: clamp(430px, 47vw, 560px);
+  min-height: 700px;
   display: grid;
   place-items: center;
   padding: clamp(150px, 16vw, 200px) 0 clamp(46px, 6vw, 74px);
@@ -24,7 +43,7 @@
 .services-hero-media {
   position: absolute;
   inset: 0;
-  background: #0a1e2e url("assets/images/buy/commercial.jpg") center 28% / cover no-repeat;
+  background: #0a1e2e url("assets/images/services.jpg") center 28% / cover no-repeat;
 }
 
 .services-hero-media::after {
@@ -39,13 +58,24 @@
   z-index: 1;
 }
 
-/* Statement — Inter (the homepage body font), a touch larger and bold. */
-.services-hero-statement {
+/* Title — gold, OptimaLocal serif. Font-size/line-height are deliberately
+   left unset: the site-wide `body main h1` rule already sizes it to
+   clamp(30px,3vw,38px)/1.12, identical to the Buy/Leasing hero titles. */
+.services-hero-title {
+  max-width: 900px;
+  margin: 0 auto 20px;
+  color: var(--gold);
+  font-family: OptimaLocal, "Cormorant Garamond", Georgia, serif;
+}
+
+/* Description — white. Left unstyled for font-size/weight/family: the
+   site-wide `body p` reset already renders this at the same 14px/300/Inter
+   the Buy/Leasing hero descriptions actually render at (their own
+   clamp()-based sizing is overridden by that same reset). */
+.services-hero-description {
   max-width: 620px;
   margin: 0 auto;
-  font-size: clamp(17px, 1.62vw, 21px);
-  font-weight: 600;
-  line-height: 1.5;
+  color: var(--white);
 }
 
 /* ---- Intro lead paragraph — homepage body size (15.3px) ---- */
@@ -169,6 +199,12 @@ html:not(.motion-ready) .services-grid.reveal .service-card {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: clamp(28px, 4vw, 48px);
     row-gap: 46px;
+  }
+}
+
+@media (max-width: 720px) {
+  .services-hero {
+    min-height: 840px;
   }
 }
 
