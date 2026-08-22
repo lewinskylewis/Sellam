@@ -16,7 +16,7 @@ const heroProperties = [
   {
     id: "sl-001",
     sections: [
-      { label: "Exterior", image: "assets/images/Silva Gigiri Residences Exterior.jpeg" },
+      { label: "Gym", image: "assets/images/Silva Gigiri Residences Gym (2).jpeg" },
       { label: "Living Room", image: "assets/images/Silva Gigiri Residences Living room.jpeg" },
       { label: "Kitchen", image: "assets/images/Silva Gigiri Residences Kitchen.jpeg" }
     ]

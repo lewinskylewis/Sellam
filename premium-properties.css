@@ -613,17 +613,58 @@ button {
 }
 
 .buy-commercial-hero .premium-hero-image {
-  background-image: linear-gradient(rgba(4, 51, 65, 0.5), rgba(4, 51, 65, 0.5)), url("assets/images/buy/commercial.jpg");
+  background-image: linear-gradient(rgba(4, 51, 65, 0.5), rgba(4, 51, 65, 0.5)), url("assets/images/GTC Office Tower.jpeg");
   background-position: center;
 }
 
+.buy-hero-content {
+  flex-direction: column;
+  gap: 22px;
+}
+
+.buy-hero-title {
+  margin: 0;
+  max-width: 900px;
+  color: var(--gold);
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 3.8vw, 52px);
+  font-weight: 600;
+  line-height: 1.2;
+  text-shadow: 0 2px 18px rgba(0, 20, 27, 0.48);
+}
+
+.buy-hero-description {
+  margin: 0;
+  max-width: 720px;
+  color: var(--white);
+  font-family: var(--font-sans);
+  font-size: clamp(15px, 1.15vw, 19px);
+  line-height: 1.5;
+  text-shadow: 0 2px 18px rgba(0, 20, 27, 0.48);
+}
+
 .buy-land-hero .premium-hero-image {
-  background-image: linear-gradient(rgba(4, 51, 65, 0.5), rgba(4, 51, 65, 0.5)), url("assets/images/buy/land.jpg");
+  background-image: linear-gradient(rgba(4, 51, 65, 0.5), rgba(4, 51, 65, 0.5)), url("assets/images/Land Hero.jpg");
   background-position: center;
 }
 
 .buy-residential-hero .premium-hero-image {
-  background-image: linear-gradient(rgba(4, 51, 65, 0.5), rgba(4, 51, 65, 0.5)), url("assets/images/buy/residential.jpg");
+  background-image: linear-gradient(rgba(4, 51, 65, 0.5), rgba(4, 51, 65, 0.5)), url("assets/images/Cheval Riverside Swimming pool.jpeg");
+  background-position: center;
+}
+
+.leasing-offices-hero .premium-hero-image {
+  background-image: linear-gradient(rgba(4, 51, 65, 0.5), rgba(4, 51, 65, 0.5)), url("assets/images/The Mandrake.jpeg");
+  background-position: center;
+}
+
+.leasing-industrial-hero .premium-hero-image {
+  background-image: linear-gradient(rgba(4, 51, 65, 0.5), rgba(4, 51, 65, 0.5)), url("assets/images/Industrial Hero.jpg");
+  background-position: center;
+}
+
+.leasing-retail-hero .premium-hero-image {
+  background-image: linear-gradient(rgba(4, 51, 65, 0.5), rgba(4, 51, 65, 0.5)), url("assets/images/GTC Office Tower (7).jpeg");
   background-position: center;
 }
 
