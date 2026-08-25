@@ -155,9 +155,12 @@ async function fetchReconstructedFromSupabase() {
     supabaseGet(supabaseUrl, anonKey, "/rest/v1/properties?select=*,property_units(*)&property_units.order=display_order.asc")
   ]);
 
-  const errors = validateRaw(rawCommunities, rawProperties);
-  if (errors.length) {
-    throw new Error(`Supabase data failed validation:\n  ${errors.join("\n  ")}`);
+  const validation = validateRaw(rawCommunities, rawProperties);
+  if (validation.errors.length) {
+    throw new Error(`Supabase data failed validation:\n  ${validation.errors.join("\n  ")}`);
+  }
+  if (validation.warnings.length) {
+    console.warn(`[api/property] Loaded from Supabase with ${validation.warnings.length} content warning(s):\n  ${validation.warnings.join("\n  ")}`);
   }
 
   const properties = rawProperties.map(reconstructProperty);

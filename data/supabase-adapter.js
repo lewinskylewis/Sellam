@@ -183,95 +183,69 @@
   // display_order, property_id, etc.) before reconstruction discards them.
   // --------------------------------------------------------------------
 
-  var EXPECTED_COMMUNITY_COUNT = 23;
-  var EXPECTED_PROPERTY_COUNT = 46;
-  var EXPECTED_UNIT_COUNT = 78;
   var CURRENCY_VALUES = ["KES", "USD"];
-
-  // The approved Phase 1 migration scope (42 SELLAM_PROPERTIES + 4
-  // international) — a real content-integrity check (catches a wrong/
-  // missing/extra record even if the total count still happens to be 46),
-  // not a shortcut that makes validation trivially pass.
-  var EXPECTED_LEGACY_IDS = [
-    "sl-001", "sl-002", "sl-003", "sl-004", "sl-005", "sl-006", "sl-007", "sl-008", "sl-009", "sl-010",
-    "sl-011", "sl-012", "sl-013", "sl-014", "sl-015", "sl-016", "sl-017", "sl-018", "sl-019", "sl-020",
-    "sl-021", "sl-022", "sl-023", "sl-024", "sl-025", "sl-026", "sl-027", "sl-028", "sl-029", "sl-030",
-    "sl-031", "sl-033", "sl-034", "sl-035", "sl-036", "sl-037", "sl-038", "sl-039", "sl-040", "sl-041",
-    "sl-042", "sl-043", "ShomaBay", "Brabus-Villas", "Afra-Park", "Indabyo-Heights"
-  ];
 
   function isFiniteNumber(value) {
     return typeof value === "number" && isFinite(value);
   }
 
+  // Two tiers, deliberately:
+  //   errors   — the fetch itself came back malformed in a way that would
+  //              break reconstruction/rendering outright. Only these cause
+  //              a fallback to static data.
+  //   warnings — content-shape oddities on an individual row (a duplicate
+  //              slug, a unit with no price, a stray non-null field). Real
+  //              content management — deleting a listing, adding one,
+  //              editing prices directly in Supabase — changes row counts
+  //              and specific ids by design, so counts/ids are never
+  //              validated here. A problem on one row is logged and the
+  //              rest of the catalogue still loads; it no longer takes the
+  //              entire site down to a frozen migration-day snapshot.
+  // The database's own CHECK constraints (see supabase/migrations/) are the
+  // real enforcement for vocabulary/format — this is a best-effort sanity
+  // pass on top of that, not a duplicate gate.
   function validateRaw(rawCommunities, rawProperties) {
     var errors = [];
+    var warnings = [];
 
-    if (rawCommunities.length !== EXPECTED_COMMUNITY_COUNT) {
-      errors.push("communities count " + rawCommunities.length + " !== expected " + EXPECTED_COMMUNITY_COUNT);
-    }
-    if (rawProperties.length !== EXPECTED_PROPERTY_COUNT) {
-      errors.push("properties count " + rawProperties.length + " !== expected " + EXPECTED_PROPERTY_COUNT);
-    }
+    if (!Array.isArray(rawCommunities)) errors.push("communities response was not an array");
+    if (!Array.isArray(rawProperties)) errors.push("properties response was not an array");
+    if (errors.length) return { errors: errors, warnings: warnings };
 
     var seenLegacyIds = {};
     var seenSlugs = {};
-    var gotIds = {};
-    var totalUnits = 0;
 
     rawProperties.forEach(function (p) {
-      gotIds[p.legacy_id] = true;
-      if (seenLegacyIds[p.legacy_id]) errors.push("duplicate legacy_id: " + p.legacy_id);
+      if (!p.legacy_id || !p.slug) {
+        warnings.push("a property row is missing legacy_id or slug — it may not resolve correctly by URL");
+        return;
+      }
+      if (seenLegacyIds[p.legacy_id]) warnings.push("duplicate legacy_id: " + p.legacy_id);
       seenLegacyIds[p.legacy_id] = true;
-      if (seenSlugs[p.slug]) errors.push("duplicate slug: " + p.slug);
+      if (seenSlugs[p.slug]) warnings.push("duplicate slug: " + p.slug);
       seenSlugs[p.slug] = true;
 
       var units = Array.isArray(p.property_units) ? p.property_units : [];
-      if (units.length === 0) errors.push(p.legacy_id + ": has no units");
+      if (units.length === 0) warnings.push(p.legacy_id + ": has no units (bedrooms/price will show as unavailable)");
 
       var seenOrders = {};
       units.forEach(function (u) {
-        totalUnits++;
-        if (u.property_id !== p.id) errors.push(p.legacy_id + ": unit belongs to a different property_id");
-        if (seenOrders[u.display_order]) errors.push(p.legacy_id + ": duplicate display_order " + u.display_order);
+        if (u.property_id !== p.id) warnings.push(p.legacy_id + ": a unit's property_id doesn't match its parent");
+        if (seenOrders[u.display_order]) warnings.push(p.legacy_id + ": duplicate unit display_order " + u.display_order);
         seenOrders[u.display_order] = true;
         if (u.currency !== null && CURRENCY_VALUES.indexOf(u.currency) === -1) {
-          errors.push(p.legacy_id + " unit display_order " + u.display_order + ": invalid currency '" + u.currency + "'");
+          warnings.push(p.legacy_id + " unit display_order " + u.display_order + ": unrecognised currency '" + u.currency + "'");
         }
         if (u.sale_price !== null && !(isFiniteNumber(u.sale_price) && u.sale_price > 0)) {
-          errors.push(p.legacy_id + " unit display_order " + u.display_order + ": malformed sale_price");
+          warnings.push(p.legacy_id + " unit display_order " + u.display_order + ": malformed sale_price");
         }
         if (u.rent_price !== null && !(isFiniteNumber(u.rent_price) && u.rent_price > 0)) {
-          errors.push(p.legacy_id + " unit display_order " + u.display_order + ": malformed rent_price");
+          warnings.push(p.legacy_id + " unit display_order " + u.display_order + ": malformed rent_price");
         }
       });
-
-      var isInternational = p.community === null;
-      if (isInternational && (p.collection !== null || p.property_type !== null || p.letting !== null)) {
-        errors.push(p.legacy_id + ": international property (community=null) has an unexpected non-null collection/property_type/letting");
-      }
     });
 
-    if (totalUnits !== EXPECTED_UNIT_COUNT) {
-      errors.push("units count " + totalUnits + " !== expected " + EXPECTED_UNIT_COUNT);
-    }
-
-    EXPECTED_LEGACY_IDS.forEach(function (id) {
-      if (!gotIds[id]) errors.push("expected legacy_id missing from fetch: " + id);
-    });
-
-    var brabus = rawProperties.filter(function (p) { return p.legacy_id === "Brabus-Villas"; })[0];
-    if (brabus) {
-      (brabus.property_units || []).forEach(function (u) {
-        if (u.sale_price !== null || u.rent_price !== null) {
-          errors.push("Brabus-Villas unit display_order " + u.display_order + " has a non-null price — must remain null");
-        }
-      });
-    } else {
-      errors.push("Brabus-Villas not found in fetched data");
-    }
-
-    return errors;
+    return { errors: errors, warnings: warnings };
   }
 
   // --------------------------------------------------------------------
@@ -316,9 +290,12 @@
 
     return fetchFromSupabase(cfg)
       .then(function (raw) {
-        var errors = validateRaw(raw.rawCommunities, raw.rawProperties);
-        if (errors.length) {
-          throw new Error("Supabase data failed validation:\n  " + errors.join("\n  "));
+        var validation = validateRaw(raw.rawCommunities, raw.rawProperties);
+        if (validation.errors.length) {
+          throw new Error("Supabase data failed validation:\n  " + validation.errors.join("\n  "));
+        }
+        if (validation.warnings.length) {
+          console.warn("[SellamData] Loaded from Supabase with " + validation.warnings.length + " content warning(s):\n  " + validation.warnings.join("\n  "));
         }
 
         var communities = raw.rawCommunities.map(reconstructCommunity);
