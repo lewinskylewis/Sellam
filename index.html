@@ -682,12 +682,21 @@
       </div>
     </footer>
 
-    <script src="data/properties.js"></script>
+    <script>window.SELLAM_SUPABASE_CONFIG = { url: "https://uvqcpqefrygodfrpaynq.supabase.co", anonKey: "sb_publishable_rVLFQsj-d6C-8vkVEWTW9w_9CbtMKZN" };</script>
     <script src="data/property-units.js"></script>
-    <script src="data/communities.js"></script>
-    <script src="community-render.js"></script>
-    <script src="property-search.js"></script>
-    <script src="script.js"></script>
+    <script src="data/supabase-adapter.js"></script>
+    <script>
+      window.SellamData.ready.then(function () {
+        var deferred = ["community-render.js", "property-search.js", "script.js"];
+        (function loadNext(i) {
+          if (i >= deferred.length) return;
+          var el = document.createElement("script");
+          el.src = deferred[i];
+          el.onload = function () { loadNext(i + 1); };
+          document.head.appendChild(el);
+        })(0);
+      });
+    </script>
     <script src="nav-active.js"></script>
     <script src="newsletter.js"></script>
     <script src="cookie-consent.js"></script>

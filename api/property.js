@@ -24,19 +24,29 @@
 
 const fs = require("fs");
 const path = require("path");
+const vm = require("vm");
 const { JSDOM } = require("jsdom");
 
 const ROOT = path.join(__dirname, "..");
 const TEMPLATE_PATH = path.join(ROOT, "templates", "property.html");
+const ADAPTER_PATH = path.join(ROOT, "data", "supabase-adapter.js");
 
 // Loaded into the virtual page in this exact order — matches the <head>/
 // <body> script order in templates/property.html so globals (window.SELLAM_
 // PROPERTIES, window.SellamUnits, window.SellamSearch, ...) are defined
 // before the scripts that read them run.
+//
+// data/properties.js is intentionally NOT in this list any more (Phase 2,
+// Step 4): window.SELLAM_PROPERTIES is now populated from Supabase before
+// these run (see loadPropertiesForRender()), falling back to evaluating
+// data/properties.js itself — unchanged, still on disk — only if that
+// fetch fails. data/property-units.js is unconditional either way: it only
+// defines window.SellamUnits's helper functions and has no data dependency
+// of its own.
 const HEAD_SCRIPT = "site-motion.js";
-const BODY_SCRIPTS = [
-  "data/properties.js",
-  "data/property-units.js",
+const DATA_UNIT_SCRIPT = "data/property-units.js";
+const STATIC_PROPERTIES_SCRIPT = "data/properties.js";
+const REMAINING_BODY_SCRIPTS = [
   "property-search.js",
   "enquiry-config.js",
   "enquiry-modal.js",
@@ -57,6 +67,117 @@ function readScript(relativePath) {
     scriptCache.set(relativePath, fs.readFileSync(path.join(ROOT, relativePath), "utf8"));
   }
   return scriptCache.get(relativePath);
+}
+
+/* ============================================================================
+   Supabase server-side read (Phase 2, Step 4)
+   ============================================================================
+   Replaces the eval of data/properties.js with a server-side fetch,
+   reconstructed into the exact same window.SELLAM_PROPERTIES shape using
+   data/supabase-adapter.js's own, already-verified reconstruction functions
+   — not a reimplementation. Falls back to evaluating data/properties.js
+   itself (unchanged, still on disk, exactly today's behavior) if the fetch
+   or validation fails for any reason, so a Supabase outage or RLS/schema
+   surprise degrades to the current production behavior rather than breaking
+   the page.
+
+   Credential: the public anon/publishable key, not SUPABASE_SECRET_KEY.
+   RLS already grants unrestricted SELECT on communities/properties/
+   property_units to anon (verified in Phase 2, Steps 1–2) — including
+   sold/let statuses, which this renderer needs so those properties keep
+   resolving by direct URL — so the least-privileged credential is
+   sufficient and preferred over the server-only secret.
+   ========================================================================== */
+
+// Loads ONLY data/supabase-adapter.js's pure reconstruction/validation
+// functions via its guarded module.exports, inside a minimal stub
+// environment just complete enough for the file's top-level code not to
+// throw (it unconditionally calls init(), which needs `window`/`document`
+// to exist). Nothing here makes a network request — init()'s own fetch
+// attempt is deliberately given an invalid config so it falls through to
+// its internal static-fallback path harmlessly in the background; this
+// function never waits on or uses that result, only the synchronously
+// available module.exports.
+let adapterExportsCache = null;
+function loadAdapterExports() {
+  if (adapterExportsCache) return adapterExportsCache;
+  const stubWindow = {};
+  stubWindow.window = stubWindow;
+  stubWindow.console = console;
+  stubWindow.fetch = () => Promise.reject(new Error("not used"));
+  stubWindow.document = {
+    querySelector: () => null,
+    createElement: () => ({ set src(_v) {}, get src() { return undefined; } }),
+    head: { appendChild() {} }
+  };
+  const moduleObj = { exports: {} };
+  stubWindow.module = moduleObj;
+  stubWindow.exports = moduleObj.exports;
+  vm.createContext(stubWindow);
+  new vm.Script(fs.readFileSync(ADAPTER_PATH, "utf8"), { filename: ADAPTER_PATH }).runInContext(stubWindow);
+  adapterExportsCache = moduleObj.exports;
+  return adapterExportsCache;
+}
+
+async function supabaseGet(supabaseUrl, anonKey, requestPath) {
+  const response = await fetch(`${supabaseUrl}${requestPath}`, {
+    method: "GET",
+    headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}` }
+  });
+  if (!response.ok) {
+    const detail = await response.text().catch(() => "");
+    throw new Error(`Supabase GET ${requestPath} failed: ${response.status} ${detail.slice(0, 300)}`);
+  }
+  return response.json();
+}
+
+const PROPERTIES_CACHE_TTL_MS = 60 * 1000;
+let propertiesCache = null; // { expiresAt, properties, communities }
+
+async function fetchReconstructedFromSupabase() {
+  if (propertiesCache && propertiesCache.expiresAt > Date.now()) {
+    return propertiesCache;
+  }
+
+  // SELLAM_SUPABASE_URL is intentionally distinct from SUPABASE_URL: the
+  // latter belongs to the existing enquiry-form Supabase project (used by
+  // api/enquiry.js / api/subscribe.js) and must never be touched here.
+  const supabaseUrl = String(process.env.SELLAM_SUPABASE_URL || "").replace(/\/$/, "");
+  const anonKey = String(process.env.SUPABASE_ANON_KEY || "");
+  if (!/^https:\/\//.test(supabaseUrl) || !anonKey) {
+    throw new Error("SELLAM_SUPABASE_URL / SUPABASE_ANON_KEY are not configured");
+  }
+
+  const { reconstructProperty, reconstructCommunity, validateRaw } = loadAdapterExports();
+
+  const [rawCommunities, rawProperties] = await Promise.all([
+    supabaseGet(supabaseUrl, anonKey, "/rest/v1/communities?select=*"),
+    supabaseGet(supabaseUrl, anonKey, "/rest/v1/properties?select=*,property_units(*)&property_units.order=display_order.asc")
+  ]);
+
+  const errors = validateRaw(rawCommunities, rawProperties);
+  if (errors.length) {
+    throw new Error(`Supabase data failed validation:\n  ${errors.join("\n  ")}`);
+  }
+
+  const properties = rawProperties.map(reconstructProperty);
+  const communities = rawCommunities.map(reconstructCommunity);
+
+  propertiesCache = { expiresAt: Date.now() + PROPERTIES_CACHE_TTL_MS, properties, communities };
+  return propertiesCache;
+}
+
+// Returns { source: "supabase" | "static-fallback" } plus enough information
+// for renderPropertyPage() to know whether it still needs to eval
+// data/properties.js itself.
+async function loadPropertiesForRender() {
+  try {
+    const { properties, communities } = await fetchReconstructedFromSupabase();
+    return { source: "supabase", properties, communities };
+  } catch (error) {
+    console.error("[api/property] Supabase server-side fetch failed, falling back to data/properties.js:", error.message);
+    return { source: "static-fallback", properties: null, communities: null };
+  }
 }
 
 // jsdom has no real layout engine, so IntersectionObserver never fires here
@@ -96,7 +217,7 @@ function matchMediaStub(query) {
   };
 }
 
-function renderPropertyPage(id) {
+async function renderPropertyPage(id) {
   const html = readTemplate();
   const url = `https://sellamre.com/property${id ? `?id=${encodeURIComponent(id)}` : ""}`;
 
@@ -108,7 +229,22 @@ function renderPropertyPage(id) {
     window.matchMedia = matchMediaStub;
 
     window.eval(readScript(HEAD_SCRIPT));
-    BODY_SCRIPTS.forEach((file) => window.eval(readScript(file)));
+
+    // Fetch (or fall back) BEFORE evaluating any script that reads
+    // window.SELLAM_PROPERTIES — same ordering guarantee the old
+    // synchronous data/properties.js eval provided, just resolved async
+    // first instead.
+    const data = await loadPropertiesForRender();
+    if (data.source === "supabase") {
+      window.SELLAM_PROPERTIES = data.properties;
+      window.SELLAM_COMMUNITIES = data.communities;
+      window.eval(readScript(DATA_UNIT_SCRIPT));
+    } else {
+      window.eval(readScript(STATIC_PROPERTIES_SCRIPT));
+      window.eval(readScript(DATA_UNIT_SCRIPT));
+    }
+
+    REMAINING_BODY_SCRIPTS.forEach((file) => window.eval(readScript(file)));
 
     // The scripts above register "DOMContentLoaded" listeners (that's where
     // property-detail.js actually builds the price table, gallery, story
@@ -117,7 +253,7 @@ function renderPropertyPage(id) {
     // one now to trigger the same rendering code.
     window.document.dispatchEvent(new window.Event("DOMContentLoaded", { bubbles: true, cancelable: true }));
 
-    return `<!doctype html>\n${window.document.documentElement.outerHTML}`;
+    return { html: `<!doctype html>\n${window.document.documentElement.outerHTML}`, source: data.source };
   } finally {
     window.close();
   }
@@ -127,8 +263,9 @@ module.exports = async function propertyHandler(request, response) {
   const id = typeof request.query?.id === "string" ? request.query.id : "";
 
   try {
-    const html = renderPropertyPage(id);
+    const { html, source } = await renderPropertyPage(id);
     response.setHeader("Content-Type", "text/html; charset=utf-8");
+    response.setHeader("X-Sellam-Data-Source", source);
     response.status(200).send(html);
   } catch (error) {
     console.error("Property render error:", error);
