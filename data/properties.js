@@ -279,6 +279,18 @@ window.SELLAM_PROPERTIES = [
     closingParagraphs: "Silva Gigiri Residences represents a rare opportunity to own in one of Nairobi's most established diplomatic and residential enclaves, with limited units remaining across the current release.\n\nOur sales team can arrange a private site visit and walk you through the available floor plans, payment structures, and projected rental returns."
   },
 
+
+
+
+
+
+
+
+
+
+
+
+
   {
     id: "sl-002",
     slug: "cheval-riverside",
@@ -335,6 +347,18 @@ window.SELLAM_PROPERTIES = [
 ],
     closingParagraphs: "Riverside has long been recognised as one of Nairobi's most desirable residential neighbourhoods. Characterised by mature tree-lined avenues, diplomatic residences, international organisations, premium office developments, and excellent connectivity, the location continues to attract homeowners, expatriates, multinational executives, and institutional investors.\n\nCheval Riverside has been conceived to deliver lasting value through exceptional location, distinctive architecture, and professionally managed amenities. The combination of strong rental demand, limited supply within Riverside, and premium lifestyle offerings creates an investment opportunity suited to both capital appreciation and stable rental income."
   },
+
+
+
+
+
+
+
+
+
+
+
+
 
 {
     id: "sl-003",
@@ -401,6 +425,25 @@ window.SELLAM_PROPERTIES = [
 
      closingParagraphs: "Peponi Road remains one of Nairobi's most established residential corridors, renowned for its mature surroundings, diplomatic presence, excellent connectivity, and proximity to leading commercial, retail, educational, and healthcare facilities. Residents enjoy immediate access to Westgate Mall, Sarit Centre, Westlands CBD, Gigiri, international schools, and major transport routes, making the development equally attractive for homeowners and international tenants. \n\nCombining a prime Westlands location, hospitality-led management, contemporary architecture, and executive-focused amenities, Diplomat Residences presents a compelling opportunity for both homeowners and investors. Strong demand from professionals, expatriates, diplomatic personnel, and corporate tenants supports long-term rental performance, while the development's quality, location, and management philosophy position it for sustained capital appreciation over time."
   },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -475,6 +518,35 @@ window.SELLAM_PROPERTIES = [
   closingParagraphs: "Brookside remains one of Nairobi's most established residential neighbourhoods, recognised for its mature tree-lined environment, low-density character, and exceptional connectivity. Residents enjoy convenient access to Westlands, Gigiri, Riverside, Lavington, international schools, healthcare facilities, premium shopping centres, and leading commercial districts, making Brookside one of the city's most desirable addresses for families and professionals alike. \n\nGaia Brookside Forest brings together spacious family residences, thoughtfully curated amenities, and a prime Westlands location to create a compelling long-term investment. The combination of limited large-format homes, strong owner-occupier demand, and the continued growth of Brookside as a premier residential neighbourhood positions the development for sustained capital appreciation and resilient rental performance."
   },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   {
     id: "sl-005",
     slug: "hephé-palace",
@@ -540,6 +612,29 @@ window.SELLAM_PROPERTIES = [
   closingParagraphs: "Situated along Ring Road in Westlands, Hephé Palace enjoys one of Nairobi's most prestigious and well-connected locations. Residents are minutes from Westgate Mall, Sarit Centre, GTC, leading international schools, world-class healthcare facilities, premium restaurants, and major business districts, making it an address equally suited to modern city living and long-term investment. \n\n Hephé Palace combines timeless architecture, exceptional amenities, and a prime Westlands location to create a compelling investment opportunity. Flexible payment plans, strong rental demand, and the continued growth of Westlands as Nairobi's premier mixed-use district position the development for sustained capital appreciation and attractive rental returns."
   },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   {
     id: "sl-006",
     slug: "amethyst-residences",
@@ -601,6 +696,29 @@ window.SELLAM_PROPERTIES = [
 
   closingParagraphs: "Located on Maalim Juma Road, Amethyst places residents at the centre of one of Nairobi's most connected urban communities. International schools, leading hospitals, business hubs, cafés, restaurants, shopping destinations including Yaya Centre, Prestige Plaza, and Junction Mall, together with convenient transport links, are all within easy reach, making Kilimani one of Nairobi's most desirable places to live and invest. \n\n Kilimani continues to attract strong residential demand from homeowners, professionals, and investors seeking quality developments in a prime urban location. Combining thoughtful architecture, carefully curated amenities, and excellent connectivity, Amethyst is designed to deliver lasting appeal through both capital appreciation and sustained rental demand."
   },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   {
     id: "sl-007",
@@ -665,6 +783,25 @@ window.SELLAM_PROPERTIES = [
 ],
     closingParagraphs: "Located on Sports Road, DG West places residents within Nairobi's premier commercial and lifestyle district. Westgate Mall, Sarit Centre, GTC, leading hotels, international offices, healthcare facilities, restaurants, and entertainment venues are all moments away, while excellent connectivity to Gigiri, Upper Hill, the CBD, and Jomo Kenyatta International Airport makes Westlands one of Nairobi's most desirable addresses for both living and investment\n\nDG West has been conceived to meet the growing demand for professionally managed hotel apartments in Nairobi. Combining a prime Westlands location, premium hospitality services, and flexible ownership options, the development is designed to deliver attractive rental income alongside long-term capital appreciation. The developer projects up to 20% annual return on investment, making it particularly appealing to local and international investors seeking passive income opportunities."
   },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
    {
     id: "sl-008",
@@ -736,7 +873,30 @@ window.SELLAM_PROPERTIES = [
       { percent: 0, label: "Interest" }
     ]
   },
+
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   {
     id: "sl-009",
     slug: "4-bedroom-luxury-villas-runda",
@@ -808,6 +968,25 @@ window.SELLAM_PROPERTIES = [
     ]
   },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   {
     id: "sl-010",
     slug: "6-bedroom-fully-en-suite-karen",
@@ -870,6 +1049,23 @@ window.SELLAM_PROPERTIES = [
     ]
   },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   {
     id: "sl-011",
     slug: "5-bedroom-family-residence",
@@ -929,6 +1125,20 @@ window.SELLAM_PROPERTIES = [
     ]
   },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   {
     id: "sl-012",
     slug: "1-2-acre-land-thigiri-groove",
@@ -962,6 +1172,23 @@ window.SELLAM_PROPERTIES = [
 
     listedDate: "2026-07-22"
   },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   {
     id: "sl-013",
@@ -997,6 +1224,17 @@ window.SELLAM_PROPERTIES = [
     listedDate: "2026-07-22"
   },
 
+
+
+
+
+
+
+
+
+
+
+
    {
     id: "sl-014",
     slug: "1-acre-land-thigiri-ridge",
@@ -1030,6 +1268,20 @@ window.SELLAM_PROPERTIES = [
 
     listedDate: "2026-07-22"
   },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   {
     id: "sl-015",
@@ -1102,6 +1354,22 @@ window.SELLAM_PROPERTIES = [
     ]
   },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   /* ------------------------------------------------------- HOMEPAGE FEATURED
      The 5 cards on the homepage "Featured Properties" carousel. These used
      to be five hand-coded standalone pages (properties/*.html) on an older,
@@ -1151,6 +1419,21 @@ window.SELLAM_PROPERTIES = [
     listedDate: "2026-07-24"
   },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   {
     id: "sl-028",
     slug: "modern-villas-lavington",
@@ -1199,6 +1482,20 @@ window.SELLAM_PROPERTIES = [
     listedDate: "2026-07-25"
   },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   {
     id: "sl-029",
     slug: "ostrea-villas-karen-nairobi",
@@ -1210,11 +1507,9 @@ window.SELLAM_PROPERTIES = [
     community: "karen",
     location: "Karen, Nairobi",
     letting: "sale",
-    // Bedroom/bathroom count wasn't given on the old page — confirm and update.
-    bedrooms: null,
-    bathrooms: null,
-    salePrice: 165000000,
-    rentPrice: null,
+    units: [           
+    { unitType: "5-bedroom", bedrooms: 5, bathrooms: 5, salePrice: 159900000, rentPrice: null },
+    ],
     image: "assets/images/Premium properties/OSTREA Karen Villas (6).jpeg",
     gallery: [
       "assets/images/Premium properties/OSTREA Karen Villas.jpeg",
@@ -1252,22 +1547,36 @@ window.SELLAM_PROPERTIES = [
     listedDate: "2026-07-26"
   },
 
+
+
+
+
+
+
+
+
+
+
+
+
   {
     id: "sl-030",
-    slug: "naserian-karen-nairobi",
+    slug: "naserian-homes",
     status: "available",
     collection: "featured",
-    title: "Naserian, Karen",
+    title: "Naserian Homes",
     summary: "A premium Karen, Nairobi residence shaped around space, privacy, and composed everyday living, with a quiet, established address and strong lifestyle access.",
     propertyType: "villa",
     community: "karen",
-    location: "Karen, Nairobi",
+    location: "Ololua Ridge, Karen, Nairobi",
     letting: "sale",
-    // Bedroom/bathroom count and price weren't given on the old page — confirm and update.
-    bedrooms: null,
-    bathrooms: null,
-    salePrice: null,
-    rentPrice: null,
+    units: [
+      
+     
+      { unitType: "5-bedroom", bedrooms: 5, bathrooms: 5, salePrice: 99000000, rentPrice: null },
+      
+    ],
+
     image: "assets/images/Premium properties/Naserian Karen.jpeg",
     gallery: [
       "assets/images/Premium properties/Naserian Karen (2).jpeg",
@@ -1277,25 +1586,50 @@ window.SELLAM_PROPERTIES = [
       "assets/images/Premium properties/Naserian Karen (6).jpeg",
       "assets/images/Premium properties/Naserian Karen (7).jpeg",
       "assets/images/Premium properties/Naserian Karen (8).jpeg",
-      "assets/images/Premium properties/Naserian Karen (9).jpeg"
+      "assets/images/Premium properties/Naserian Karen (9).jpeg",
+      "assets/images/Naserian Homes (1).jpeg",
+      "assets/images/Naserian Homes (2).jpeg",
+      "assets/images/Naserian Homes (3).jpeg",
+      "assets/images/Naserian Homes (4).jpeg",
+      "assets/images/Naserian Homes (5).jpeg",
+      "assets/images/Naserian Homes (6).jpeg",
+      "assets/images/Naserian Homes (7).jpeg",
+      "assets/images/Naserian Homes (8).jpeg",
+      "assets/images/Naserian Homes (9).jpeg"
+
     ],
-    url: "naserian-karen-nairobi",
-    description: "Naserian in Karen is a premium residential opportunity shaped around space, privacy, and composed everyday living. Its setting suits buyers who want a quiet, established address with elegant homes and strong lifestyle access. The property is presented for families, investors, and homeowners looking for a refined Karen residence with secure surroundings and long-term value.",
+    url: "naserian-homes",
+    description: "Set against the serene backdrop of Ololua Forest, Naserian Homes presents a collection of spacious five-bedroom villas within a gated, low-density residential enclave in Karen. The development comprises approximately 30 residences set across 20 acres, creating a generous sense of space and privacy rarely found within Nairobi. Located along Ololua Ridge, approximately 3 km from Ngong Road and with access from Forest Line Road, Naserian brings together expansive architecture, natural surroundings and a comprehensive residents' lifestyle environment. Large windows, generous living spaces and landscaped grounds establish a strong connection between the homes and their forest-edge setting.",
     featureLocation: "Karen location with proximity to schools, shopping, clubs, hospitals, and calm residential streets.",
     story: {
       rows: [
-        { title: "Naserian Residence",
-          body: "Naserian is presented as a composed premium residence in Karen, Nairobi, with spaces planned for comfort, privacy, and everyday ease. The interiors and exterior setting work together to create a property experience that feels refined, practical, and ready for discerning buyers." },
-        { title: "Design And Finishes",
-          body: "The property brings together generous proportions, considered finishes, and strong visual character. Each image in the gallery reflects the quality and atmosphere of Naserian, giving buyers a clearer sense of how the home supports family living, hosting, and long-term value." },
-        { title: "Lifestyle And Comfort",
-          body: "From relaxed daily routines to private entertaining, Naserian is shaped around a comfortable premium lifestyle. The residence offers the kind of space, light, and calm expected from a carefully selected SELLAM property." },
-        { title: "Location Advantage",
-          body: "Karen, Nairobi gives this property a strong residential context, with access to established amenities, key routes, and the privacy buyers expect from a premium address. It is positioned for both lifestyle appeal and long-term investment confidence." }
+        { title: "Spaces to Live & Entertain",
+          body: "Each residence offers approximately 6,488 sq. ft. of living space, arranged around generous communal areas designed for both everyday family life and entertaining. The expansive lounge and dining areas benefit from large windows that introduce natural light and frame the surrounding greenery.An upper-floor family room opens onto a terrace, while covered outdoor decks extend the living spaces towards the landscaped gardens, creating a seamless transition between indoor and outdoor living." },
+        { title: "The Culinary Atelier",
+          body: "The kitchen is designed as a practical and generous family space, featuring ample cabinetry, a pantry, dedicated laundry area and a kitchen terrace. Its layout provides both functionality for everyday living and the capacity to support larger-scale entertaining." },
+        { title: "Private Sanctuaries",
+          body: "The villas comprise five en-suite bedrooms, with the master suite designed as a private retreat. It features a generously proportioned bathroom, walk-in closet, dedicated study area and private terrace.Large windows throughout the bedrooms enhance natural light while maintaining the connection to the surrounding landscape." },
+        { title: "Outdoor Living",
+          body: "The residences are complemented by landscaped gardens and generous covered decks, creating private spaces for outdoor relaxation and entertaining. The wider development incorporates landscaped communal areas, a gazebo and fire pit, providing additional spaces for residents to gather and unwind." }
       ]
     },
-    listedDate: "2026-07-27"
+    listedDate: "2026-08-25",
+    featureHighlights: [
+      { title: "Security:", text: "CCTV surveillance,Controlled access,Electric perimeter fencing,Intercom" },
+      { title: "Fitness:", text: "Fully equipped gym, Jogging track" },
+      { title: "Wellness:", text: "Spa and massage facilities,Salon and nail bar" },
+      { title: "Ammenities:", text: "Residents' clubhouse and lounge,Visitor reception and lobby,Outdoor swimming pool" },
+      { title: "Community:", text: "Children's play area,Indoor games room,Gazebo and fire pit,Common garden and event spaces,Screening room for cinema and events" }
+    ],
   },
+
+
+
+
+
+
+
+
 
   {
     id: "sl-031",
@@ -1374,29 +1708,76 @@ window.SELLAM_PROPERTIES = [
     listedDate: "2026-04-21"
   },
 
+
+
+
+
+
   {
     id: "sl-017",
-    slug: "grosvenor-westlands",
+    slug: "grosvenor-residences",
     status: "available",
-    collection: "exclusive",
-    title: "Grosvenor",
-    summary: "A prestigious Westlands location close to offices, restaurants, retail and lifestyle amenities.",
+    collection: "featured",
+    title: "Grosvenor Residences",
+    summary: "Grosvenor Residences introduces a sophisticated new residential address in the heart of Westlands, positioned alongside the iconic GTC Towers and within immediate reach of Nairobi's leading commercial, retail and lifestyle destinations.",
     propertyType: "apartment",
     community: "westlands",
     location: "Westlands, Nairobi",
-    letting: "sale",
-    salePrice: 52000000,
-    rentPrice: null,
-    bedrooms: 3,
-    bathrooms: 3,
-    features: ["gym", "wifi", "security", "parking", "backup-generator"],
-    image: "assets/images/grosvenor.jpg",
-    gallery: ["assets/images/grosvenor.jpg"],
-    url: "grosvenor-westlands",
-    description: "A prestigious Westlands location close to offices, restaurants, retail and lifestyle amenities.",
-    featureLocation: "Prestigious Westlands location close to offices, restaurants, retail, and lifestyle amenities.",
-    listedDate: "2026-05-06"
+    letting: "both",
+  
+    units: [           
+    { unitType: "1-bedroom", bedrooms: 1, bathrooms: 1, salePrice: 9000000, rentPrice: null },
+    { unitType: "2-bedroom", bedrooms: 2, bathrooms: 2, salePrice: 14500000, rentPrice: null },
+      ],
+    
+    image: "assets/images/ENZO Residence (3).jpeg",
+    heroImage: "assets/images/ENZO Residence (6).jpeg",
+    gallery: [
+      "assets/images/ENZO Residence (14).jpeg",
+      "assets/images/ENZO Residence (13).jpeg",
+      "assets/images/ENZO Residence (7).jpeg",
+      "assets/images/ENZO Residence (11).jpeg",
+      "assets/images/ENZO Residence (2).jpeg",
+      "assets/images/ENZO Residence (16).jpeg",
+      "assets/images/ENZO Residence (1).jpeg",
+      "assets/images/ENZO Residence (12).jpeg",
+      "assets/images/ENZO Residence (8).jpeg",
+      "assets/images/ENZO Residence (15).jpeg"      
+      ],
+
+    url: "grosvenor-residences",
+    description: "Position your business at one of East Africa's most distinguished commercial addresses. GTC Office Tower offers world-class Grade A office spaces within Nairobi's premier mixed-use development, combining contemporary architecture, intelligent workplace design, and exceptional business amenities. Whether acquiring office space or leasing for immediate occupation, GTC provides an environment designed for productivity, collaboration, and long-term business growth.",
+        featureLocation: "Adjacent to GTC Towers,Near Sarit Centre,,Near Westgate Mall,Close to Westlands Business District,Excellent Access to Waiyaki Way,Convenient Nairobi Expressway Connectivity,Easy Access to Nairobi CBD.",
+    story: {
+      rows: [
+        { title: "BUsiness and Social Spaces", 
+          body: "Grosvenor recognises that modern residential life increasingly extends beyond the home." },
+        { title: "Residents' Lounge", 
+          body: "A residents-only lounge provides an additional setting for relaxation and informal social interaction." },
+        { title: "Café Lounge", 
+          body: "An integrated café environment offers residents a convenient place for coffee, informal meetings and socialising.." },
+        {  title: "Central Courtyard", 
+          body: "Landscaped communal spaces provide a quieter environment within the development, bringing greenery and outdoor space into the urban setting.." },
+        
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+  { title: "Security:", text: "24-Hour Security,CCTV Surveillance,Controlled Access" },
+  { title: "Connectivity:", text: "Full Power Backup, High-Speed Lifts" },
+  { title: "Community:", text: "Bar & lounge and Landscaped gardens" },
+  { title: "Amenities:", text: "Residents' Café Lounge,Residents' Lounge,Business Lounge" },
+  { title: "Wellness:", text: "Rooftop yoga garden,Fully equipped fitness centre, Spa, massage rooms, steam & sauna" }
+],
+    closingParagraphs: "Whether purchasing office space as a long-term investment or leasing premises for your business, GTC Office Tower presents a rare opportunity within Nairobi's Grade A commercial market. Backed by premium specifications, an iconic business address, and sustained demand from leading local and international occupiers, it continues to set the benchmark for commercial real estate in East Africa."
   },
+  
+
+
+
+
+
+
 
   /* --------------------------------------------------------------- LEASING
      Commercial properties for the Leasing nav dropdown: Offices, Retail,
@@ -1449,7 +1830,11 @@ window.SELLAM_PROPERTIES = [
       "assets/images/GTC Office Tower (2).jpeg",
       "assets/images/GTC Office Tower (4).jpeg",
       "assets/images/GTC Office Tower (12).jpeg",
-      "assets/images/GTC Office Tower (7).jpeg"
+      "assets/images/GTC Office Tower (7).jpeg",
+      "assets/images/GTC Office Tower (18).jpeg",
+      "assets/images/GTC Office Tower (15).jpeg",
+      "assets/images/GTC Office Tower (14).jpeg",
+      "assets/images/GTC Office Tower (13).jpeg"
       ],
     url: "gtc-office-tower",
     description: "Position your business at one of East Africa's most distinguished commercial addresses. GTC Office Tower offers world-class Grade A office spaces within Nairobi's premier mixed-use development, combining contemporary architecture, intelligent workplace design, and exceptional business amenities. Whether acquiring office space or leasing for immediate occupation, GTC provides an environment designed for productivity, collaboration, and long-term business growth.",
@@ -1476,6 +1861,17 @@ window.SELLAM_PROPERTIES = [
 ],
     closingParagraphs: "Whether purchasing office space as a long-term investment or leasing premises for your business, GTC Office Tower presents a rare opportunity within Nairobi's Grade A commercial market. Backed by premium specifications, an iconic business address, and sustained demand from leading local and international occupiers, it continues to set the benchmark for commercial real estate in East Africa."
   },
+
+
+
+
+
+
+
+
+
+
+
 
 {
   id: "sl-019",
@@ -1511,7 +1907,11 @@ window.SELLAM_PROPERTIES = [
     gallery: [
       "assets/images/The Mandrake (2).jpeg",
       "assets/images/The Mandrake (3).jpeg",
+      "assets/images/The Mandrake (1).jpeg",
+      "assets/images/The Mandrake (5).jpeg",
+      "assets/images/The Mandrake (6).jpeg",
       "assets/images/The Mandrake (4).jpeg",
+      "assets/images/The Mandrake (7).jpeg"
     
       ],
     url: "the-mandrake",
@@ -1539,7 +1939,17 @@ window.SELLAM_PROPERTIES = [
 ],
     closingParagraphs: "Whether purchasing office space as a long-term investment or leasing premises for your business, GTC Office Tower presents a rare opportunity within Nairobi's Grade A commercial market. Backed by premium specifications, an iconic business address, and sustained demand from leading local and international occupiers, it continues to set the benchmark for commercial real estate in East Africa."
   },
-   
+
+  
+
+
+
+
+
+
+
+
+
   {
     id: "sl-020",
     slug: "riverside-business-park-office",
@@ -1563,6 +1973,14 @@ window.SELLAM_PROPERTIES = [
     featureLocation: "Kilimani location with quick access to Yaya Centre, Adlife Plaza, and the wider Kilimani/Upper Hill business corridor.",
     listedDate: "2026-05-19"
   },
+
+
+
+
+
+
+
+
 
   {
     id: "sl-025",
@@ -1588,6 +2006,16 @@ window.SELLAM_PROPERTIES = [
     listedDate: "2026-05-24"
   },
 
+
+
+
+
+
+
+
+
+
+
   {
     id: "sl-021",
     slug: "kilimani-mall-retail-space",
@@ -1611,6 +2039,13 @@ window.SELLAM_PROPERTIES = [
     featureLocation: "Kilimani address inside an active retail mall with consistent shopper traffic and shared amenities.",
     listedDate: "2026-05-29"
   },
+
+
+
+
+
+
+
 
   {
     id: "sl-022",
@@ -1636,6 +2071,16 @@ window.SELLAM_PROPERTIES = [
     listedDate: "2026-06-03"
   },
 
+
+
+
+
+
+
+
+
+
+
   {
     id: "sl-023",
     slug: "ngong-road-light-industrial-unit",
@@ -1659,6 +2104,13 @@ window.SELLAM_PROPERTIES = [
     featureLocation: "Ngong Road address with straightforward access for goods vehicles and proximity to Nairobi's southern industrial belt.",
     listedDate: "2026-06-08"
   },
+
+
+
+
+
+
+
 
   {
     id: "sl-024",
@@ -1684,6 +2136,13 @@ window.SELLAM_PROPERTIES = [
     listedDate: "2026-06-13"
   },
 
+
+
+
+
+
+
+
   {
     id: "sl-026",
     slug: "ngong-development-land",
@@ -1707,6 +2166,14 @@ window.SELLAM_PROPERTIES = [
     featureLocation: "Ngong location with growing infrastructure and easy access to Nairobi via Ngong Road.",
     listedDate: "2026-06-18"
   },
+
+
+
+
+
+
+
+
 
   {
     id: "sl-033",
@@ -1783,5 +2250,788 @@ window.SELLAM_PROPERTIES = [
     ]
   },
 
+
+
+
+
+
+
+
+  {
+    id: "sl-034",
+    // NOTE: slug/url must never contain a raw "&" — it's the query-string
+    // separator, so "?id=5-&-6-..." gets truncated by URLSearchParams into
+    // id="5-" (no match), silently falling back to the generic "DG West"
+    // placeholder property. Kept the "&" in `title` (safe — that's just
+    // display text) but stripped it from the id-bearing slug/url below.
+    slug: "ridgeways-ambassadorial-estate",
+    status: "available",
+    collection: "featured",
+    title: "RIDGEWAYS AMBASSADORIAL ESTATE",
+    summary: "RIDGEWAYS AMBASSADORIAL ESTATE offers contemporary apartments in Nairobi with landscaped terraces, modern architecture, luxury amenities, secure parking, premium finishes, wellness facilities, and strong long-term investment potential in prestigious Riverside.",
+    propertyType: "mansion",
+    community: "ridgeways",
+    location: "Ridgeways, Nairobi",
+    letting: "sale",
+    // Two floor plans in this development — see data/property-units.js for
+    // how the rest of the site reads bedrooms/bathrooms/price off `units`.
+    units: [
+      
+     
+      { unitType: "7-bedroom", bedrooms: 7, bathrooms: 7, salePrice: 100000000, rentPrice: null }
+    ],
+
+    image: "assets/images/RIDGEWAYS AMBASSADORIAL ESTATE (8).jpeg",
+    heroImage: "assets/images/RIDGEWAYS AMBASSADORIAL ESTATE (6).jpeg",
+    gallery: [
+      "assets/images/RIDGEWAYS AMBASSADORIAL ESTATE (8).jpeg",
+      "assets/images/RIDGEWAYS AMBASSADORIAL ESTATE (13).jpeg",
+      "assets/images/RIDGEWAYS AMBASSADORIAL ESTATE (7).jpeg",
+      "assets/images/RIDGEWAYS AMBASSADORIAL ESTATE (11).jpeg",
+      "assets/images/RIDGEWAYS AMBASSADORIAL ESTATE (2).jpeg",
+      "assets/images/RIDGEWAYS AMBASSADORIAL ESTATE (16).jpeg",
+      "assets/images/RIDGEWAYS AMBASSADORIAL ESTATE (1).jpeg",
+      "assets/images/RIDGEWAYS AMBASSADORIAL ESTATE (12).jpeg",
+      "assets/images/RIDGEWAYS AMBASSADORIAL ESTATE (8).jpeg",
+      "assets/images/RIDGEWAYS AMBASSADORIAL ESTATE (3).jpeg"
+      
+      ],
+
+    url: "ridgeways-ambassadorial-estate",
+    description: {
+      body: "Set on approximately half an acre in one of Nairobi's established residential enclaves, this substantial seven-bedroom ambassadorial residence combines generous proportions, privacy and a strategic location with the versatility expected of a high-value family or executive home. Designed around expansive interiors and landscaped outdoor spaces, the residence offers a considered balance between formal entertaining and everyday family living. Its scale, additional guest accommodation and extensive leisure facilities make it equally suited to private ownership, diplomatic occupation or executive rental."},
+    featureLocation: "Ridgeways, Nairobi address with easy access to Westlands CBD, Sarit Centre, and Nairobi's key diplomatic and business districts.",
+     story: {
+      rows: [
+        { title: "Grand Living & Entertaining",
+          body: "The principal living areas are defined by high ceilings, generous volumes and a statement fireplace, creating an elegant setting for both formal occasions and relaxed family life. A dedicated family room provides a more intimate retreat, while the home's outdoor living areas extend naturally into the landscaped grounds, creating an environment designed for entertaining throughout the year." },
+        { title: "The Culinary Atelier",
+          body: "The kitchen is designed for both everyday functionality and entertaining, featuring a modern fitted kitchen, stone countertops and dedicated pantry space. An open connection between the kitchen and adjoining living areas creates a practical social environment, while a separate laundry area supports the demands of a substantial family residence." },
+        { title: "Private Sanctuaries",
+          body: "The estate provides seven spacious bedrooms, all en-suite, offering privacy and comfort throughout the residence.The principal accommodation includes generous dressing and walk-in closet provisions, while the additional bedrooms provide flexibility for family, guests or executive accommodation." },
+        { title: "A Private Guest Residence",
+          body: "Adding to the property's versatility is a two-bedroom guest wing, providing a degree of separation rarely available in conventional family homes.The accommodation can serve visiting guests, extended family, senior staff or diplomatic requirements while maintaining the privacy of the principal residence. The property also includes two DSQs, further supporting the operational requirements of a large household." }
+        
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+      { title: "Security:", text: "24-Hour Security, Secure Gated Community" },
+      { title: "Design:", text: "2-bedroom guest wing,2 DSQs,Grand lounge with fireplace,High ceilings,Family room,Modern fitted kitchen,Stone countertops,Pantry,Private home office,Walk-in closets " },
+      { title: "Kitchen:", text: "Modern Kitchen with Island, Walk-In Pantry" },
+      { title: "Ammenities:", text: "Garage,Ample parking,Controlled gated entrance,Scenic outlook" },
+      { title: "Entertainment:", text: "Private swimming pool,Jacuzzi,Sauna,Steam room,Game room,Private cinema,Bar Wine cellar,Outdoor entertainment areas " },
+      { title: "Utilities:", text: "Air conditioning,Solar water heating,Backup generator" }
+    ],
+  
+  },
+
+
+
+
+
+
+
+
+
+
+  {
+    id: "sl-035",
+    // NOTE: slug/url must never contain a raw "&" — it's the query-string
+    // separator, so "?id=5-&-6-..." gets truncated by URLSearchParams into
+    // id="5-" (no match), silently falling back to the generic "DG West"
+    // placeholder property. Kept the "&" in `title` (safe — that's just
+    // display text) but stripped it from the id-bearing slug/url below.
+    slug: "belgravia-place",
+    status: "available",
+    collection: "featured",
+    title: "Belgravia Place",
+    summary: "Belgravia Place brings a considered residential concept to Kileleshwa, drawing on the enduring character and understated elegance associated with London's Belgravia and translating it into a contemporary Nairobi setting.",
+    propertyType: "apartment",
+    community: "kileleshwa",
+    location: "Kileleshwa, Nairobi",
+    letting: "sale",
+    // Two floor plans in this development — see data/property-units.js for
+    // how the rest of the site reads bedrooms/bathrooms/price off `units`.
+    units: [
+      
+     
+      { unitType: "1-bedroom", bedrooms: 1, bathrooms: 1, salePrice: 6200000, rentPrice: null },
+      { unitType: "2-bedroom", bedrooms: 2, bathrooms: 2, salePrice: 12500000, rentPrice: null },
+      { unitType: "3-bedroom", bedrooms: 3, bathrooms: 3, salePrice: 13600000, rentPrice: null }
+    ],
+
+    image: "assets/images/Belgravia Place (2).jpeg",
+    heroImage: "assets/images/Belgravia Place (6).jpeg",
+    gallery: [
+      "assets/images/Belgravia Place (8).jpeg",
+      "assets/images/Belgravia Place (13).jpeg",
+      "assets/images/Belgravia Place (7).jpeg",
+      "assets/images/Belgravia Place (11).jpeg",
+      "assets/images/Belgravia Place (2).jpeg",
+      "assets/images/Belgravia Place (16).jpeg",
+      "assets/images/Belgravia Place (1).jpeg",
+      "assets/images/Belgravia Place (12).jpeg",
+      "assets/images/Belgravia Place (8).jpeg",
+      "assets/images/Belgravia Place (4).jpeg"
+      
+      ],
+
+    url: "belgravia-place",
+    description: {
+      body: "Set on approximately half an acre in one of Nairobi's established residential enclaves, this substantial seven-bedroom ambassadorial residence combines generous proportions, privacy and a strategic location with the versatility expected of a high-value family or executive home. Designed around expansive interiors and landscaped outdoor spaces, the residence offers a considered balance between formal entertaining and everyday family living. Its scale, additional guest accommodation and extensive leisure facilities make it equally suited to private ownership, diplomatic occupation or executive rental."},
+    featureLocation: "Kileleshwa, Nairobi address with easy access to Westlands CBD, Sarit Centre, and Nairobi's key diplomatic and business districts.",
+     story: {
+      rows: [
+        { title: "The Residences",
+          body: "Belgravia Place offers a considered selection of 1, 2 and 3-bedroom residences, with generous layouts and contemporary finishes designed for modern urban living." },
+        { title: "Architecture & Landscape",
+          body: "Inspired by the established character of London's Belgravia, the development takes a restrained approach to contemporary architecture, placing emphasis on proportion, natural light, greenery and quality of space.Landscaped grounds and a central courtyard form the heart of the development, creating a quieter, greener environment while maintaining the convenience of an urban address." },
+        { title: "Living Spaces",
+          body: "The residences are designed around practical layouts and comfortable proportions, with contemporary kitchens, quality cabinetry and countertops, built-in wardrobes and thoughtfully finished bathrooms.Selected residences feature private balconies, while the larger configurations provide additional spaces through DSQs or mini-studios." },
+        { title: "A Lifestyle Beyond the Residence",
+          body: "Belgravia Place brings together an extensive range of amenities across its ground, mezzanine and rooftop levels, allowing residents to work, exercise, socialise and unwind within the development." }
+        
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+      { title: "Security:", text: "24-Hour Security, Secure Gated Community" },
+      { title: "Design:", text: "2-bedroom guest wing,2 DSQs,Grand lounge with fireplace,High ceilings,Family room,Modern fitted kitchen,Stone countertops,Pantry,Private home office,Walk-in closets " },
+      { title: "Kitchen:", text: "Modern Kitchen with Island, Walk-In Pantry" },
+      { title: "Rooftop:", text: "* Infinity sky pool,Poolside leisure area, Fully equipped fitness centre,Padel court,Sauna,Wellness spaces" },
+      { title: "Mezzanine:", text: "* Co-working café,Private meeting and conference spaces,Children's play area,Laundry facilities,Convenience store,Entertainment and games room" },
+      { title: "Community:", text: "24-hour reception and lobby,Garden restaurant,Landscaped central courtyard,Resident and visitor facilities" }
+    ],
+
+    paymentPlan: [
+      { percent: 20, label: "Down Payment" },
+      { percent: 15, label: "Down Payment" },
+      { percent: 50, label: "Down Payment" }
+      
+    ]
+  
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {
+    id: "sl-036",
+    // NOTE: slug/url must never contain a raw "&" — it's the query-string
+    // separator, so "?id=5-&-6-..." gets truncated by URLSearchParams into
+    // id="5-" (no match), silently falling back to the generic "DG West"
+    // placeholder property. Kept the "&" in `title` (safe — that's just
+    // display text) but stripped it from the id-bearing slug/url below.
+    slug: "paradise-haven-residence",
+    status: "available",
+    collection: "featured",
+    title: "Paradise Haven Residence",
+    summary: "Paradise Haven Residence brings a considered residential concept to Runda, drawing on the enduring character and understated elegance associated with London's Belgravia and translating it into a contemporary Nairobi setting.",
+    propertyType: "apartment",
+    community: "runda",
+    location: "Runda, Nairobi",
+    letting: "sale",
+    // Two floor plans in this development — see data/property-units.js for
+    // how the rest of the site reads bedrooms/bathrooms/price off `units`.
+    units: [
+      
+     
+      { unitType: "5-bedroom", bedrooms: 5, bathrooms: 5, salePrice: 150000000, rentPrice: null }
+   
+    ],
+
+    image: "assets/images/Paradise Haven Residence (2).jpeg",
+    heroImage: "assets/images/Paradise Haven Residence (4).jpeg",
+    gallery: [
+      "assets/images/Paradise Haven Residence (8).jpeg",
+      "assets/images/Paradise Haven Residence (13).jpeg",
+      "assets/images/Paradise Haven Residence (7).jpeg",
+      "assets/images/Paradise Haven Residence (11).jpeg",
+      "assets/images/Paradise Haven Residence (2).jpeg",
+      "assets/images/Paradise Haven Residence (16).jpeg",
+      "assets/images/Paradise Haven Residence (1).jpeg",
+      "assets/images/Paradise Haven Residence (12).jpeg",
+      "assets/images/Paradise Haven Residence (8).jpeg",
+      "assets/images/Paradise Haven Residence (4).jpeg"
+      
+      ],
+
+    url: "paradise-haven-residence",
+    description: {
+      body: "Paradise Haven Residence is an exclusive collection of just sixteen bespoke villas set within the prestigious suburb of Runda. Occupying generous quarter-acre plots within a secure gated enclave, each residence has been thoughtfully designed to combine timeless architecture with contemporary luxury, creating homes that offer exceptional privacy, elegant interiors, and an uncompromising standard of living.Every villa reflects meticulous craftsmanship, sophisticated finishes, and intelligent spatial planning. With only sixteen residences surrounding a private clubhouse, Paradise Haven delivers a rare opportunity to own a distinguished family home within one of Nairobi's most exclusive residential addresses."},
+    featureLocation: "Runda, Nairobi address with easy access to Westlands CBD, Sarit Centre, and Nairobi's key diplomatic and business districts.",
+     story: {
+      rows: [
+        { title: "Contemporary Architecture",
+          body: "Inspired by timeless architectural principles and refined modern living, Paradise Haven Residence showcases elegant façades, expansive glazing, clean architectural lines, and beautifully landscaped outdoor spaces. Every villa occupies its own quarter-acre plot, ensuring exceptional privacy while maintaining a harmonious streetscape throughout the development.Designed across three spacious levels, each home balances grandeur with warmth, creating elegant spaces that remain practical for everyday family living.." },
+        { title: "Grand Entrance & Arrival Experience",
+          body: "A striking double-volume entrance foyer welcomes residents into an impressive reception lobby beneath a dramatic glass skylight. Suspended above, a cascading designer ring chandelier creates an unforgettable first impression, while soaring ceilings and carefully selected finishes establish the tone of understated luxury that continues throughout the residence." },
+        { title: "Contemporary Living Spaces",
+          body: "Designed around family living and effortless entertaining, the expansive lounge is centred around an elegant fireplace and opens seamlessly onto spacious outdoor terraces overlooking landscaped gardens. High ceilings, warm ambient lighting, and natural finishes create inviting interiors filled with light and sophistication." },
+        { title: "Elegant Dining",
+          body: "The formal dining room has been thoughtfully designed to create memorable entertaining experiences. Anchored by an elegant marble dining table accommodating eight guests, the space is enhanced by velvet dining chairs with gold accents, expansive glazing, and direct garden views." }
+        
+      ]
+    },
+    listedDate: "2026-08-25",
+    featureHighlights: [
+      { title: "Security:", text: "24-Hour Security, Secure Gated Community" },
+      { title: "Design:", text: "2-bedroom guest wing,2 DSQs,Grand lounge with fireplace,High ceilings,Family room,Modern fitted kitchen,Stone countertops,Pantry,Private home office,Walk-in closets. "},
+      { title: "Kitchen:", text: "Modern Kitchen with Island, Walk-In Pantry" },
+      { title: "Rooftop:", text: "* Infinity sky pool,Poolside leisure area, Fully equipped fitness centre,Padel court,Sauna,Wellness spaces" },
+      { title: "Amenities:", text: "* Heated Swimming Pool,Private Residents' Clubhouse,Residents' Lounge,Shared Entertainment Kitchen,Fully Equipped Gymnasium,Landscaped Communal Gardens,Estate Management Office, Covered Carport, Visitor Parking" },
+      { title: "Community:", text: "24-hour reception and lobby,Garden restaurant,Landscaped central courtyard,Resident and visitor facilities" }
+    ],
+
+    paymentPlan: [
+      { percent: 20, label: "Down Payment" },
+      { percent: 15, label: "Down Payment" },
+      { percent: 50, label: "Down Payment" }
+      
+    ]
+  
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {
+    id: "sl-037",
+    // NOTE: slug/url must never contain a raw "&" — it's the query-string
+    // separator, so "?id=5-&-6-..." gets truncated by URLSearchParams into
+    // id="5-" (no match), silently falling back to the generic "DG West"
+    // placeholder property. Kept the "&" in `title` (safe — that's just
+    // display text) but stripped it from the id-bearing slug/url below.
+    slug: "runda-mumwe-ambassadorial-villa",
+    status: "available",
+    collection: "featured",
+    title: "Runda Mumwe Ambassadorial Villa",
+    summary: "Runda Mumwe Ambassadorial Villa offers a luxurious living experience in the heart of Runda, combining modern amenities with elegant design.",
+    propertyType: "apartment",
+    community: "runda",
+    location: "Runda, Nairobi",
+    letting: "sale",
+    // Two floor plans in this development — see data/property-units.js for
+    // how the rest of the site reads bedrooms/bathrooms/price off `units`.
+    units: [
+      
+     
+      { unitType: "4-bedroom", bedrooms: 4, bathrooms: 4, salePrice: 350000000, rentPrice: null }
+     
+    ],
+
+    image: "assets/images/Runda Mumwe Ambassadorial Villa (16).jpeg",
+    heroImage: "assets/images/Runda Mumwe Ambassadorial Villa (16).jpeg",
+    gallery: [
+      "assets/images/Runda Mumwe Ambassadorial Villa (8).jpeg",
+      "assets/images/Runda Mumwe Ambassadorial Villa (13).jpeg",
+      "assets/images/Runda Mumwe Ambassadorial Villa (7).jpeg",
+      "assets/images/Runda Mumwe Ambassadorial Villa (11).jpeg",
+      "assets/images/Runda Mumwe Ambassadorial Villa (2).jpeg",
+      "assets/images/Runda Mumwe Ambassadorial Villa (16).jpeg",
+      "assets/images/Runda Mumwe Ambassadorial Villa (1).jpeg",
+      "assets/images/Runda Mumwe Ambassadorial Villa (12).jpeg",
+      "assets/images/Runda Mumwe Ambassadorial Villa (8).jpeg",
+      "assets/images/Runda Mumwe Ambassadorial Villa (4).jpeg"
+      
+      ],
+
+    url: "runda-mumwe-ambassadorial-villa",
+    description: {
+      body: "Set on approximately half an acre of beautifully landscaped grounds in the prestigious Runda Mumwe, this distinguished ambassadorial villa brings together generous proportions, refined finishes, privacy and modern functionality within one of Nairobi's most established residential addresses.The residence features four spacious all-en-suite bedrooms, a detached guest wing, two DSQs, multiple living spaces, a fully fitted kitchen, private swimming pool and mature landscaped gardens. Designed for both formal entertaining and comfortable family living, the property offers the scale and discretion associated with high-level diplomatic and executive residences.Its location provides convenient access to the UN Headquarters and diplomatic corridor in Gigiri, leading international schools, hospitals, shopping and Nairobi's principal business districts.."},
+    featureLocation: "Runda, Nairobi address with easy access to Westlands CBD, Sarit Centre, and Nairobi's key diplomatic and business districts.",
+     story: {
+      rows: [
+        { title: "Grand Living Spaces",
+          body: "The residence opens through a striking entrance into expansive living areas designed to accommodate both everyday family life and formal entertaining.Multiple lounges create distinct spaces for relaxation, hosting and family gatherings, while large windows allow natural light to flow through the interiors. The generous proportions of the home, together with its landscaped outdoor environment, create a seamless relationship between indoor comfort and outdoor living." },
+        { title: "Private Bedroom Suites",
+          body: "The residence comprises four spacious all-en-suite bedrooms, each designed to provide privacy and comfort. The bedrooms are complemented by contemporary bathrooms and generous proportions, creating comfortable private retreats within the wider home."},
+        { title: "The Kitchen",
+          body: "The home features a closed, fully fitted kitchen designed for functionality and everyday family use.The kitchen provides:Modern fitted cabinetry,Generous storage,Spacious work surfaces,Dedicated pantry,Separate laundry area." },
+        { title: "Outdoor Living",
+          body: "The expansive grounds are central to the character of the residence.A mature landscaped garden surrounds the home, with established trees, manicured lawns and a serene water fountain creating a private and tranquil setting.The outdoor spaces provide ample room for entertaining, family recreation and quiet relaxation." }
+        
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+      { title: "Security:", text: "24-Hour Security, Secure Gated Community" },
+      { title: "Design:", text: "2-bedroom guest wing,2 DSQs,Grand lounge with fireplace,High ceilings,Family room,Modern fitted kitchen,Stone countertops,Pantry,Private home office,Walk-in closets " },
+      { title: "Kitchen:", text: "Modern Kitchen with Island, Walk-In Pantry" },
+      { title: "Rooftop:", text: "Infinity sky pool,Poolside leisure area, Fully equipped fitness centre,Padel court,Sauna,Wellness spaces" },
+      { title: "Mezzanine:", text: "Co-working café,Private meeting and conference spaces,Children's play area,Laundry facilities,Convenience store,Entertainment and games room" },
+      { title: "Community:", text: "24-hour reception and lobby,Garden restaurant,Landscaped central courtyard,Resident and visitor facilities" }
+    ],  
+  },
+
+
+
+
+
+
+
+  {
+    id: "sl-038",
+    // NOTE: slug/url must never contain a raw "&" — it's the query-string
+    // separator, so "?id=5-&-6-..." gets truncated by URLSearchParams into
+    // id="5-" (no match), silently falling back to the generic "DG West"
+    // placeholder property. Kept the "&" in `title` (safe — that's just
+    // display text) but stripped it from the id-bearing slug/url below.
+    slug: "oakland-residence",
+    status: "available",
+    collection: "featured",
+    title: "Oakland Residence",
+    summary: "Oakland Residence offers a luxurious living experience in the heart of Spring Valley, combining modern amenities with elegant design.",
+    propertyType: "apartment",
+    community: "spring-valley",
+    location: "Spring Valley, Nairobi",
+    letting: "sale",
+    // Two floor plans in this development — see data/property-units.js for
+    // how the rest of the site reads bedrooms/bathrooms/price off `units`.
+    units: [
+      
+     
+      { unitType: "4-bedroom", bedrooms: 4, bathrooms: 4, salePrice: 82000000, rentPrice: null }
+     
+    ],
+
+    image: "assets/images/Oakland Residence (16).jpeg",
+    heroImage: "assets/images/Oakland Residence (16).jpeg",
+    gallery: [
+      "assets/images/Oakland Residence (8).jpeg",
+      "assets/images/Oakland Residence (13).jpeg",
+      "assets/images/Oakland Residence (7).jpeg",
+      "assets/images/Oakland Residence (11).jpeg",
+      "assets/images/Oakland Residence (2).jpeg",
+      "assets/images/Oakland Residence (16).jpeg",
+      "assets/images/Oakland Residence (1).jpeg",
+      "assets/images/Oakland Residence (12).jpeg",
+      "assets/images/Oakland Residence (8).jpeg",
+      "assets/images/Oakland Residence (4).jpeg"
+      
+      ],
+
+    url: "oakland-residence",
+    description: {
+      body: "Situated along the prestigious Peponi Road in Spring Valley, this beautifully appointed four-bedroom residence offers an exceptional blend of luxury, privacy, and nature. Overlooking the lush canopy of Karura Forest, the apartment has been thoughtfully designed to deliver generous living spaces, refined finishes, and an elevated lifestyle within one of Nairobi's most desirable residential addresses. Combining contemporary architecture with tranquil surroundings, this is a home designed for discerning homeowners seeking both convenience and exclusivity.."},
+    featureLocation: "Minutes from Westlands, Gigiri & Karura Forest.",
+     story: {
+      rows: [
+        { title: "Contemporary Living Spaces",
+          body: "Designed to maximise space and natural light, the apartment features an expansive open-plan living and dining area that flows effortlessly onto a private balcony overlooking Karura Forest. Large windows frame uninterrupted green views, creating bright, inviting interiors while seamlessly connecting indoor and outdoor living. A separate family and TV lounge with its own balcony provides an additional space for relaxation, entertainment, or everyday family living." },
+        { title: "The Culinary Kitchen",
+          body: "The contemporary kitchen has been carefully designed to combine elegance with everyday functionality. Featuring premium cabinetry, generous work surfaces, a breakfast bar, double sink, and a spacious pantry, it offers an ideal setting for both casual family meals and formal entertaining. A separate utility area enhances convenience while maintaining an organised and efficient workspace.."},
+        { title: "Private Sanctuaries",
+          body: "All four bedrooms are generously proportioned and thoughtfully designed to provide exceptional comfort and privacy. Each bedroom is fully en-suite and fitted with built-in wardrobes, creating elegant personal retreats for every member of the household." },
+        { title: "Spa-Inspired Bathrooms",
+          body: "Every bathroom has been finished to a high contemporary standard using premium fittings and elegant finishes. Spacious layouts, modern sanitary ware, quality tiling, and sophisticated fixtures create luxurious spaces designed for comfort and relaxation. The master bathroom is complemented by both a walk-in shower and a bathtub, offering a true spa-inspired experience.." },
+        { title: "Outdoor Living",
+          body: "Positioned within beautifully landscaped grounds, residents enjoy direct access to well-maintained gardens that provide a peaceful extension of the home. Private balconies overlooking Karura Forest further enhance the outdoor living experience, creating ideal spaces to unwind while enjoying one of Nairobi's most scenic natural settings." }
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+      { title: "Security:", text: "24-Hour Security, CCTV Surveillance, Controlled Access" },
+      { title: "Design:", text: "Four All En-Suite Bedrooms, Master Suite with Walk-In Closet, Private Forest-View Balconies, Family / TV Room, Open-Plan Living & Dining, Modern Kitchen with Pantry, Breakfast Bar, Separate Utility Area, Separate Staff Quarters (DSQ), Guest Cloakroom, Security Alarm System, Three Dedicated Parking Bays " },
+      { title: "Community:", text: "* Swimming Pool, Children's Play Area, Entertainment Area, Landscaped Gardens, Pet-Friendly Development" }
+    ],  
+  },
+
+
+
+
+{
+    id: "sl-039",
+    // NOTE: slug/url must never contain a raw "&" — it's the query-string
+    // separator, so "?id=5-&-6-..." gets truncated by URLSearchParams into
+    // id="5-" (no match), silently falling back to the generic "DG West"
+    // placeholder property. Kept the "&" in `title` (safe — that's just
+    // display text) but stripped it from the id-bearing slug/url below.
+    slug: "gtc-one-bedroom-penthouse",
+    status: "available",
+    collection: "featured",
+    title: "GTC One Bedroom Penthouse",
+    summary: "GTC One Bedroom Penthouse offers a luxurious living experience in the heart of Spring Valley, combining modern amenities with elegant design.",
+    propertyType: "penthouse",
+    community: "westlands",
+    location: "Global Trade Centre (GTC), Westlands, Nairobi",
+    letting: "sale",
+    // Two floor plans in this development — see data/property-units.js for
+    // how the rest of the site reads bedrooms/bathrooms/price off `units`.
+    units: [
+      
+     
+      { unitType: "1-bedroom", bedrooms: 1, bathrooms: 1, salePrice: 50000000, rentPrice: null }
+     
+    ],
+
+    image: "assets/images/Oakland Residence (16).jpeg",
+    heroImage: "assets/images/Oakland Residence (16).jpeg",
+    gallery: [
+      "assets/images/Oakland Residence (8).jpeg",
+      "assets/images/Oakland Residence (13).jpeg",
+      "assets/images/Oakland Residence (7).jpeg",
+      "assets/images/Oakland Residence (11).jpeg",
+      "assets/images/Oakland Residence (2).jpeg",
+      "assets/images/Oakland Residence (16).jpeg",
+      "assets/images/Oakland Residence (1).jpeg",
+      "assets/images/Oakland Residence (12).jpeg",
+      "assets/images/Oakland Residence (8).jpeg",
+      "assets/images/Oakland Residence (4).jpeg"
+      
+      ],
+
+    url: "gtc-one-bedroom-penthouse",
+    description: {
+      body: "Situated along the prestigious Peponi Road in Spring Valley, this beautifully appointed four-bedroom residence offers an exceptional blend of luxury, privacy, and nature. Overlooking the lush canopy of Karura Forest, the apartment has been thoughtfully designed to deliver generous living spaces, refined finishes, and an elevated lifestyle within one of Nairobi's most desirable residential addresses. Combining contemporary architecture with tranquil surroundings, this is a home designed for discerning homeowners seeking both convenience and exclusivity.."},
+    featureLocation: "Minutes from Westlands, Gigiri & Karura Forest.",
+     story: {
+      rows: [
+        { title: "Contemporary Living Spaces",
+          body: "Designed to maximise space and natural light, the apartment features an expansive open-plan living and dining area that flows effortlessly onto a private balcony overlooking Karura Forest. Large windows frame uninterrupted green views, creating bright, inviting interiors while seamlessly connecting indoor and outdoor living. A separate family and TV lounge with its own balcony provides an additional space for relaxation, entertainment, or everyday family living." },
+        { title: "The Culinary Kitchen",
+          body: "The contemporary kitchen has been carefully designed to combine elegance with everyday functionality. Featuring premium cabinetry, generous work surfaces, a breakfast bar, double sink, and a spacious pantry, it offers an ideal setting for both casual family meals and formal entertaining. A separate utility area enhances convenience while maintaining an organised and efficient workspace.."},
+        { title: "Private Sanctuaries",
+          body: "All four bedrooms are generously proportioned and thoughtfully designed to provide exceptional comfort and privacy. Each bedroom is fully en-suite and fitted with built-in wardrobes, creating elegant personal retreats for every member of the household." },
+        { title: "Spa-Inspired Bathrooms",
+          body: "Every bathroom has been finished to a high contemporary standard using premium fittings and elegant finishes. Spacious layouts, modern sanitary ware, quality tiling, and sophisticated fixtures create luxurious spaces designed for comfort and relaxation. The master bathroom is complemented by both a walk-in shower and a bathtub, offering a true spa-inspired experience.." },
+        { title: "Outdoor Living",
+          body: "Positioned within beautifully landscaped grounds, residents enjoy direct access to well-maintained gardens that provide a peaceful extension of the home. Private balconies overlooking Karura Forest further enhance the outdoor living experience, creating ideal spaces to unwind while enjoying one of Nairobi's most scenic natural settings." }
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+      { title: "Security:", text: "24-Hour Security, CCTV Surveillance, Controlled Access" },
+      { title: "Design:", text: "Four All En-Suite Bedrooms, Master Suite with Walk-In Closet, Private Forest-View Balconies, Family / TV Room, Open-Plan Living & Dining, Modern Kitchen with Pantry, Breakfast Bar, Separate Utility Area, Separate Staff Quarters (DSQ), Guest Cloakroom, Security Alarm System, Three Dedicated Parking Bays " },
+      { title: "Community:", text: "* Swimming Pool, Children's Play Area, Entertainment Area, Landscaped Gardens, Pet-Friendly Development" }
+    ],  
+  },
+
+
+
+
+
+
+  {
+    id: "sl-040",
+    // NOTE: slug/url must never contain a raw "&" — it's the query-string
+    // separator, so "?id=5-&-6-..." gets truncated by URLSearchParams into
+    // id="5-" (no match), silently falling back to the generic "DG West"
+    // placeholder property. Kept the "&" in `title` (safe — that's just
+    // display text) but stripped it from the id-bearing slug/url below.
+    slug: "gtc-two-bedroom-penthouse",
+    status: "available",
+    collection: "featured",
+    title: "GTC Two Bedroom Penthouse",
+    summary: "GTC Two Bedroom Penthouse offers a luxurious living experience in the heart of Spring Valley, combining modern amenities with elegant design.",
+    propertyType: "penthouse",
+    community: "westlands",
+    location: "Global Trade Centre (GTC), Westlands, Nairobi",
+    letting: "sale",
+    // Two floor plans in this development — see data/property-units.js for
+    // how the rest of the site reads bedrooms/bathrooms/price off `units`.
+    units: [
+      
+     
+      { unitType: "2-bedroom", bedrooms: 2, bathrooms: 2, salePrice: 73450000, rentPrice: null }
+     
+    ],
+
+    image: "assets/images/Oakland Residence (16).jpeg",
+    heroImage: "assets/images/Oakland Residence (16).jpeg",
+    gallery: [
+      "assets/images/Oakland Residence (8).jpeg",
+      "assets/images/Oakland Residence (13).jpeg",
+      "assets/images/Oakland Residence (7).jpeg",
+      "assets/images/Oakland Residence (11).jpeg",
+      "assets/images/Oakland Residence (2).jpeg",
+      "assets/images/Oakland Residence (16).jpeg",
+      "assets/images/Oakland Residence (1).jpeg",
+      "assets/images/Oakland Residence (12).jpeg",
+      "assets/images/Oakland Residence (8).jpeg",
+      "assets/images/Oakland Residence (4).jpeg"
+      
+      ],
+
+    url: "gtc-two-bedroom-penthouse",
+    description: {
+      body: "Situated along the prestigious Peponi Road in Spring Valley, this beautifully appointed four-bedroom residence offers an exceptional blend of luxury, privacy, and nature. Overlooking the lush canopy of Karura Forest, the apartment has been thoughtfully designed to deliver generous living spaces, refined finishes, and an elevated lifestyle within one of Nairobi's most desirable residential addresses. Combining contemporary architecture with tranquil surroundings, this is a home designed for discerning homeowners seeking both convenience and exclusivity.."},
+    featureLocation: "Minutes from Westlands, Gigiri & Karura Forest.",
+     story: {
+      rows: [
+        { title: "Contemporary Living Spaces",
+          body: "Designed to maximise space and natural light, the apartment features an expansive open-plan living and dining area that flows effortlessly onto a private balcony overlooking Karura Forest. Large windows frame uninterrupted green views, creating bright, inviting interiors while seamlessly connecting indoor and outdoor living. A separate family and TV lounge with its own balcony provides an additional space for relaxation, entertainment, or everyday family living." },
+        { title: "The Culinary Kitchen",
+          body: "The contemporary kitchen has been carefully designed to combine elegance with everyday functionality. Featuring premium cabinetry, generous work surfaces, a breakfast bar, double sink, and a spacious pantry, it offers an ideal setting for both casual family meals and formal entertaining. A separate utility area enhances convenience while maintaining an organised and efficient workspace.."},
+        { title: "Private Sanctuaries",
+          body: "All four bedrooms are generously proportioned and thoughtfully designed to provide exceptional comfort and privacy. Each bedroom is fully en-suite and fitted with built-in wardrobes, creating elegant personal retreats for every member of the household." },
+        { title: "Spa-Inspired Bathrooms",
+          body: "Every bathroom has been finished to a high contemporary standard using premium fittings and elegant finishes. Spacious layouts, modern sanitary ware, quality tiling, and sophisticated fixtures create luxurious spaces designed for comfort and relaxation. The master bathroom is complemented by both a walk-in shower and a bathtub, offering a true spa-inspired experience.." },
+        { title: "Outdoor Living",
+          body: "Positioned within beautifully landscaped grounds, residents enjoy direct access to well-maintained gardens that provide a peaceful extension of the home. Private balconies overlooking Karura Forest further enhance the outdoor living experience, creating ideal spaces to unwind while enjoying one of Nairobi's most scenic natural settings." }
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+      { title: "Security:", text: "24-Hour Security, CCTV Surveillance, Controlled Access" },
+      { title: "Design:", text: "Four All En-Suite Bedrooms, Master Suite with Walk-In Closet, Private Forest-View Balconies, Family / TV Room, Open-Plan Living & Dining, Modern Kitchen with Pantry, Breakfast Bar, Separate Utility Area, Separate Staff Quarters (DSQ), Guest Cloakroom, Security Alarm System, Three Dedicated Parking Bays " },
+      { title: "Community:", text: "* Swimming Pool, Children's Play Area, Entertainment Area, Landscaped Gardens, Pet-Friendly Development" }
+    ],  
+  },
+
+
+
+
+
+
+
+
+
+
+  {
+    id: "sl-041",
+    // NOTE: slug/url must never contain a raw "&" — it's the query-string
+    // separator, so "?id=5-&-6-..." gets truncated by URLSearchParams into
+    // id="5-" (no match), silently falling back to the generic "DG West"
+    // placeholder property. Kept the "&" in `title` (safe — that's just
+    // display text) but stripped it from the id-bearing slug/url below.
+    slug: "gtc-three-bedroom-penthouse",
+    status: "available",
+    collection: "featured",
+    title: "GTC Three Bedroom Penthouse",
+    summary: "GTC Three Bedroom Penthouse offers a luxurious living experience in the heart of Spring Valley, combining modern amenities with elegant design.",
+    propertyType: "penthouse",
+    community: "westlands",
+    location: "Global Trade Centre (GTC), Westlands, Nairobi",
+    letting: "sale",
+    // Two floor plans in this development — see data/property-units.js for
+    // how the rest of the site reads bedrooms/bathrooms/price off `units`.
+    units: [
+      
+     
+      { unitType: "3-bedroom", bedrooms: 3, bathrooms: 3, salePrice: 100000000, rentPrice: null }
+     
+    ],
+
+    image: "assets/images/Oakland Residence (16).jpeg",
+    heroImage: "assets/images/Oakland Residence (16).jpeg",
+    gallery: [
+      "assets/images/Oakland Residence (8).jpeg",
+      "assets/images/Oakland Residence (13).jpeg",
+      "assets/images/Oakland Residence (7).jpeg",
+      "assets/images/Oakland Residence (11).jpeg",
+      "assets/images/Oakland Residence (2).jpeg",
+      "assets/images/Oakland Residence (16).jpeg",
+      "assets/images/Oakland Residence (1).jpeg",
+      "assets/images/Oakland Residence (12).jpeg",
+      "assets/images/Oakland Residence (8).jpeg",
+      "assets/images/Oakland Residence (4).jpeg"
+      
+      ],
+
+    url: "gtc-three-bedroom-penthouse",
+    description: {
+      body: "Situated along the prestigious Peponi Road in Spring Valley, this beautifully appointed four-bedroom residence offers an exceptional blend of luxury, privacy, and nature. Overlooking the lush canopy of Karura Forest, the apartment has been thoughtfully designed to deliver generous living spaces, refined finishes, and an elevated lifestyle within one of Nairobi's most desirable residential addresses. Combining contemporary architecture with tranquil surroundings, this is a home designed for discerning homeowners seeking both convenience and exclusivity.."},
+    featureLocation: "Minutes from Westlands, Gigiri & Karura Forest.",
+     story: {
+      rows: [
+        { title: "Contemporary Living Spaces",
+          body: "Designed to maximise space and natural light, the apartment features an expansive open-plan living and dining area that flows effortlessly onto a private balcony overlooking Karura Forest. Large windows frame uninterrupted green views, creating bright, inviting interiors while seamlessly connecting indoor and outdoor living. A separate family and TV lounge with its own balcony provides an additional space for relaxation, entertainment, or everyday family living." },
+        { title: "The Culinary Kitchen",
+          body: "The contemporary kitchen has been carefully designed to combine elegance with everyday functionality. Featuring premium cabinetry, generous work surfaces, a breakfast bar, double sink, and a spacious pantry, it offers an ideal setting for both casual family meals and formal entertaining. A separate utility area enhances convenience while maintaining an organised and efficient workspace.."},
+        { title: "Private Sanctuaries",
+          body: "All four bedrooms are generously proportioned and thoughtfully designed to provide exceptional comfort and privacy. Each bedroom is fully en-suite and fitted with built-in wardrobes, creating elegant personal retreats for every member of the household." },
+        { title: "Spa-Inspired Bathrooms",
+          body: "Every bathroom has been finished to a high contemporary standard using premium fittings and elegant finishes. Spacious layouts, modern sanitary ware, quality tiling, and sophisticated fixtures create luxurious spaces designed for comfort and relaxation. The master bathroom is complemented by both a walk-in shower and a bathtub, offering a true spa-inspired experience.." },
+        { title: "Outdoor Living",
+          body: "Positioned within beautifully landscaped grounds, residents enjoy direct access to well-maintained gardens that provide a peaceful extension of the home. Private balconies overlooking Karura Forest further enhance the outdoor living experience, creating ideal spaces to unwind while enjoying one of Nairobi's most scenic natural settings." }
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+      { title: "Security:", text: "24-Hour Security, CCTV Surveillance, Controlled Access" },
+      { title: "Design:", text: "Four All En-Suite Bedrooms, Master Suite with Walk-In Closet, Private Forest-View Balconies, Family / TV Room, Open-Plan Living & Dining, Modern Kitchen with Pantry, Breakfast Bar, Separate Utility Area, Separate Staff Quarters (DSQ), Guest Cloakroom, Security Alarm System, Three Dedicated Parking Bays " },
+      { title: "Community:", text: "* Swimming Pool, Children's Play Area, Entertainment Area, Landscaped Gardens, Pet-Friendly Development" }
+    ],  
+  },
+
+
+
+
+
+
+
+
+
+
+  {
+    id: "sl-042",
+    // NOTE: slug/url must never contain a raw "&" — it's the query-string
+    // separator, so "?id=5-&-6-..." gets truncated by URLSearchParams into
+    // id="5-" (no match), silently falling back to the generic "DG West"
+    // placeholder property. Kept the "&" in `title` (safe — that's just
+    // display text) but stripped it from the id-bearing slug/url below.
+    slug: "gtc-four-bedroom-penthouse",
+    status: "available",
+    collection: "featured",
+    title: "GTC Four Bedroom Penthouse",
+    summary: "GTC Four Bedroom Penthouse offers a luxurious living experience in the heart of Spring Valley, combining modern amenities with elegant design.",
+    propertyType: "penthouse",
+    community: "westlands",
+    location: "Global Trade Centre (GTC), Westlands, Nairobi",
+    letting: "sale",
+    // Two floor plans in this development — see data/property-units.js for
+    // how the rest of the site reads bedrooms/bathrooms/price off `units`.
+    units: [
+      
+     
+      { unitType: "4-bedroom", bedrooms: 4, bathrooms: 4, salePrice: 146900000, rentPrice: null }
+     
+    ],
+
+    image: "assets/images/Oakland Residence (16).jpeg",
+    heroImage: "assets/images/Oakland Residence (16).jpeg",
+    gallery: [
+      "assets/images/Oakland Residence (8).jpeg",
+      "assets/images/Oakland Residence (13).jpeg",
+      "assets/images/Oakland Residence (7).jpeg",
+      "assets/images/Oakland Residence (11).jpeg",
+      "assets/images/Oakland Residence (2).jpeg",
+      "assets/images/Oakland Residence (16).jpeg",
+      "assets/images/Oakland Residence (1).jpeg",
+      "assets/images/Oakland Residence (12).jpeg",
+      "assets/images/Oakland Residence (8).jpeg",
+      "assets/images/Oakland Residence (4).jpeg"
+      
+      ],
+
+    url: "gtc-four-bedroom-penthouse",
+    description: {
+      body: "Situated along the prestigious Peponi Road in Spring Valley, this beautifully appointed four-bedroom residence offers an exceptional blend of luxury, privacy, and nature. Overlooking the lush canopy of Karura Forest, the apartment has been thoughtfully designed to deliver generous living spaces, refined finishes, and an elevated lifestyle within one of Nairobi's most desirable residential addresses. Combining contemporary architecture with tranquil surroundings, this is a home designed for discerning homeowners seeking both convenience and exclusivity.."},
+    featureLocation: "Minutes from Westlands, Gigiri & Karura Forest.",
+     story: {
+      rows: [
+        { title: "Contemporary Living Spaces",
+          body: "Designed to maximise space and natural light, the apartment features an expansive open-plan living and dining area that flows effortlessly onto a private balcony overlooking Karura Forest. Large windows frame uninterrupted green views, creating bright, inviting interiors while seamlessly connecting indoor and outdoor living. A separate family and TV lounge with its own balcony provides an additional space for relaxation, entertainment, or everyday family living." },
+        { title: "The Culinary Kitchen",
+          body: "The contemporary kitchen has been carefully designed to combine elegance with everyday functionality. Featuring premium cabinetry, generous work surfaces, a breakfast bar, double sink, and a spacious pantry, it offers an ideal setting for both casual family meals and formal entertaining. A separate utility area enhances convenience while maintaining an organised and efficient workspace.."},
+        { title: "Private Sanctuaries",
+          body: "All four bedrooms are generously proportioned and thoughtfully designed to provide exceptional comfort and privacy. Each bedroom is fully en-suite and fitted with built-in wardrobes, creating elegant personal retreats for every member of the household." },
+        { title: "Spa-Inspired Bathrooms",
+          body: "Every bathroom has been finished to a high contemporary standard using premium fittings and elegant finishes. Spacious layouts, modern sanitary ware, quality tiling, and sophisticated fixtures create luxurious spaces designed for comfort and relaxation. The master bathroom is complemented by both a walk-in shower and a bathtub, offering a true spa-inspired experience.." },
+        { title: "Outdoor Living",
+          body: "Positioned within beautifully landscaped grounds, residents enjoy direct access to well-maintained gardens that provide a peaceful extension of the home. Private balconies overlooking Karura Forest further enhance the outdoor living experience, creating ideal spaces to unwind while enjoying one of Nairobi's most scenic natural settings." }
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+      { title: "Security:", text: "24-Hour Security, CCTV Surveillance, Controlled Access" },
+      { title: "Design:", text: "Four All En-Suite Bedrooms, Master Suite with Walk-In Closet, Private Forest-View Balconies, Family / TV Room, Open-Plan Living & Dining, Modern Kitchen with Pantry, Breakfast Bar, Separate Utility Area, Separate Staff Quarters (DSQ), Guest Cloakroom, Security Alarm System, Three Dedicated Parking Bays " },
+      { title: "Community:", text: "* Swimming Pool, Children's Play Area, Entertainment Area, Landscaped Gardens, Pet-Friendly Development" }
+    ],  
+  },
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  {
+    id: "sl-043",
+    // NOTE: slug/url must never contain a raw "&" — it's the query-string
+    // separator, so "?id=5-&-6-..." gets truncated by URLSearchParams into
+    // id="5-" (no match), silently falling back to the generic "DG West"
+    // placeholder property. Kept the "&" in `title` (safe — that's just
+    // display text) but stripped it from the id-bearing slug/url below.
+    slug: "antara-forest-edge-villas",
+    status: "available",
+    collection: "featured",
+    title: "Antara Forest Edge Villas",
+    summary: "Antara Forest Edge Villas offers a luxurious living experience in the heart of Spring Valley, combining modern amenities with elegant design.",
+    propertyType: "penthouse",
+    community: "westlands",
+    location: "Global Trade Centre (GTC), Westlands, Nairobi",
+    letting: "sale",
+    // Two floor plans in this development — see data/property-units.js for
+    // how the rest of the site reads bedrooms/bathrooms/price off `units`.
+    units: [
+      
+     
+      { unitType: "4-bedroom", bedrooms: 4, bathrooms: 4, salePrice: 135000000, rentPrice: null }
+     
+    ],
+
+    image: "assets/images/Oakland Residence (16).jpeg",
+    heroImage: "assets/images/Oakland Residence (16).jpeg",
+    gallery: [
+      "assets/images/Oakland Residence (8).jpeg",
+      "assets/images/Oakland Residence (13).jpeg",
+      "assets/images/Oakland Residence (7).jpeg",
+      "assets/images/Oakland Residence (11).jpeg",
+      "assets/images/Oakland Residence (2).jpeg",
+      "assets/images/Oakland Residence (16).jpeg",
+      "assets/images/Oakland Residence (1).jpeg",
+      "assets/images/Oakland Residence (12).jpeg",
+      "assets/images/Oakland Residence (8).jpeg",
+      "assets/images/Oakland Residence (4).jpeg"
+      
+      ],
+
+    url: "antara-forest-edge-villas",
+    description: {
+      body: "Situated along the prestigious Peponi Road in Spring Valley, this beautifully appointed four-bedroom residence offers an exceptional blend of luxury, privacy, and nature. Overlooking the lush canopy of Karura Forest, the apartment has been thoughtfully designed to deliver generous living spaces, refined finishes, and an elevated lifestyle within one of Nairobi's most desirable residential addresses. Combining contemporary architecture with tranquil surroundings, this is a home designed for discerning homeowners seeking both convenience and exclusivity.."},
+    featureLocation: "Minutes from Westlands, Gigiri & Karura Forest.",
+     story: {
+      rows: [
+        { title: "Contemporary Living Spaces",
+          body: "Designed to maximise space and natural light, the apartment features an expansive open-plan living and dining area that flows effortlessly onto a private balcony overlooking Karura Forest. Large windows frame uninterrupted green views, creating bright, inviting interiors while seamlessly connecting indoor and outdoor living. A separate family and TV lounge with its own balcony provides an additional space for relaxation, entertainment, or everyday family living." },
+        { title: "The Culinary Kitchen",
+          body: "The contemporary kitchen has been carefully designed to combine elegance with everyday functionality. Featuring premium cabinetry, generous work surfaces, a breakfast bar, double sink, and a spacious pantry, it offers an ideal setting for both casual family meals and formal entertaining. A separate utility area enhances convenience while maintaining an organised and efficient workspace.."},
+        { title: "Private Sanctuaries",
+          body: "All four bedrooms are generously proportioned and thoughtfully designed to provide exceptional comfort and privacy. Each bedroom is fully en-suite and fitted with built-in wardrobes, creating elegant personal retreats for every member of the household." },
+        { title: "Spa-Inspired Bathrooms",
+          body: "Every bathroom has been finished to a high contemporary standard using premium fittings and elegant finishes. Spacious layouts, modern sanitary ware, quality tiling, and sophisticated fixtures create luxurious spaces designed for comfort and relaxation. The master bathroom is complemented by both a walk-in shower and a bathtub, offering a true spa-inspired experience.." },
+        { title: "Outdoor Living",
+          body: "Positioned within beautifully landscaped grounds, residents enjoy direct access to well-maintained gardens that provide a peaceful extension of the home. Private balconies overlooking Karura Forest further enhance the outdoor living experience, creating ideal spaces to unwind while enjoying one of Nairobi's most scenic natural settings." }
+      ]
+    },
+    listedDate: "2026-07-22",
+    featureHighlights: [
+      { title: "Security:", text: "24-Hour Security, CCTV Surveillance, Controlled Access" },
+      { title: "Design:", text: "Four All En-Suite Bedrooms, Master Suite with Walk-In Closet, Private Forest-View Balconies, Family / TV Room, Open-Plan Living & Dining, Modern Kitchen with Pantry, Breakfast Bar, Separate Utility Area, Separate Staff Quarters (DSQ), Guest Cloakroom, Security Alarm System, Three Dedicated Parking Bays " },
+      { title: "Community:", text: "* Swimming Pool, Children's Play Area, Entertainment Area, Landscaped Gardens, Pet-Friendly Development" }
+    ],  
+  },
   
 ];
