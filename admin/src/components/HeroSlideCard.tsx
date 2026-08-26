@@ -1,4 +1,4 @@
-import type { HeroSlide } from "../lib/hero";
+import { resolveHeroImagePreviewUrl, type HeroSlide } from "../lib/hero";
 import { ImageIcon } from "./icons";
 
 export default function HeroSlideCard({
@@ -23,13 +23,14 @@ export default function HeroSlideCard({
   onMoveDown: () => void;
 }) {
   const coverImage = slide.sections.find((s) => s.image)?.image ?? null;
+  const coverImageUrl = coverImage ? resolveHeroImagePreviewUrl(coverImage) : null;
   const property = slide.property;
 
   return (
     <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_8px_30px_rgba(15,23,42,0.14)]">
       <div className="relative h-44 w-full bg-paper">
-        {coverImage ? (
-          <img src={coverImage} alt={property?.title ?? "Hero slide"} className="h-full w-full object-cover" />
+        {coverImageUrl ? (
+          <img src={coverImageUrl} alt={property?.title ?? "Hero slide"} className="h-full w-full object-cover" />
         ) : (
           <span className="flex h-full w-full items-center justify-center text-ink-soft">
             <ImageIcon className="h-8 w-8" />

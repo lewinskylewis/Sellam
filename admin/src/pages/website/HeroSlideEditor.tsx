@@ -8,6 +8,7 @@ import {
   errorMessage,
   fetchHeroSlides,
   isMissingTableError,
+  resolveHeroImagePreviewUrl,
   updateHeroSlide,
   type HeroSection,
 } from "../../lib/hero";
@@ -182,7 +183,11 @@ export default function HeroSlideEditor() {
                 <div className="flex gap-4">
                   <div className="h-24 w-32 shrink-0 overflow-hidden rounded-lg bg-paper">
                     {section.image ? (
-                      <img src={section.image} alt={section.label} className="h-full w-full object-cover" />
+                      <img
+                        src={resolveHeroImagePreviewUrl(section.image)}
+                        alt={section.label}
+                        className="h-full w-full object-cover"
+                      />
                     ) : (
                       <span className="flex h-full w-full items-center justify-center text-ink-soft">
                         <ImageIcon className="h-6 w-6" />

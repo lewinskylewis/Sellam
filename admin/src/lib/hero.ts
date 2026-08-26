@@ -21,6 +21,20 @@ export type HeroSlide = HeroSlideRow & { property: PropertyListItem | null };
 
 export const HERO_SECTION_SLOTS = 3;
 
+// Same problem/fix as MediaManager.tsx's resolvePreviewUrl: the 6 seeded
+// legacy hero slides store plain relative paths (see script.js's original
+// heroProperties), which the public site resolves against its own origin —
+// not this dashboard's. Without this, every seeded slide's image 404s in
+// the admin preview. Storage-uploaded images are already absolute URLs and
+// pass through unchanged. Display-only; never written back to the DB.
+const PUBLIC_SITE_ORIGIN = "https://sellamre.com/";
+
+export function resolveHeroImagePreviewUrl(path: string): string {
+  if (!path) return "";
+  if (/^https?:\/\//i.test(path) || path.startsWith("data:") || path.startsWith("blob:")) return path;
+  return PUBLIC_SITE_ORIGIN + path.replace(/^\/+/, "");
+}
+
 export function blankSections(): HeroSection[] {
   return Array.from({ length: HERO_SECTION_SLOTS }, () => ({ label: "", image: "" }));
 }
