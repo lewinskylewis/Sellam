@@ -11,8 +11,15 @@
    here. `id` points at the matching record in data/properties.js — the
    title, its link (property.html?id=...), the full unit-type list, and the
    starting price are all read live off that record (via resolveHeroProperty
-   below), so the hero can never drift out of sync with the real inventory. */
-const heroProperties = [
+   below), so the hero can never drift out of sync with the real inventory.
+
+   This exact array is now also the FALLBACK: the primary source is the
+   Hero Manager (homepage_hero_slides table), fetched by
+   data/supabase-adapter.js into window.SELLAM_HERO_SLIDES in the same
+   { id, sections } shape. If that fetch failed or returned nothing (table
+   not migrated yet, RLS not applied, no active slides), this hardcoded set
+   is used instead, so the homepage never ships with an empty hero. */
+const FALLBACK_HERO_PROPERTIES = [
   {
     id: "sl-001",
     sections: [
@@ -62,6 +69,11 @@ const heroProperties = [
     ]
   }
 ];
+
+const heroProperties =
+  Array.isArray(window.SELLAM_HERO_SLIDES) && window.SELLAM_HERO_SLIDES.length > 0
+    ? window.SELLAM_HERO_SLIDES
+    : FALLBACK_HERO_PROPERTIES;
 
 // Resolves a hero entry's `id` against the central inventory to build the
 // title/link/description — the ONLY thing hand-authored per hero entry is

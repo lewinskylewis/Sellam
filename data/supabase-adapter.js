@@ -94,6 +94,22 @@
     });
   }
 
+  // Homepage hero carousel (Hero Manager). Fetched separately from
+  // fetchFromSupabase() above and never allowed to fail the main
+  // properties/communities load — see the .catch() around its call site in
+  // init(). properties(legacy_id) is a PostgREST resource embed across the
+  // property_id foreign key; only legacy_id is needed here because the
+  // title/price/link/etc. a hero slide displays are resolved live off
+  // window.SELLAM_PROPERTIES by script.js's resolveHeroProperty(), exactly
+  // as before — this table only ever supplies WHICH property and WHICH 3
+  // curated photos.
+  function fetchHeroSlides(cfg) {
+    return supabaseGet(
+      cfg,
+      "/rest/v1/homepage_hero_slides?select=sections,sort_order,properties(legacy_id)&is_active=eq.true&order=sort_order.asc"
+    );
+  }
+
   // --------------------------------------------------------------------
   // Reconstruction — reverses the Phase 1 migration's transform exactly,
   // field for field, back into the shape data/properties.js /
@@ -161,6 +177,17 @@
       // the single representation for both the flat- and multi-unit case,
       // so every migrated record (all now have >=1 property_units row)
       // only ever needs `units` here.
+    };
+  }
+
+  // Reproduces the exact { id, sections } shape script.js's heroProperties
+  // array already uses — id here is the property's legacy_id (what
+  // resolveHeroProperty() matches window.SELLAM_PROPERTIES against), not
+  // the homepage_hero_slides row's own uuid.
+  function reconstructHeroSlide(row) {
+    return {
+      id: row.properties ? row.properties.legacy_id : null,
+      sections: Array.isArray(row.sections) ? row.sections : []
     };
   }
 
@@ -304,7 +331,25 @@
         window.SELLAM_COMMUNITIES = communities;
         window.SELLAM_PROPERTIES = properties;
 
-        return { source: "supabase", communities: communities.length, properties: properties.length };
+        // Best-effort and isolated on purpose: a problem fetching the hero
+        // table (not yet migrated in some environment, RLS not applied,
+        // etc.) must never take down the properties/communities load that
+        // every other page depends on. On failure this simply leaves
+        // window.SELLAM_HERO_SLIDES unset, and script.js falls back to its
+        // own hardcoded set — same graceful-degradation shape as
+        // loadStaticFallback() above.
+        return fetchHeroSlides(cfg)
+          .then(function (rawHeroSlides) {
+            window.SELLAM_HERO_SLIDES = rawHeroSlides
+              .filter(function (row) { return row.properties && row.properties.legacy_id; })
+              .map(reconstructHeroSlide);
+          })
+          .catch(function (heroError) {
+            console.warn("[SellamData] Hero slides fetch failed, falling back to script.js's hardcoded set:", heroError.message);
+          })
+          .then(function () {
+            return { source: "supabase", communities: communities.length, properties: properties.length };
+          });
       })
       .catch(function (error) {
         return loadStaticFallback(error.message);
