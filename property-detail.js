@@ -1336,7 +1336,7 @@ function setupGallery(property) {
     button.className = "gallery-slide";
     button.type = "button";
     button.setAttribute("aria-label", `Open ${image.alt}`);
-    button.innerHTML = `<img src="${image.src}" alt="${image.alt}">`;
+    button.innerHTML = `<img src="${image.src}" alt="${image.alt}" loading="lazy" decoding="async">`;
     button.addEventListener("click", (event) => {
       if (didSwipe) {
         event.preventDefault();
@@ -1469,7 +1469,7 @@ function setupGalleryCollage(property) {
     const button = document.createElement("button");
     button.type = "button";
     button.setAttribute("aria-label", `Open ${image.alt}`);
-    button.innerHTML = `<img src="${image.src}" alt="${image.alt}" loading="lazy">`;
+    button.innerHTML = `<img src="${image.src}" alt="${image.alt}" loading="lazy" decoding="async">`;
     button.addEventListener("click", () => {
       close();
       openLightbox(index);

@@ -56,7 +56,7 @@
     return (
       '<article class="community-card">' +
         '<a class="image-frame" href="' + url + '">' +
-          '<img src="' + escapeAttr(c.image) + '" alt="' + escapeAttr(c.imageAlt) + '">' +
+          '<img src="' + escapeAttr(c.image) + '" alt="' + escapeAttr(c.imageAlt) + '" loading="lazy" decoding="async">' +
         "</a>" +
         "<h3><a href=\"" + url + "\">" + c.label + "</a></h3>" +
         "<p>" + c.description + "</p>" +

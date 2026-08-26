@@ -80,17 +80,22 @@
     });
   }
 
-  // Two requests total: communities, and properties with property_units
-  // embedded via the existing property_units_property_id_fkey foreign key
-  // (PostgREST resource embedding) — avoids a third round trip.
+  // Fetched via /api/catalogue rather than Supabase directly — a thin,
+  // CDN-cached proxy (see api/catalogue.js) that makes the same two reads
+  // (communities, properties+property_units) on the server and shares the
+  // result across every visitor for up to a minute, instead of every
+  // browser hitting Supabase independently. Returns the exact same
+  // { rawCommunities, rawProperties } shape the two direct calls used to,
+  // so nothing below this point (validateRaw, reconstructProperty,
+  // reconstructCommunity) needed to change.
   function fetchFromSupabase(cfg) {
-    var communities = supabaseGet(cfg, "/rest/v1/communities?select=*");
-    var properties = supabaseGet(
-      cfg,
-      "/rest/v1/properties?select=*,property_units(*)&property_units.order=display_order.asc"
-    );
-    return Promise.all([communities, properties]).then(function (results) {
-      return { rawCommunities: results[0], rawProperties: results[1] };
+    return fetch("/api/catalogue", { method: "GET" }).then(function (response) {
+      if (!response.ok) {
+        return response.text().then(function (detail) {
+          throw new Error("GET /api/catalogue failed: " + response.status + " " + detail.slice(0, 300));
+        });
+      }
+      return response.json();
     });
   }
 

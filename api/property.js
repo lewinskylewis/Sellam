@@ -132,11 +132,23 @@ async function supabaseGet(supabaseUrl, anonKey, requestPath) {
 }
 
 const PROPERTIES_CACHE_TTL_MS = 60 * 1000;
-let propertiesCache = null; // { expiresAt, properties, communities }
+const propertyCacheById = new Map(); // id -> { expiresAt, properties, communities }
 
-async function fetchReconstructedFromSupabase() {
-  if (propertiesCache && propertiesCache.expiresAt > Date.now()) {
-    return propertiesCache;
+// Fetches only the ONE property this render needs, not the whole catalogue.
+// property-detail.js only ever looks up a single property by id/slug
+// (findInventoryProperty() is the only place it reads window.SELLAM_PROPERTIES
+// at all) — nothing on this page cross-references other listings, so
+// pulling every property+its units over the wire just to render one page
+// wastes exactly the payload/latency this scales worst with as the
+// catalogue grows. `id` matches either legacy_id or slug, same as
+// findInventoryProperty()'s own lookup, so the query mirrors that exactly.
+// Communities stays a full (small, tens-of-rows) fetch — nothing this page
+// evals reads it, but it's cheap enough that narrowing it isn't worth the
+// added complexity.
+async function fetchReconstructedFromSupabase(id) {
+  const cached = propertyCacheById.get(id);
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached;
   }
 
   // SELLAM_SUPABASE_URL is intentionally distinct from SUPABASE_URL: the
@@ -150,9 +162,13 @@ async function fetchReconstructedFromSupabase() {
 
   const { reconstructProperty, reconstructCommunity, validateRaw } = loadAdapterExports();
 
+  const propertiesPath = id
+    ? `/rest/v1/properties?or=(legacy_id.eq.${encodeURIComponent(id)},slug.eq.${encodeURIComponent(id)})&select=*,property_units(*)&property_units.order=display_order.asc`
+    : null;
+
   const [rawCommunities, rawProperties] = await Promise.all([
     supabaseGet(supabaseUrl, anonKey, "/rest/v1/communities?select=*"),
-    supabaseGet(supabaseUrl, anonKey, "/rest/v1/properties?select=*,property_units(*)&property_units.order=display_order.asc")
+    propertiesPath ? supabaseGet(supabaseUrl, anonKey, propertiesPath) : Promise.resolve([])
   ]);
 
   const validation = validateRaw(rawCommunities, rawProperties);
@@ -166,16 +182,22 @@ async function fetchReconstructedFromSupabase() {
   const properties = rawProperties.map(reconstructProperty);
   const communities = rawCommunities.map(reconstructCommunity);
 
-  propertiesCache = { expiresAt: Date.now() + PROPERTIES_CACHE_TTL_MS, properties, communities };
-  return propertiesCache;
+  const result = { expiresAt: Date.now() + PROPERTIES_CACHE_TTL_MS, properties, communities };
+  // Crude but sufficient bound on a long-lived warm instance: this is a
+  // per-property cache now instead of one shared entry, so without a cap it
+  // could grow for as long as the instance stays warm and keeps seeing new
+  // ids. Simplest safe fix — clear and start over rather than tracking LRU.
+  if (propertyCacheById.size > 200) propertyCacheById.clear();
+  propertyCacheById.set(id, result);
+  return result;
 }
 
 // Returns { source: "supabase" | "static-fallback" } plus enough information
 // for renderPropertyPage() to know whether it still needs to eval
 // data/properties.js itself.
-async function loadPropertiesForRender() {
+async function loadPropertiesForRender(id) {
   try {
-    const { properties, communities } = await fetchReconstructedFromSupabase();
+    const { properties, communities } = await fetchReconstructedFromSupabase(id);
     return { source: "supabase", properties, communities };
   } catch (error) {
     console.error("[api/property] Supabase server-side fetch failed, falling back to data/properties.js:", error.message);
@@ -237,7 +259,7 @@ async function renderPropertyPage(id) {
     // window.SELLAM_PROPERTIES — same ordering guarantee the old
     // synchronous data/properties.js eval provided, just resolved async
     // first instead.
-    const data = await loadPropertiesForRender();
+    const data = await loadPropertiesForRender(id);
     if (data.source === "supabase") {
       window.SELLAM_PROPERTIES = data.properties;
       window.SELLAM_COMMUNITIES = data.communities;
