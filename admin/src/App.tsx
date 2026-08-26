@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Overview from "./pages/Overview";
 import Properties from "./pages/Properties";
 import PropertyEditor from "./pages/PropertyEditor";
+import Enquiries from "./pages/Enquiries";
 
 export default function App() {
   return (
@@ -49,6 +50,16 @@ export default function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <PropertyEditor />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/enquiries"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Enquiries />
                 </DashboardLayout>
               </ProtectedRoute>
             }

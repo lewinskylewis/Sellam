@@ -93,9 +93,9 @@ export default function Overview() {
       <section className="mt-6 rounded-2xl border border-line bg-surface shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
         <div className="flex items-center justify-between px-6 py-5">
           <h2 className="text-lg font-bold text-ink">Recent Enquiries</h2>
-          <span title="Coming in a future phase" className="cursor-not-allowed text-sm font-medium text-link">
+          <Link to="/enquiries" className="text-sm font-medium text-link hover:underline">
             View all enquiries
-          </span>
+          </Link>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[720px] border-collapse text-sm">
