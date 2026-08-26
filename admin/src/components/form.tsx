@@ -31,7 +31,7 @@ export function Field({
 
 export function SectionCard({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
   return (
-    <section className="rounded-2xl border border-line bg-surface p-6 shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
+    <section className="rounded-2xl border border-line bg-surface p-6 shadow-[0_8px_30px_rgba(15,23,42,0.14)]">
       <h2 className="text-lg font-bold text-ink">{title}</h2>
       {subtitle && <p className="mt-0.5 text-sm text-ink-soft">{subtitle}</p>}
       <div className="mt-5 space-y-5">{children}</div>

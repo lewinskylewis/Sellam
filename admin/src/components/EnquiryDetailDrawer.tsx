@@ -124,7 +124,7 @@ export default function EnquiryDetailDrawer({
       <div className="fixed inset-0 z-40 bg-black/40" onClick={onClose} aria-hidden="true" />
       <aside className="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col bg-surface shadow-2xl">
         <div className="flex items-center justify-between border-b border-line px-6 py-5">
-          <h2 className="font-serif text-xl text-ink">Enquiry</h2>
+          <h2 className="font-display text-xl text-ink">Enquiry</h2>
           <button
             type="button"
             onClick={onClose}

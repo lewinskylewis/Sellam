@@ -191,3 +191,14 @@ export async function saveProperty(
 
   return { id: id as string };
 }
+
+// property_units has `on delete cascade` on its property_id foreign key
+// (see 202608251200_create_properties_schema.sql), so deleting the
+// property row alone removes its units too — no separate DELETE grant on
+// property_units is needed for that. Uploaded Storage images aren't part
+// of this table and are cleaned up separately (see mediaStorage.ts),
+// best-effort, after this succeeds.
+export async function deleteProperty(id: string): Promise<void> {
+  const { error } = await supabase.from("properties").delete().eq("id", id);
+  if (error) throw error;
+}

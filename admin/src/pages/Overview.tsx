@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { displayName, useAuth } from "../lib/auth";
 import StatCard from "../components/StatCard";
 import Avatar from "../components/Avatar";
-import StatusPill from "../components/StatusPill";
+import EnquiryStatusBadge from "../components/EnquiryStatusBadge";
 import { ChatIcon, CommunityIcon, HouseIcon, HousePlusIcon, UserIcon } from "../components/icons";
 import {
   fetchOverviewStats,
@@ -76,7 +76,7 @@ export default function Overview() {
 
   return (
     <div>
-      <h1 className="font-serif text-4xl font-semibold text-ink">Overview</h1>
+      <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Overview</h1>
       <p className="mt-1 text-ink-soft">Welcome back, {name}</p>
 
       {error && (
@@ -90,7 +90,7 @@ export default function Overview() {
         <StatCard label="Communities" value={stats?.communities ?? null} icon={<CommunityIcon className="h-6 w-6" />} loading={loading} />
       </div>
 
-      <section className="mt-6 rounded-2xl border border-line bg-surface shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
+      <section className="mt-6 rounded-2xl border border-line bg-surface shadow-[0_8px_30px_rgba(15,23,42,0.14)]">
         <div className="flex items-center justify-between px-6 py-5">
           <h2 className="text-lg font-bold text-ink">Recent Enquiries</h2>
           <Link to="/enquiries" className="text-sm font-medium text-link hover:underline">
@@ -142,7 +142,7 @@ export default function Overview() {
                     <td className="max-w-[220px] truncate px-3 py-3 text-ink-soft">{e.email}</td>
                     <td className="px-3 py-3 whitespace-nowrap text-ink-soft">{formatDate(e.submitted_at)}</td>
                     <td className="px-6 py-3 text-right">
-                      <StatusPill status={e.status} />
+                      <EnquiryStatusBadge status={e.status} />
                     </td>
                   </tr>
                 ))
@@ -155,7 +155,7 @@ export default function Overview() {
       <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-3">
         <Link
           to="/properties/new"
-          className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-line bg-surface p-10 text-ink-soft shadow-[0_2px_8px_rgba(15,23,42,0.05)] transition-colors hover:bg-paper"
+          className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-line bg-surface p-10 text-ink-soft shadow-[0_8px_30px_rgba(15,23,42,0.14)] transition-colors hover:bg-paper"
         >
           <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand text-white">
             <HousePlusIcon className="h-7 w-7" />
@@ -163,7 +163,7 @@ export default function Overview() {
           <span className="text-base font-semibold text-ink">Add Property</span>
         </Link>
 
-        <section className="rounded-2xl border border-line bg-surface p-6 shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
+        <section className="rounded-2xl border border-line bg-surface p-6 shadow-[0_8px_30px_rgba(15,23,42,0.14)]">
           <h2 className="text-lg font-bold text-ink">Recent Activities</h2>
           <div className="mt-4 divide-y divide-line">
             {loading ? (
@@ -189,7 +189,7 @@ export default function Overview() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-line bg-surface p-6 shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
+        <section className="rounded-2xl border border-line bg-surface p-6 shadow-[0_8px_30px_rgba(15,23,42,0.14)]">
           <h2 className="text-lg font-bold text-ink">Recent Properties</h2>
           <div className="mt-2 divide-y divide-line">
             {loading ? (

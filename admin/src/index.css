@@ -2,13 +2,17 @@
 
 @theme {
   --font-sans: "Inter", Arial, Helvetica, sans-serif;
-  --font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-display: "Plus Jakarta Sans", "Inter", Arial, Helvetica, sans-serif;
 
   --color-ink: #142033;
   --color-ink-soft: #6b7280;
   --color-paper: #eef0f3;
-  --color-surface: #ffffff;
-  --color-line: #e5e7eb;
+
+  /* Default surface — dense, readable content (tables, forms, drawers).
+     Mostly-opaque; a small amount of translucency keeps it feeling part
+     of the same material system without sacrificing legibility. */
+  --color-surface: rgba(255, 255, 255, 0.92);
+  --color-line: rgba(100, 116, 139, 0.16);
   --color-brand: #15213a;
   --color-brand-soft: #202f4d;
   --color-accent: #b08d57;
@@ -25,8 +29,47 @@
 }
 
 body {
-  background: var(--color-paper);
+  min-height: 100vh;
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  /* The provided background photo, washed with a soft white scrim so
+     dense UI stays highly readable on top — atmospheric, not distracting. */
+  background-image:
+    linear-gradient(180deg, rgba(238, 241, 247, 0.82) 0%, rgba(233, 237, 246, 0.86) 55%, rgba(226, 232, 244, 0.9) 100%),
+    url("/dashboard-bg.jpg");
+  background-color: #e9edf6;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+/* Restrained, premium blur on the default (dense-content) surface. */
+.bg-surface {
+  backdrop-filter: blur(10px) saturate(1.05);
+  -webkit-backdrop-filter: blur(10px) saturate(1.05);
+}
+
+/* Selective glass — reserved for hero UI: sidebar, header bar, insight/
+   stat tiles. More translucent and more blurred than the default surface,
+   with a soft inner highlight border for that Apple "material" look. */
+.surface-glass {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(22px) saturate(1.2);
+  -webkit-backdrop-filter: blur(22px) saturate(1.2);
+}
+
+/* Rich, restrained gradient instead of a flat fill — sidebar, primary
+   buttons, icon badges, active nav state. */
+.bg-brand {
+  background-image: linear-gradient(135deg, #101a2e 0%, #1f3a63 55%, #2c4a7c 100%);
+}
+
+/* Floating glass sidebar — translucent + blurred rather than solid. */
+.sidebar-glass {
+  background-image: linear-gradient(165deg, rgba(16, 26, 46, 0.93) 0%, rgba(31, 58, 99, 0.9) 55%, rgba(44, 74, 124, 0.86) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }

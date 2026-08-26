@@ -103,14 +103,14 @@ export default function Enquiries() {
 
   return (
     <div>
-      <h1 className="font-serif text-4xl font-semibold text-ink">Enquiries</h1>
+      <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Enquiries</h1>
       <p className="mt-1 text-ink-soft">
         {loading ? "Fetching enquiries…" : `${filtered.length} of ${enquiries?.length ?? 0} enquiries`}
       </p>
 
       {error && <p className="mt-4 rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">Unable to load enquiries. {error}</p>}
 
-      <div className="mt-6 rounded-2xl border border-line bg-surface p-4 shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
+      <div className="mt-6 rounded-2xl border border-line bg-surface p-4 shadow-[0_8px_30px_rgba(15,23,42,0.14)]">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative min-w-[220px] flex-1">
             <SearchIcon className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink-soft" />
@@ -144,7 +144,7 @@ export default function Enquiries() {
         </div>
       </div>
 
-      <section className="mt-4 rounded-2xl border border-line bg-surface shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
+      <section className="mt-4 rounded-2xl border border-line bg-surface shadow-[0_8px_30px_rgba(15,23,42,0.14)]">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[800px] border-collapse text-sm">
             <thead>

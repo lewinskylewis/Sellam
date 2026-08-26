@@ -2,7 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Field, SectionCard, inputClasses } from "../components/form";
 import MediaManager, { type DeferredFile, type MediaState } from "../components/MediaManager";
-import { uploadPropertyImage } from "../lib/mediaStorage";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
+import { uploadPropertyImage, deletePropertyImageFolder } from "../lib/mediaStorage";
 import StoriesEditor, { type StoryItem } from "../components/StoriesEditor";
 import FeatureHighlightsEditor, { type HighlightItem } from "../components/FeatureHighlightsEditor";
 import PaymentPlanEditor, { type PaymentPlanItemDraft } from "../components/PaymentPlanEditor";
@@ -11,6 +12,7 @@ import {
   fetchCommunities,
   fetchPropertyForEdit,
   saveProperty,
+  deleteProperty,
   type Community,
   type EditorUnit,
   type PropertyWritePayload,
@@ -162,6 +164,9 @@ export default function PropertyEditor() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [savingStage, setSavingStage] = useState<"saving" | "uploading" | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   // Files picked before this property exists yet — not part of `form` since
   // File objects don't belong in a JSON-serialized dirty-check snapshot.
@@ -517,6 +522,25 @@ export default function PropertyEditor() {
     navigate("/properties");
   }
 
+  async function handleDeleteConfirmed() {
+    if (!isEdit || !id) return;
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      await deleteProperty(id);
+      // Best-effort — the property row is already gone either way; a
+      // failure here just leaves orphaned files in Storage, not a
+      // correctness problem, so it's fire-and-forget rather than blocking
+      // navigation on it.
+      deletePropertyImageFolder(id).catch((err) => console.warn("Storage cleanup after delete failed:", err));
+      navigate("/properties", { replace: true });
+    } catch (err) {
+      setDeleteError(errorMessage(err, "Failed to delete this property."));
+    } finally {
+      setDeleting(false);
+    }
+  }
+
   if (loading) {
     return <p className="text-ink-soft">Loading property…</p>;
   }
@@ -529,7 +553,7 @@ export default function PropertyEditor() {
     <div className="max-w-3xl">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="font-serif text-4xl font-semibold text-ink">
+          <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">
             {isEdit ? "Edit Property" : "Add Property"}
           </h1>
           <p className="mt-1 text-ink-soft">
@@ -745,7 +769,7 @@ export default function PropertyEditor() {
           </Field>
         </SectionCard>
 
-        <section className="rounded-2xl border border-line bg-surface p-6 shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
+        <section className="rounded-2xl border border-line bg-surface p-6 shadow-[0_8px_30px_rgba(15,23,42,0.14)]">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold text-ink">Units</h2>
             <button
@@ -869,7 +893,7 @@ export default function PropertyEditor() {
         </section>
       </div>
 
-      <div className="sticky bottom-0 mt-6 flex items-center gap-3 rounded-2xl border border-line bg-surface p-4 shadow-[0_2px_8px_rgba(15,23,42,0.08)]">
+      <div className="sticky bottom-0 mt-6 flex items-center gap-3 rounded-2xl border border-line bg-surface p-4 shadow-[0_-8px_30px_rgba(15,23,42,0.12)]">
         <button
           type="button"
           onClick={handleSave}
@@ -887,7 +911,33 @@ export default function PropertyEditor() {
           Cancel
         </button>
         {isDirty && !saving && <span className="text-xs text-ink-soft">Unsaved changes</span>}
+
+        {isEdit && (
+          <button
+            type="button"
+            onClick={() => setShowDeleteConfirm(true)}
+            disabled={saving}
+            className="ml-auto rounded-xl border border-red-200 px-4 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:opacity-60"
+          >
+            Delete Property
+          </button>
+        )}
       </div>
+
+      {showDeleteConfirm && (
+        <ConfirmDeleteModal
+          title="Delete this property?"
+          itemLabel={form.title}
+          description="This permanently deletes the property, its units, and any uploaded images. This cannot be undone."
+          deleting={deleting}
+          error={deleteError}
+          onConfirm={handleDeleteConfirmed}
+          onCancel={() => {
+            setShowDeleteConfirm(false);
+            setDeleteError(null);
+          }}
+        />
+      )}
     </div>
   );
 }

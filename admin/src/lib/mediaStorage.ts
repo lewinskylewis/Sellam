@@ -66,3 +66,19 @@ export function storagePathFromPublicUrl(url: string): string | null {
   if (idx === -1) return null;
   return decodeURIComponent(url.slice(idx + marker.length));
 }
+
+// Best-effort cleanup after a property is deleted — every uploaded image
+// lives under a {propertyId}/ prefix (see uploadPropertyImage), so this
+// only ever touches that one property's own folder. Never called on the
+// existing local site image paths, which aren't Storage objects at all.
+// Failures here are non-fatal: the property row is already gone by the
+// time this runs, and a stray orphaned file costs nothing but disk space.
+export async function deletePropertyImageFolder(propertyId: string): Promise<void> {
+  const { data, error } = await supabase.storage.from(PROPERTY_IMAGES_BUCKET).list(propertyId);
+  if (error) throw error;
+  if (!data || data.length === 0) return;
+
+  const paths = data.map((f) => `${propertyId}/${f.name}`);
+  const { error: removeError } = await supabase.storage.from(PROPERTY_IMAGES_BUCKET).remove(paths);
+  if (removeError) throw removeError;
+}

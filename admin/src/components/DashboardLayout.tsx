@@ -4,7 +4,7 @@ import { MenuIcon } from "./icons";
 
 function MobileTopBar({ onOpen }: { onOpen: () => void }) {
   return (
-    <div className="flex items-center gap-3 bg-brand px-5 py-4 text-white md:hidden">
+    <div className="sidebar-glass sticky top-0 z-20 flex items-center gap-3 px-5 py-4 text-white md:hidden">
       <button
         type="button"
         onClick={onOpen}
@@ -13,7 +13,7 @@ function MobileTopBar({ onOpen }: { onOpen: () => void }) {
       >
         <MenuIcon className="h-5 w-5" />
       </button>
-      <span className="font-serif text-xl tracking-[0.08em] uppercase">Sellam</span>
+      <span className="font-display text-xl tracking-[0.08em] uppercase">Sellam</span>
     </div>
   );
 }
@@ -24,9 +24,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div className="flex min-h-screen bg-paper">
+    // h-screen + overflow-hidden locks the viewport so the sidebar (a
+    // sibling that sits outside the scrollable column below) never moves —
+    // only the content column scrolls, independent of the sidebar.
+    <div className="flex h-screen overflow-hidden">
       <Sidebar open={sidebarOpen} onToggle={() => setSidebarOpen((v) => !v)} />
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col overflow-y-auto">
         <MobileTopBar onOpen={() => setSidebarOpen(true)} />
         <main className="flex-1 px-5 py-8 md:px-10 md:py-10">{children}</main>
       </div>

@@ -43,13 +43,13 @@ export default function Sidebar({ open, onToggle }: { open: boolean; onToggle: (
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-brand text-white transition-transform duration-200 ease-in-out md:static md:z-0 md:transition-[width] ${
+        className={`sidebar-glass fixed inset-y-4 left-4 z-40 flex w-64 flex-col rounded-3xl text-white shadow-2xl transition-transform duration-200 ease-in-out md:static md:inset-auto md:z-0 md:my-4 md:ml-4 md:transition-[width] ${
           open ? "translate-x-0 md:w-64" : "-translate-x-full md:w-20 md:translate-x-0"
         }`}
       >
         <div className={`flex items-center py-7 ${open ? "justify-between px-6" : "justify-center px-2 md:px-0"}`}>
           {open && (
-            <span className="font-serif text-2xl tracking-[0.08em] text-white uppercase">Sellam</span>
+            <span className="font-display text-2xl tracking-[0.08em] text-white uppercase">Sellam</span>
           )}
           <button
             type="button"

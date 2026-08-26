@@ -14,7 +14,7 @@ export default function StatCard({
   unavailable?: boolean;
 }) {
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-5 shadow-[0_2px_8px_rgba(15,23,42,0.05)]">
+    <div className="surface-glass flex items-center gap-4 rounded-2xl p-5 shadow-[0_8px_30px_rgba(15,23,42,0.1)]">
       <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand text-white">
         {icon}
       </span>

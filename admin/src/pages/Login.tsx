@@ -21,10 +21,10 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-paper px-6">
+    <div className="flex min-h-screen items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <div className="mb-10 text-center">
-          <p className="font-serif text-3xl tracking-wide text-brand">Sellam</p>
+          <p className="font-display text-3xl tracking-wide text-brand">Sellam</p>
           <p className="mt-1 text-xs font-medium tracking-[0.2em] text-ink-soft uppercase">
             Admin Dashboard
           </p>
@@ -32,7 +32,7 @@ export default function Login() {
 
         <form
           onSubmit={handleSubmit}
-          className="rounded-lg border border-line bg-surface p-8 shadow-sm"
+          className="rounded-3xl border border-line bg-surface p-8 shadow-[0_8px_30px_rgba(15,23,42,0.14)]"
         >
           <div className="mb-5">
             <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-ink">

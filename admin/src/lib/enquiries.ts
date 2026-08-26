@@ -43,6 +43,20 @@ export async function fetchPropertyIdByLegacyId(): Promise<Map<string, string>> 
   return new Map((data ?? []).map((p) => [p.legacy_id, p.id]));
 }
 
+// legacy_id (properties.legacy_id, matching enquiry.property_id) -> how many
+// enquiries reference it. Used for the "Most Enquired Property" insight tile
+// — real data, no fabrication.
+export async function fetchEnquiryCountsByPropertyId(): Promise<Map<string, number>> {
+  const { data, error } = await supabase.from("property_enquiries").select("property_id");
+  if (error) throw error;
+  const counts = new Map<string, number>();
+  (data ?? []).forEach((e) => {
+    if (!e.property_id) return;
+    counts.set(e.property_id, (counts.get(e.property_id) ?? 0) + 1);
+  });
+  return counts;
+}
+
 // --------------------------------------------------------------------
 // Status normalization (Phase 4) — five admin-facing pipeline stages,
 // Spam kept as a separate, non-pipeline bucket. See
