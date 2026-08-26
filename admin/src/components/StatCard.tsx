@@ -19,7 +19,7 @@ export default function StatCard({
         {icon}
       </span>
       <span className="min-w-0">
-        <span className="block text-sm leading-snug text-ink-soft">{label}</span>
+        <span className="block text-sm leading-snug text-ink">{label}</span>
         {loading ? (
           <span className="mt-1 block h-7 w-10 animate-pulse rounded bg-line" />
         ) : unavailable ? (

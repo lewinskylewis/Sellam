@@ -103,8 +103,8 @@ export default function Enquiries() {
 
   return (
     <div>
-      <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Enquiries</h1>
-      <p className="mt-1 text-ink-soft">
+      <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Enquiries</h1>
+      <p className="mt-1 text-ink">
         {loading ? "Fetching enquiries…" : `${filtered.length} of ${enquiries?.length ?? 0} enquiries`}
       </p>
 

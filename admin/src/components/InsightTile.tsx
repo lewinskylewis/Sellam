@@ -25,18 +25,18 @@ export default function InsightTile({
         {icon}
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-xs font-medium tracking-wide text-ink-soft uppercase">{label}</span>
+        <span className="block text-xs font-medium tracking-wide text-ink uppercase">{label}</span>
         {loading ? (
           <span className="mt-1.5 block h-5 w-28 animate-pulse rounded bg-line" />
         ) : unavailableReason ? (
-          <span className="mt-1 block text-sm text-ink-soft/70">{unavailableReason}</span>
+          <span className="mt-1 block text-sm text-ink">{unavailableReason}</span>
         ) : title ? (
           <>
             <span className="mt-0.5 block truncate text-sm font-semibold text-ink">{title}</span>
-            {metric && <span className="block text-xs text-ink-soft">{metric}</span>}
+            {metric && <span className="block text-xs text-ink">{metric}</span>}
           </>
         ) : (
-          <span className="mt-1 block text-sm text-ink-soft/70">—</span>
+          <span className="mt-1 block text-sm text-ink">—</span>
         )}
       </span>
     </div>

@@ -151,8 +151,8 @@ export default function Properties() {
     <div>
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Properties</h1>
-          <p className="mt-1 text-ink-soft">
+          <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Properties</h1>
+          <p className="mt-1 text-ink">
             {loading ? "Loading…" : `${filtered.length} of ${properties?.length ?? 0} properties`}
           </p>
         </div>

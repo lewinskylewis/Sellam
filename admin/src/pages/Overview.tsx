@@ -76,8 +76,8 @@ export default function Overview() {
 
   return (
     <div>
-      <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">Overview</h1>
-      <p className="mt-1 text-ink-soft">Welcome back, {name}</p>
+      <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Overview</h1>
+      <p className="mt-1 text-ink">Welcome back, {name}</p>
 
       {error && (
         <p className="mt-4 rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>
