@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Field, SectionCard, inputClasses } from "../components/form";
+import { CheckIcon } from "../components/icons";
 import MediaManager, { type DeferredFile, type MediaState } from "../components/MediaManager";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 import { uploadPropertyImage, deletePropertyImageFolder } from "../lib/mediaStorage";
@@ -504,10 +505,10 @@ export default function PropertyEditor() {
       if (uploadWarning) {
         setSaveError(uploadWarning);
       } else {
+        // Deliberately no navigation here — the success screen below takes
+        // over the whole page, and "Back to Properties" is the only exit,
+        // per the required save UX.
         setSaved(true);
-      }
-      if (!isEdit) {
-        navigate(`/properties/${result.id}/edit`, { replace: true });
       }
     } catch (err) {
       setSaveError(errorMessage(err, "Failed to save this property."));
@@ -549,8 +550,32 @@ export default function PropertyEditor() {
     return <p className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">{loadError}</p>;
   }
 
+  // Replaces the entire form once a save has fully completed (property row
+  // + any required image uploads) — a partial success (e.g. a deferred
+  // image upload failing) takes the saveError branch above instead and
+  // never reaches here, so this is only ever shown for a complete success.
+  if (saved) {
+    return (
+      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 text-center">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600">
+          <CheckIcon className="h-8 w-8" />
+        </span>
+        <p className="text-lg font-semibold text-ink">
+          {isEdit ? "Property updated successfully" : "Property created successfully"}
+        </p>
+        <button
+          type="button"
+          onClick={() => navigate("/properties")}
+          className="rounded-xl bg-brand px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-soft"
+        >
+          Back to Properties
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-3xl">
+    <div>
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">
@@ -564,9 +589,6 @@ export default function PropertyEditor() {
 
       {saveError && (
         <p className="mt-4 rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">{saveError}</p>
-      )}
-      {saved && !saveError && (
-        <p className="mt-4 rounded-md bg-green-50 px-4 py-3 text-sm text-green-700">Saved successfully.</p>
       )}
 
       <div className="mt-6 space-y-6">
@@ -596,7 +618,7 @@ export default function PropertyEditor() {
             />
           </Field>
 
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-2 gap-5 lg:grid-cols-3">
             <Field label="Status" required>
               <select className={inputClasses} value={form.status} onChange={(e) => set("status", e.target.value)}>
                 {STATUS_OPTIONS.map((s) => (

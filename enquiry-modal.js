@@ -349,11 +349,21 @@
     document.querySelectorAll(".enquiry-form").forEach(setupForm);
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
+  function initEnquiryModal() {
     createModal();
     modal = document.querySelector("[data-enquiry-modal]");
     modalForm = modal?.querySelector("[data-enquiry-form]");
     setupTriggers();
     setupEvents();
-  });
+  }
+
+  // Guarded like property-search.js's setup: on pages that load this script
+  // only after window.SellamData.ready resolves, DOMContentLoaded has
+  // already fired by the time this runs, so the listener alone would never
+  // trigger.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initEnquiryModal);
+  } else {
+    initEnquiryModal();
+  }
 })();

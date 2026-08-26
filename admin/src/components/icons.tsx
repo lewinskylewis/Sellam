@@ -147,3 +147,55 @@ export function CloseIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function ImageIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3.5" y="4.5" width="17" height="15" rx="1.6" />
+      <circle cx="9" cy="10" r="1.8" />
+      <path d="m5 17 4.5-4.5a1.4 1.4 0 0 1 2 0L15 16l1.2-1.2a1.4 1.4 0 0 1 2 0L20 16.5" />
+    </svg>
+  );
+}
+
+export function StarIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="m12 4 2.3 5 5.2.6-3.9 3.6 1 5.2L12 15.9 7.4 18.4l1-5.2-3.9-3.6 5.2-.6Z" />
+    </svg>
+  );
+}
+
+export function QuoteIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M7.5 6.5c-2 1-3 2.9-3 5.2 0 2.2 1.5 3.8 3.4 3.8 1.7 0 3-1.3 3-3s-1.2-2.9-2.7-2.9c-.2 0-.4 0-.6.1.2-1.3 1.1-2.5 2.4-3.2Z" />
+      <path d="M16 6.5c-2 1-3 2.9-3 5.2 0 2.2 1.5 3.8 3.4 3.8 1.7 0 3-1.3 3-3s-1.2-2.9-2.7-2.9c-.2 0-.4 0-.6.1.2-1.3 1.1-2.5 2.4-3.2Z" />
+    </svg>
+  );
+}
+
+export function LinkIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M9.5 14.5 14.5 9.5" />
+      <path d="M11 7.5 12.4 6a3.3 3.3 0 0 1 4.6 4.6l-1.5 1.4M13 16.5 11.6 18a3.3 3.3 0 0 1-4.6-4.6l1.5-1.4" />
+    </svg>
+  );
+}
+
+export function CheckIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="m5 13 4.5 4.5L19 8" />
+    </svg>
+  );
+}
+
+export function ArrowLeftIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M19 12H5M11 6l-6 6 6 6" />
+    </svg>
+  );
+}

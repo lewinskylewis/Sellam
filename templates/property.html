@@ -362,13 +362,27 @@
       </button>
     </div>
 
-    <!-- Central inventory: single source of truth for this template. -->
-    <script src="data/properties.js"></script>
+    <!-- Central inventory: single source of truth for this template. Live
+         Supabase data via the same adapter every other page uses — the
+         server-rendered response from api/property.js already carries this
+         script tag verbatim, so without this fix the browser was re-running
+         property-detail.js against the OLD static data/properties.js array
+         and clobbering the freshly server-rendered content on every load. -->
+    <script>window.SELLAM_SUPABASE_CONFIG = { url: "https://uvqcpqefrygodfrpaynq.supabase.co", anonKey: "sb_publishable_rVLFQsj-d6C-8vkVEWTW9w_9CbtMKZN" };</script>
     <script src="data/property-units.js"></script>
-    <script src="property-search.js"></script>
-    <script src="enquiry-config.js"></script>
-    <script src="enquiry-modal.js"></script>
-    <script src="property-detail.js"></script>
+    <script src="data/supabase-adapter.js"></script>
+    <script>
+      window.SellamData.ready.then(function () {
+        var deferred = ["property-search.js", "enquiry-config.js", "enquiry-modal.js", "property-detail.js"];
+        (function loadNext(i) {
+          if (i >= deferred.length) return;
+          var el = document.createElement("script");
+          el.src = deferred[i];
+          el.onload = function () { loadNext(i + 1); };
+          document.head.appendChild(el);
+        })(0);
+      });
+    </script>
     <script src="nav-active.js"></script>
     <script src="newsletter.js"></script>
     <script src="cookie-consent.js"></script>

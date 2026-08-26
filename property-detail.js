@@ -1580,7 +1580,7 @@ function updateLightbox() {
   if (caption) caption.textContent = item.alt;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function initPropertyDetail() {
   const property = getProperty();
   setupMobileMenu();
   setupPropertyContent(property);
@@ -1590,4 +1590,16 @@ document.addEventListener("DOMContentLoaded", () => {
   setupInlineLightboxTriggers();
   setupLightbox();
   setupRevealAnimations();
-});
+}
+
+// Guarded the same way property-search.js's setup is: this script is now
+// loaded only after window.SellamData.ready resolves (see
+// templates/property.html), which is well after DOMContentLoaded has
+// already fired — without this check the listener below would register but
+// never run, and the page would stay stuck on the template's placeholder
+// content.
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initPropertyDetail);
+} else {
+  initPropertyDetail();
+}

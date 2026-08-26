@@ -7,6 +7,10 @@ import Overview from "./pages/Overview";
 import Properties from "./pages/Properties";
 import PropertyEditor from "./pages/PropertyEditor";
 import Enquiries from "./pages/Enquiries";
+import HeroManager from "./pages/website/HeroManager";
+import HeroSlideEditor from "./pages/website/HeroSlideEditor";
+import PropertyHighlights from "./pages/website/PropertyHighlights";
+import Testimonials from "./pages/website/Testimonials";
 
 export default function App() {
   return (
@@ -60,6 +64,56 @@ export default function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <Enquiries />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/website/hero"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <HeroManager />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/website/hero/new"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <HeroSlideEditor />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/website/hero/:id/edit"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <HeroSlideEditor />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/website/property-highlights"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <PropertyHighlights />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/website/testimonials"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Testimonials />
                 </DashboardLayout>
               </ProtectedRoute>
             }

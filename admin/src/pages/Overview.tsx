@@ -4,7 +4,8 @@ import { displayName, useAuth } from "../lib/auth";
 import StatCard from "../components/StatCard";
 import Avatar from "../components/Avatar";
 import EnquiryStatusBadge from "../components/EnquiryStatusBadge";
-import { ChatIcon, CommunityIcon, HouseIcon, HousePlusIcon, UserIcon } from "../components/icons";
+import { ChatIcon, CommunityIcon, HouseIcon, HousePlusIcon, ImageIcon, QuoteIcon, StarIcon, UserIcon } from "../components/icons";
+import QuickActionTile from "../components/QuickActionTile";
 import {
   fetchOverviewStats,
   fetchRecentEnquiries,
@@ -152,17 +153,34 @@ export default function Overview() {
         </div>
       </section>
 
-      <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-3">
-        <Link
+      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <QuickActionTile
           to="/properties/new"
-          className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-line bg-surface p-10 text-ink-soft shadow-[0_8px_30px_rgba(15,23,42,0.14)] transition-colors hover:bg-paper"
-        >
-          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand text-white">
-            <HousePlusIcon className="h-7 w-7" />
-          </span>
-          <span className="text-base font-semibold text-ink">Add Property</span>
-        </Link>
+          label="Add Property"
+          subtitle="Create a new listing"
+          icon={<HousePlusIcon className="h-6 w-6" />}
+        />
+        <QuickActionTile
+          to="/website/hero"
+          label="Homepage Hero"
+          subtitle="Manage Hero Carousel"
+          icon={<ImageIcon className="h-6 w-6" />}
+        />
+        <QuickActionTile
+          to="/website/property-highlights"
+          label="Property Highlights"
+          subtitle="Featured & Exclusive Properties"
+          icon={<StarIcon className="h-6 w-6" />}
+        />
+        <QuickActionTile
+          to="/website/testimonials"
+          label="Client Testimonials"
+          subtitle="Collect Client Feedback"
+          icon={<QuoteIcon className="h-6 w-6" />}
+        />
+      </div>
 
+      <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-2">
         <section className="rounded-2xl border border-line bg-surface p-6 shadow-[0_8px_30px_rgba(15,23,42,0.14)]">
           <h2 className="text-lg font-bold text-ink">Recent Activities</h2>
           <div className="mt-4 divide-y divide-line">
