@@ -163,6 +163,27 @@
     document.head.appendChild(link);
   }
 
+  // The full stylesheet above is fetched over the network, which starts only
+  // once this script itself has run — a window in which the banner, if
+  // already inserted into the DOM, would render completely unstyled (full
+  // width, fully opaque, in normal flow) until that request finishes. This
+  // inline copy of just .cookie-banner's hidden/entrance rules applies
+  // instantly with zero network round-trip, so the banner is never visible
+  // in that raw state — for a returning visitor it never flashes at all, and
+  // for a first-time visitor it only ever appears via its intended animated
+  // entrance, once showBanner() adds is-visible.
+  function injectCriticalStyle() {
+    if (document.querySelector("style[data-cookie-consent-critical]")) return;
+    var style = document.createElement("style");
+    style.setAttribute("data-cookie-consent-critical", "");
+    style.textContent =
+      ".cookie-banner{position:fixed;left:0;right:0;bottom:0;z-index:400;opacity:0;visibility:hidden;" +
+      "pointer-events:none;transform:translateY(14px);transition:opacity 320ms ease,visibility 320ms ease," +
+      "transform 320ms cubic-bezier(0.2,0.8,0.2,1)}" +
+      ".cookie-banner.is-visible{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}";
+    document.head.appendChild(style);
+  }
+
   var banner, modal, dialog, categoryList;
   var lastFocusedBeforeModal = null;
 
@@ -349,6 +370,7 @@
   /* ---------------------------------------------------------------- init */
 
   function init() {
+    injectCriticalStyle();
     ensureStylesheet();
     injectFooterSettingsLink();
     buildBanner();
