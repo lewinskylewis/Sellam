@@ -247,19 +247,50 @@
 
     var items = selectProperties(config);
 
-    // Build rows of two cards, matching the pages' existing .listing-row layout.
-    var html = "";
-    items.forEach(function (p, i) {
-      if (i % 2 === 0) html += (i === 0 ? "" : "</div>") + '<div class="listing-row">';
-      html += cardHTML(p, i, config);
-    });
-    if (items.length) html += "</div>";
-
     // Preserve the empty-state element (rent-filter.js relies on it) then paint.
     var emptyState = container.querySelector("[data-rent-empty]");
     container.innerHTML = "";
     if (emptyState) container.appendChild(emptyState);
-    container.insertAdjacentHTML("beforeend", html);
+
+    // TEMPORARY DIAGNOSTIC — mobile rendering investigation. Featured
+    // Properties (data-listing="sale" with no data-community, i.e.
+    // featured-properties.html specifically) inserts its cards in batches of
+    // 6 across successive animation frames instead of one bulk
+    // insertAdjacentHTML, to test whether synchronous bulk insertion itself
+    // is the trigger for the reported blank-render behaviour. Every other
+    // container (Exclusive, Rent, Buy categories, community sections) keeps
+    // the original single-insert path unchanged. Not a fix — remove before
+    // merging.
+    var isFeaturedDiagnostic = config.mode === "sale" && !config.community;
+
+    if (isFeaturedDiagnostic) {
+      var BATCH_SIZE = 6;
+      var index = 0;
+      var insertBatch = function () {
+        var end = Math.min(index + BATCH_SIZE, items.length);
+        var batchHtml = "";
+        for (var i = index; i < end; i++) {
+          if (i % 2 === 0) batchHtml += '<div class="listing-row">';
+          batchHtml += cardHTML(items[i], i, config);
+          if (i % 2 === 1 || i === items.length - 1) batchHtml += "</div>";
+        }
+        container.insertAdjacentHTML("beforeend", batchHtml);
+        index = end;
+        if (index < items.length) {
+          window.requestAnimationFrame(insertBatch);
+        }
+      };
+      if (items.length) window.requestAnimationFrame(insertBatch);
+    } else {
+      // Build rows of two cards, matching the pages' existing .listing-row layout.
+      var html = "";
+      items.forEach(function (p, i) {
+        if (i % 2 === 0) html += (i === 0 ? "" : "</div>") + '<div class="listing-row">';
+        html += cardHTML(p, i, config);
+      });
+      if (items.length) html += "</div>";
+      container.insertAdjacentHTML("beforeend", html);
+    }
 
     if (!items.length && container.hasAttribute("data-hide-empty-section")) {
       var section = container.closest("[data-listing-section]");
