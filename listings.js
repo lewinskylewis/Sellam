@@ -247,6 +247,15 @@
 
     var items = selectProperties(config);
 
+    // TEMPORARY DIAGNOSTIC — mobile rendering investigation. Featured
+    // Properties (data-listing="sale" with no data-community, i.e.
+    // featured-properties.html specifically) is capped at 6 cards to test
+    // whether image/card volume affects the reported failure rate. Not a
+    // fix — remove before merging.
+    if (config.mode === "sale" && !config.community) {
+      items = items.slice(0, 6);
+    }
+
     // Build rows of two cards, matching the pages' existing .listing-row layout.
     var html = "";
     items.forEach(function (p, i) {
