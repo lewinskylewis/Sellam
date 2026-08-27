@@ -35,17 +35,20 @@ html.sellam-preloading body {
   pointer-events: none;
 }
 
+/* Logo + tagline breathe together as one unit — animating the shared
+   wrapper (not each child separately) keeps their relative spacing fixed
+   throughout the cycle. */
 .sellam-preloader-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
+  animation: sellam-preloader-breathe 2s ease-in-out infinite;
 }
 
 #sellam-preloader img {
   width: min(220px, 42vw);
   height: auto;
   display: block;
-  animation: sellam-preloader-breathe 4.8s ease-in-out infinite;
 }
 
 /* Sharp -> subtly soft/blurred -> sharp. Held at full clarity for a beat on
@@ -65,19 +68,25 @@ html.sellam-preloading body {
   }
 }
 
+/* !important throughout — the site-wide "body p" typography rule
+   (styles.css) forces its own font-size/family/weight with !important on
+   every <p>, so this component-scoped rule needs the same to actually take
+   effect, matching the override pattern already used elsewhere in this
+   codebase for the same reason. */
 .sellam-preloader-tagline {
-  margin: 18px 0 0;
-  color: #fff;
-  font-family: var(--font-optima, "Optima Local", Optima, Candara, "Segoe UI", Arial, sans-serif);
-  font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 0.06em;
-  text-align: center;
-  opacity: 0.85;
+  margin: 18px 0 0 !important;
+  color: #fff !important;
+  font-family: var(--font-optima, "Optima Local", Optima, Candara, "Segoe UI", Arial, sans-serif) !important;
+  font-size: 9px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.06em !important;
+  line-height: 1.4 !important;
+  text-align: center !important;
+  opacity: 0.85 !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #sellam-preloader img {
+  .sellam-preloader-inner {
     animation: none;
     opacity: 1;
     filter: none;
