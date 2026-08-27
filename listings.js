@@ -200,7 +200,7 @@
     var pricesAttr = Units.prices(p, field).join(",");
 
     return (
-      '<article class="property-card reveal"' +
+      '<article class="property-card"' +
         ' id="' + escapeAttr(p.slug) + '"' +
         " data-card" +
         ' data-property-id="' + escapeAttr(p.id) + '"' +
