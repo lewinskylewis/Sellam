@@ -683,6 +683,13 @@ button {
   font-weight: 400;
 }
 
+/* Community page "About" section (admin-managed `overview` field) —
+   community-render.js renders each paragraph as a plain .intro-copy, this
+   just adds spacing between more than one. */
+.community-overview-copy .intro-copy + .intro-copy {
+  margin-top: 18px;
+}
+
 .community-kicker {
   margin: 0 0 10px;
   color: var(--gold);

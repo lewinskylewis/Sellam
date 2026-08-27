@@ -19,7 +19,7 @@ import {
 const NAV_ITEMS: { label: string; to: string; enabled: boolean; icon: ComponentType<{ className?: string }> }[] = [
   { label: "Overview", to: "/", enabled: true, icon: GridIcon },
   { label: "Properties", to: "/properties", enabled: true, icon: HouseIcon },
-  { label: "Communities", to: "/communities", enabled: false, icon: CommunityIcon },
+  { label: "Communities", to: "/communities", enabled: true, icon: CommunityIcon },
   { label: "Enquiries", to: "/enquiries", enabled: true, icon: ChatIcon },
   { label: "Leads & Clients", to: "/leads", enabled: false, icon: UsersIcon },
   { label: "Analytics", to: "/analytics", enabled: false, icon: ChartIcon },

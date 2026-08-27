@@ -7,6 +7,8 @@ import Overview from "./pages/Overview";
 import Properties from "./pages/Properties";
 import PropertyEditor from "./pages/PropertyEditor";
 import Enquiries from "./pages/Enquiries";
+import Communities from "./pages/Communities";
+import CommunityEditor from "./pages/CommunityEditor";
 import HeroManager from "./pages/website/HeroManager";
 import HeroSlideEditor from "./pages/website/HeroSlideEditor";
 import PropertyHighlights from "./pages/website/PropertyHighlights";
@@ -54,6 +56,36 @@ export default function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <PropertyEditor />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/communities"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Communities />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/communities/new"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <CommunityEditor />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/communities/:key/edit"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <CommunityEditor />
                 </DashboardLayout>
               </ProtectedRoute>
             }

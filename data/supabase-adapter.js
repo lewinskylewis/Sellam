@@ -205,7 +205,14 @@
       description: row.description,
       // Derived, never stored (Step 2 audit §H) — community-render.js
       // reads community.url directly for the "View Community" link.
-      url: "communities/" + row.key + ".html"
+      url: "communities/" + row.key + ".html",
+      // Admin dashboard Communities module (202608272200): homepage carousel
+      // visibility/order, and the individual community page's own hero
+      // background — see community-render.js for both consumers.
+      heroImage: row.hero_image || null,
+      overview: row.overview || null,
+      sortOrder: typeof row.sort_order === "number" ? row.sort_order : 0,
+      isActive: row.is_active !== false
     };
   }
 

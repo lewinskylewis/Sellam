@@ -110,13 +110,15 @@
     <main>
       <section class="premium-hero" aria-label="Loresho community hero">
         <div class="premium-hero-image" aria-hidden="true" style="background-image: linear-gradient(rgba(4, 51, 65, 0.55), rgba(4, 51, 65, 0.55)), url('assets/images/Premium properties/Loresho 4 Bedroom Villas (10).jpeg'); background-position: center;"></div>
+        <div class="exclusive-hero-content buy-hero-content page-shell">
+          <h1 class="buy-hero-title reveal" data-community-hero-title>Loresho</h1>
+          <p class="buy-hero-description reveal" data-community-hero-description>Loresho is a calm villa neighborhood with family homes, green surroundings, privacy, and quick access to Westlands corridors.</p>
+        </div>
       </section>
 
-      <section class="properties-intro">
+      <section class="properties-intro community-overview-section" data-community-overview hidden>
         <div class="page-shell">
-          <p class="community-kicker reveal">Community</p>
-          <h1 class="community-page-title reveal">Loresho</h1>
-          <p class="intro-copy reveal">Loresho is a calm villa neighborhood with family homes, green surroundings, privacy, and quick access to Westlands corridors.</p>
+          <div class="community-overview-copy" data-community-overview-copy></div>
         </div>
       </section>
 
@@ -232,7 +234,7 @@
     <script src="data/supabase-adapter.js"></script>
     <script>
       window.SellamData.ready.then(function () {
-        var deferred = ["listings.js", "enquiry-config.js", "enquiry-modal.js", "premium-properties.js"];
+        var deferred = ["listings.js", "enquiry-config.js", "enquiry-modal.js", "premium-properties.js", "community-render.js"];
         (function loadNext(i) {
           if (i >= deferred.length) return;
           var el = document.createElement("script");

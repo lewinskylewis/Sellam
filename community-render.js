@@ -65,9 +65,77 @@
     );
   }
 
+  // Admin Communities module: only "visible" communities, in the order the
+  // dashboard sets — defensive defaults (isActive !== false, sortOrder or
+  // array position) so this degrades to today's "show everything, DB
+  // order" behaviour against the static data/communities.js fallback,
+  // which doesn't have these fields.
+  var carouselCommunities = communities
+    .filter(function (c) { return c.isActive !== false; })
+    .slice()
+    .sort(function (a, b) {
+      var aOrder = typeof a.sortOrder === "number" ? a.sortOrder : 0;
+      var bOrder = typeof b.sortOrder === "number" ? b.sortOrder : 0;
+      return aOrder - bOrder;
+    });
+
   var track = document.querySelector(".community-track");
-  if (track && communities.length) {
-    track.innerHTML = communities.map(cardHTML).join("");
+  if (track && carouselCommunities.length) {
+    track.innerHTML = carouselCommunities.map(cardHTML).join("");
+  }
+
+  /* ------------------------------------------------- individual page hero */
+  // Applies the admin-managed hero image (and keeps title/intro in sync
+  // with label/description) on a community's own page — e.g.
+  // communities/karen(.html). No-ops entirely if this page isn't a
+  // community page (no .premium-hero-image present) or the matched
+  // community has no hero_image set yet, leaving today's hand-authored
+  // markup exactly as it is now.
+  var heroSection = document.querySelector(".premium-hero-image");
+  if (heroSection && communities.length) {
+    var slug = window.location.pathname.split("/").pop().replace(/\.html$/, "");
+    var current = communities.filter(function (c) { return c.key === slug; })[0];
+
+    if (current) {
+      if (current.heroImage) {
+        heroSection.style.backgroundImage =
+          "linear-gradient(rgba(4, 51, 65, 0.55), rgba(4, 51, 65, 0.55)), url('" + current.heroImage + "')";
+      }
+      // Dedicated data-attributes, not the .buy-hero-title/-description
+      // classes themselves — those classes only carry position/typography,
+      // and using them (or a shared class like .intro-copy) as the JS
+      // selector too previously collided with premium-properties.css's
+      // other same-named rules by source order, silently overriding the
+      // gold/white hero colour with dark body-text colour.
+      var titleEl = document.querySelector("[data-community-hero-title]");
+      if (titleEl) titleEl.textContent = current.label;
+      var introEl = document.querySelector("[data-community-hero-description]");
+      if (introEl) introEl.textContent = current.description;
+
+      // "About this community" — a longer section below the hero, separate
+      // from the short intro above. Section stays hidden (as it is by
+      // default in every template) unless the admin has actually set an
+      // overview, so a community without one renders exactly as today.
+      var overviewSection = document.querySelector("[data-community-overview]");
+      var overviewCopy = document.querySelector("[data-community-overview-copy]");
+      if (overviewSection && overviewCopy && current.overview) {
+        overviewCopy.innerHTML = "";
+        String(current.overview)
+          .split(/\n{2,}/)
+          .map(function (part) { return part.trim(); })
+          .filter(Boolean)
+          .forEach(function (part) {
+            var p = document.createElement("p");
+            // Reuses .intro-copy's existing typography (font/size/color) —
+            // no new CSS needed for a single paragraph. Multi-paragraph
+            // spacing is the one small addition, in premium-properties.css.
+            p.className = "intro-copy";
+            p.textContent = part;
+            overviewCopy.appendChild(p);
+          });
+        overviewSection.hidden = false;
+      }
+    }
   }
 
   /* ----------------------------------------------- properties cross-check */
