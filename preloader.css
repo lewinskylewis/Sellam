@@ -1,0 +1,70 @@
+/* ============================================================================
+   SELLAM — SITE PRELOADER
+   ============================================================================
+   Full-screen cover shown from first paint until window.SellamData.ready
+   resolves (or a safety timeout elapses — see the inline script next to
+   #sellam-preloader in each page). Pure CSS/HTML for the initial appearance
+   so there is nothing to flash in: the overlay markup and this stylesheet
+   are both present before <body> renders anything else. JavaScript only
+   ever adds "is-exiting" and later removes the element — it never has to
+   run for the loader to correctly cover the page.
+   ========================================================================== */
+
+html.sellam-preloading,
+html.sellam-preloading body {
+  overflow: hidden;
+  height: 100%;
+}
+
+#sellam-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #002f3f;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+
+#sellam-preloader.is-exiting {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#sellam-preloader img {
+  width: min(220px, 42vw);
+  height: auto;
+  display: block;
+  animation: sellam-preloader-breathe 3.6s ease-in-out infinite;
+}
+
+@keyframes sellam-preloader-breathe {
+  0%,
+  100% {
+    opacity: 0.82;
+    filter: blur(0.4px);
+    transform: scale(0.985);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #sellam-preloader img {
+    animation: none;
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+
+  #sellam-preloader {
+    transition: opacity 0.25s ease;
+  }
+}

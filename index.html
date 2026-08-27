@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="sellam-preloading">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Sellam | Premium Real Estate</title>
     <meta
       name="description"
@@ -15,6 +15,7 @@
       rel="stylesheet"
     >
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="preloader.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gabriela&display=swap" rel="stylesheet">
@@ -96,6 +97,9 @@
     <script src="site-motion.js"></script>
   </head>
   <body>
+    <div id="sellam-preloader" role="status" aria-label="Loading Sellam">
+      <img src="assets/logos/sellam-logo.png" alt="SELLAM" width="558" height="115" fetchpriority="high">
+    </div>
     <header class="site-header" aria-label="Primary navigation">
       <nav class="nav-shell">
         <a class="brand" href="index" aria-label="Sellam home">
@@ -700,5 +704,29 @@
     <script src="nav-active.js"></script>
     <script src="newsletter.js"></script>
     <script src="cookie-consent.js"></script>
+    <script>
+      (function () {
+        var overlay = document.getElementById("sellam-preloader");
+        if (!overlay) return;
+        var root = document.documentElement;
+        var exited = false;
+        function exit() {
+          if (exited) return;
+          exited = true;
+          overlay.classList.add("is-exiting");
+          root.classList.remove("sellam-preloading");
+          setTimeout(function () {
+            if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+          }, 650);
+        }
+        var ready = window.SellamData && window.SellamData.ready;
+        if (ready && typeof ready.then === "function") {
+          ready.then(exit, exit);
+        } else {
+          exit();
+        }
+        setTimeout(exit, 4000);
+      })();
+    </script>
   </body>
 </html>
