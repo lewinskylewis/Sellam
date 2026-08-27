@@ -98,7 +98,10 @@
   </head>
   <body>
     <div id="sellam-preloader" role="status" aria-label="Loading Sellam">
-      <img src="assets/logos/sellam-logo.png" alt="SELLAM" width="558" height="115" fetchpriority="high">
+      <div class="sellam-preloader-inner">
+        <img src="assets/logos/sellam-logo.png" alt="SELLAM" width="558" height="115" fetchpriority="high">
+        <p class="sellam-preloader-tagline">Connecting people with property.</p>
+      </div>
     </div>
     <header class="site-header" aria-label="Primary navigation">
       <nav class="nav-shell">
@@ -719,12 +722,69 @@
             if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
           }, 650);
         }
-        var ready = window.SellamData && window.SellamData.ready;
-        if (ready && typeof ready.then === "function") {
-          ready.then(exit, exit);
-        } else {
-          exit();
+
+        var dataReady = window.SellamData && window.SellamData.ready;
+        if (!dataReady || typeof dataReady.then !== "function") {
+          dataReady = Promise.resolve();
         }
+        dataReady = dataReady.then(function () {}, function () {});
+
+        // The hero background is set as a CSS background-image by script.js
+        // (itself only loaded after SellamData.ready) rather than an <img>
+        // tag, so there is no native load event to hook. A MutationObserver
+        // on the layer script.js paints onto picks up the URL the moment
+        // it's set, without touching script.js itself; a real Image() then
+        // tells us when that exact asset has actually finished loading.
+        var heroReady = new Promise(function (resolve) {
+          var heroLayer = document.querySelector(".hero-bg-current");
+          if (!heroLayer) {
+            resolve();
+            return;
+          }
+
+          function urlFromBackground(value) {
+            if (!value) return null;
+            var match = /^url\((.*)\)$/.exec(value.trim());
+            if (!match) return null;
+            var inner = match[1].trim();
+            var quote = inner.charAt(0);
+            if ((quote === '"' || quote === "'") && inner.charAt(inner.length - 1) === quote) {
+              inner = inner.slice(1, -1);
+            }
+            return inner || null;
+          }
+
+          function preload(url) {
+            if (!url) {
+              resolve();
+              return;
+            }
+            var probe = new Image();
+            probe.onload = resolve;
+            probe.onerror = resolve;
+            probe.src = url;
+          }
+
+          var existingUrl = urlFromBackground(heroLayer.style.backgroundImage);
+          if (existingUrl) {
+            preload(existingUrl);
+            return;
+          }
+
+          var observer = new MutationObserver(function () {
+            var url = urlFromBackground(heroLayer.style.backgroundImage);
+            if (url) {
+              observer.disconnect();
+              preload(url);
+            }
+          });
+          observer.observe(heroLayer, { attributes: true, attributeFilter: ["style"] });
+        });
+
+        Promise.all([dataReady, heroReady]).then(exit);
+
+        // Hard safety net, independent of the above — the loader can never
+        // outlive this regardless of what fails.
         setTimeout(exit, 4000);
       })();
     </script>
