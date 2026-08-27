@@ -58,6 +58,13 @@
     for (var i = 0; i < candidates.length; i += 1) {
       var candidate = candidates[i];
       if (candidate.classList.contains("reveal") || candidate.querySelector(".reveal")) continue;
+      // Listing containers (listings.js) are populated asynchronously and can
+      // grow far taller than any viewport — tall enough that this observer's
+      // 0.12 threshold becomes impossible to reach, permanently trapping
+      // already-rendered cards at opacity: 0. They're content containers, not
+      // decorative sections, so they should never be auto-tagged as reveal
+      // targets in the first place.
+      if (candidate.matches("[data-property-rows]") || candidate.querySelector("[data-property-rows]")) continue;
       candidate.classList.add("reveal", "site-motion-auto");
     }
   }
