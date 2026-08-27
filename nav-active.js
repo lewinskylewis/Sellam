@@ -32,7 +32,7 @@
         "buy-commercial",
         "buy-land",
         "buy-residential",
-        "premium-properties",
+        "featured-properties",
         "exclusive-properties",
         "property"
       ].includes(pageName)

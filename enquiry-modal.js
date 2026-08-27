@@ -90,7 +90,7 @@
     try {
       const page = new URL(document.referrer).pathname.split("/").pop()?.replace(/\.html$/i, "").toLowerCase();
       if (page === "rent") return "rent";
-      if (page === "premium-properties") return "sale";
+      if (page === "featured-properties") return "sale";
       if (page === "exclusive-properties") return "exclusive";
     } catch (_error) {
       return "";

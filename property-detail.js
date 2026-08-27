@@ -802,7 +802,13 @@ function findInventoryProperty(id) {
   return list.find((item) => item.id === id || item.slug === id) || null;
 }
 
-function formatKESValue(value) {
+// `currency` mirrors data/property-units.js's unit shape (Supabase's
+// property_units.currency — "KES" or "USD", null defaults to KES). Only the
+// international/diaspora listings (ShomaBay, Brabus Villas, Afra Park,
+// Indabyo Heights) currently set "USD" — every Kenya-market property keeps
+// today's KES formatting unchanged.
+function formatKESValue(value, currency) {
+  if (currency === "USD") return `USD ${Number(value).toLocaleString("en-US")}`;
   return window.SellamSearch && typeof window.SellamSearch.formatKES === "function"
     ? window.SellamSearch.formatKES(value)
     : `KES ${Number(value).toLocaleString("en-KE")}`;
@@ -836,8 +842,8 @@ function buildPriceRows(inventoryItem) {
     const area = unit.area || "";
     const note = unit.note || "";
 
-    if (unit.salePrice) rows.push({ bedrooms, bathrooms, area, note, price: formatKESValue(unit.salePrice) });
-    if (unit.rentPrice) rows.push({ bedrooms, bathrooms, area, note, price: `${formatKESValue(unit.rentPrice)} / month` });
+    if (unit.salePrice) rows.push({ bedrooms, bathrooms, area, note, price: formatKESValue(unit.salePrice, unit.currency) });
+    if (unit.rentPrice) rows.push({ bedrooms, bathrooms, area, note, price: `${formatKESValue(unit.rentPrice, unit.currency)} / month` });
   });
 
   if (!rows.length) rows.push({ bedrooms: "—", bathrooms: "—", price: "Price on application" });
@@ -901,7 +907,17 @@ function inventoryToLegacyShape(inventoryItem) {
 
 function getProperty() {
   const params = new URLSearchParams(window.location.search);
-  const pageSlug = window.location.pathname.split("/").pop()?.replace(/\.html$/i, "");
+  // location.pathname keeps non-ASCII characters percent-encoded (e.g.
+  // "hephé-palace" arrives as "heph%C3%A9-palace") — decode it back before
+  // matching, otherwise any slug with an accent never matches its inventory
+  // record and silently falls through to the legacy "dg-west" placeholder.
+  const rawPageSlug = window.location.pathname.split("/").pop()?.replace(/\.html$/i, "");
+  let pageSlug = rawPageSlug;
+  try {
+    if (rawPageSlug) pageSlug = decodeURIComponent(rawPageSlug);
+  } catch (error) {
+    // Malformed escape sequence — keep the raw segment rather than throw.
+  }
   const id = params.get("id") || document.body.dataset.propertyKey || pageSlug;
 
   const inventoryItem = findInventoryProperty(id);
