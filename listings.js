@@ -214,7 +214,7 @@
         ' data-bedrooms="' + escapeAttr(bedroomsAttr) + '"' +
         ' data-bathrooms="' + escapeAttr(bathroomsAttr) + '">' +
         '<a class="property-image" href="' + url + '">' +
-          '<img src="' + escapeAttr(p.image) + '" alt="' + title + '" loading="lazy" decoding="async">' +
+          '<img src="' + escapeAttr(p.image) + '" alt="' + title + '" decoding="async">' +
         "</a>" +
         '<div class="property-info">' +
           "<h2>" + p.title + "</h2>" +
