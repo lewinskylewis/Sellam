@@ -267,7 +267,19 @@ module.exports = async function syncMailboxesHandler(request, response) {
       const count = await syncMailbox(config, key, address, password);
       results[key] = { ok: true, newMessages: count };
     } catch (error) {
-      console.error(`Mailbox sync failed for ${address}:`, error.message);
+      // Only specific, known-safe diagnostic fields — never the whole error
+      // object or anything from `config`/the auth options, since ImapFlow
+      // errors are not guaranteed not to carry connection context.
+      console.error(`Mailbox sync failed for ${address}:`, {
+        mailbox: key,
+        name: error?.name,
+        message: error?.message,
+        code: error?.code,
+        response: error?.response,
+        responseCode: error?.responseCode,
+        command: error?.command,
+        stack: error?.stack
+      });
       results[key] = { ok: false, error: error.message };
     }
   }
