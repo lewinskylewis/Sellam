@@ -23,7 +23,7 @@ const NAV_ITEMS: { label: string; to: string; enabled: boolean; icon: ComponentT
   { label: "Enquiries", to: "/enquiries", enabled: true, icon: ChatIcon },
   { label: "Leads & Clients", to: "/leads", enabled: false, icon: UsersIcon },
   { label: "Analytics", to: "/analytics", enabled: false, icon: ChartIcon },
-  { label: "Messages", to: "/messages", enabled: false, icon: MailIcon },
+  { label: "Messages", to: "/messages", enabled: true, icon: MailIcon },
   { label: "Settings", to: "/settings", enabled: false, icon: GearIcon },
 ];
 

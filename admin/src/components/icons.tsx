@@ -199,3 +199,38 @@ export function ArrowLeftIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function SendIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4.5 4.5 20 12 4.5 19.5l2.3-7L15 12l-8.2-.5Z" />
+    </svg>
+  );
+}
+
+export function ArchiveIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3.5" y="4.5" width="17" height="4.5" rx="1.2" />
+      <path d="M5 9v9a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 18V9" />
+      <path d="M10 13h4" />
+    </svg>
+  );
+}
+
+export function PaperclipIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M16.5 7.5 9 15a2.5 2.5 0 0 0 3.5 3.5l7-7a4.5 4.5 0 0 0-6.4-6.4l-7 7a1 1 0 0 0 1.4 1.4l6.6-6.6" />
+    </svg>
+  );
+}
+
+export function RefreshIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4.5 12a7.5 7.5 0 0 1 12.6-5.5M19.5 12a7.5 7.5 0 0 1-12.6 5.5" />
+      <path d="M16.5 4.5v3.5H13M7.5 19.5V16H11" />
+    </svg>
+  );
+}

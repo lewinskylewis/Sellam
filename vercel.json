@@ -2,10 +2,25 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "cleanUrls": true,
+  "images": {
+    "sizes": [300, 640, 800, 900, 1400, 1920],
+    "formats": ["image/avif", "image/webp"],
+    "minimumCacheTTL": 604800,
+    "remotePatterns": [
+      {
+        "protocol": "https",
+        "hostname": "uvqcpqefrygodfrpaynq.supabase.co",
+        "pathname": "/storage/v1/object/public/**"
+      }
+    ]
+  },
   "rewrites": [
     { "source": "/property.html", "destination": "/api/property" },
     { "source": "/property", "destination": "/api/property" },
     { "source": "/:slug", "destination": "/api/property?id=:slug" }
+  ],
+  "crons": [
+    { "path": "/api/sync-mailboxes", "schedule": "*/10 * * * *" }
   ],
   "git": {
     "deploymentEnabled": {

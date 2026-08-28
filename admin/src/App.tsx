@@ -7,6 +7,7 @@ import Overview from "./pages/Overview";
 import Properties from "./pages/Properties";
 import PropertyEditor from "./pages/PropertyEditor";
 import Enquiries from "./pages/Enquiries";
+import Messages from "./pages/Messages";
 import Communities from "./pages/Communities";
 import CommunityEditor from "./pages/CommunityEditor";
 import HeroManager from "./pages/website/HeroManager";
@@ -96,6 +97,16 @@ export default function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <Enquiries />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/messages"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Messages />
                 </DashboardLayout>
               </ProtectedRoute>
             }

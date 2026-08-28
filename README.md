@@ -100,3 +100,72 @@ fails closed with a 503 and logs the reason server-side.
 the future admin dashboard" above; the same constraints apply to any future
 subscriber-list UI. There is currently no unsubscribe endpoint — this only
 covers signup.
+
+## Dashboard Messages module (real IMAP-in / Resend-out email)
+
+The admin dashboard's Messages page (`admin/src/pages/Messages.tsx`) is a
+real inbox for `sales@sellamre.com` and `office@sellamre.com` — not an
+internal-only system. It's a hybrid:
+
+- **Inbound**: `api/sync-mailboxes.js` connects to both mailboxes over IMAP
+  (GoDaddy/Titan, via `imapflow`), parses new mail with `mailparser`, and
+  writes it into `email_conversations` / `email_messages` /
+  `email_attachments` (`supabase/migrations/202608280001_create_email_messaging.sql`,
+  not yet applied — run it in the Supabase SQL Editor when ready to enable
+  this feature). It runs on a Vercel Cron schedule (`vercel.json`, every 10
+  minutes — **Vercel's Hobby plan only allows daily crons; a Pro plan or
+  above is required for the 10-minute schedule to actually run that often**)
+  and can also be triggered on demand from the dashboard.
+- **Outbound**: `api/send-message.js` sends dashboard replies via Resend,
+  genuinely "from" the conversation's mailbox address (reusing the same
+  verified `sellamre.com` domain as the enquiry/newsletter emails — no new
+  DNS work needed), and records the reply as an outbound message in the same
+  thread. It's gated by a real signed-in admin session, not just any caller.
+- **Threading** uses the RFC 5322 `Message-ID` / `In-Reply-To` / `References`
+  headers, matching this project's stated non-negotiable: real email
+  delivery, not a Supabase-only chat log.
+- Each conversation is soft-linked to a `property_enquiries` row by matching
+  email address at write time (`email_conversations.enquiry_id`) — a
+  best-effort pointer, not a foreign key, so this never touches or
+  constrains the existing enquiry table.
+
+### Why IMAP-in / Resend-out, not one provider for both directions
+
+Resend's inbound-email product requires pointing this domain's MX records at
+Resend, which would replace the MX records currently pointed at Titan for
+these exact mailboxes — disruptive to the live mailboxes and out of scope.
+Titan/GoDaddy's own SMTP could send outbound instead, but Resend is already
+integrated, proven, and `sellamre.com` is already verified there, so sending
+replies through Resend needed zero new DNS work.
+
+### Required environment variables
+
+In addition to the Supabase/Resend variables documented above:
+
+| Variable | Value | Where to get it |
+|---|---|---|
+| `SUPABASE_ANON_KEY` | The **anon/publishable** key (same value as `admin/.env`'s `VITE_SUPABASE_ANON_KEY`) | Supabase → Project Settings → API. Used server-side only to verify a dashboard session belongs to a real signed-in admin before allowing a mailbox sync or a send — it is a public key by design, safe to duplicate here. |
+| `TITAN_IMAP_HOST` | `imap.titan.email` (confirm with GoDaddy/Titan support for this account if unsure) | GoDaddy/Titan mailbox settings |
+| `TITAN_IMAP_PORT` | `993` | IMAPS (implicit TLS) |
+| `SALES_MAILBOX_PASSWORD` | `sales@sellamre.com`'s mailbox password | Ideally a dedicated app password if Titan supports one, not the account's main login password |
+| `OFFICE_MAILBOX_PASSWORD` | `office@sellamre.com`'s mailbox password | Same as above |
+| `CRON_SECRET` | Any random string you generate | Also referenced by Vercel's own scheduled cron invocation automatically once set — this is how `/api/sync-mailboxes` tells a real Vercel Cron call apart from an arbitrary internet request |
+| `ADMIN_ORIGIN` | e.g. `https://admin.sellamre.com` | Only required if the admin dashboard is deployed as its own Vercel project/domain (the common setup — a separate project with root directory `admin`, since these `api/` routes live at the main project's root and aren't included in that build). Without it, the admin dashboard's browser calls to `/api/send-message` and `/api/sync-mailboxes` will be blocked by CORS. Skip it only if admin is served from this exact same origin. |
+
+Also set `VITE_API_BASE_URL` in `admin/.env` (see `admin/.env.example`) to
+this project's origin (e.g. `https://sellamre.com`) — that's where the
+dashboard sends its `/api/send-message` and `/api/sync-mailboxes` calls.
+
+If IMAP or the anon-key variables are missing, `/api/sync-mailboxes` fails
+closed per-mailbox (each mailbox reports its own error in the response) and
+`/api/send-message` fails closed with a 503 — the existing enquiry and
+newsletter flows are entirely unaffected either way, since they don't touch
+any of these new variables or tables.
+
+### Before this feature works end-to-end
+
+1. Apply `supabase/migrations/202608280001_create_email_messaging.sql` in the
+   Supabase SQL Editor (it has not been run against the live database).
+2. Set the environment variables above in Vercel.
+3. Confirm the IMAP host/port with GoDaddy/Titan support if `imap.titan.email:993`
+   doesn't connect for this account.
