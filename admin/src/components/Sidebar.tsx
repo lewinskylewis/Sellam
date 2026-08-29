@@ -21,10 +21,10 @@ const NAV_ITEMS: { label: string; to: string; enabled: boolean; icon: ComponentT
   { label: "Properties", to: "/properties", enabled: true, icon: HouseIcon },
   { label: "Communities", to: "/communities", enabled: true, icon: CommunityIcon },
   { label: "Enquiries", to: "/enquiries", enabled: true, icon: ChatIcon },
-  { label: "Leads & Clients", to: "/leads", enabled: false, icon: UsersIcon },
-  { label: "Analytics", to: "/analytics", enabled: false, icon: ChartIcon },
+  { label: "Leads & Clients", to: "/leads", enabled: true, icon: UsersIcon },
+  { label: "Analytics", to: "/analytics", enabled: true, icon: ChartIcon },
   { label: "Messages", to: "/messages", enabled: true, icon: MailIcon },
-  { label: "Settings", to: "/settings", enabled: false, icon: GearIcon },
+  { label: "Settings", to: "/settings", enabled: true, icon: GearIcon },
 ];
 
 export default function Sidebar({ open, onToggle }: { open: boolean; onToggle: () => void }) {

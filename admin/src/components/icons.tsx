@@ -234,3 +234,163 @@ export function RefreshIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function BellIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M6 9.5a6 6 0 0 1 12 0c0 4.2 1.3 5.8 1.9 6.4H4.1c.6-.6 1.9-2.2 1.9-6.4Z" />
+      <path d="M10 19a2 2 0 0 0 4 0" />
+    </svg>
+  );
+}
+
+export function GlobeIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M3.5 12h17M12 3.5c2.3 2.3 3.5 5.3 3.5 8.5s-1.2 6.2-3.5 8.5c-2.3-2.3-3.5-5.3-3.5-8.5s1.2-6.2 3.5-8.5Z" />
+    </svg>
+  );
+}
+
+export function PaletteIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 3.5a8.5 8.5 0 1 0 0 17c1 0 1.7-.8 1.7-1.7 0-.45-.18-.85-.46-1.15-.28-.3-.46-.7-.46-1.15 0-.9.75-1.7 1.7-1.7h1.9a3 3 0 0 0 3-3c0-4.4-3.8-8.3-7.4-8.3Z" />
+      <circle cx="7.3" cy="11" r="1.1" />
+      <circle cx="9.8" cy="7.3" r="1.1" />
+      <circle cx="14.3" cy="7.3" r="1.1" />
+      <circle cx="16.7" cy="11" r="1.1" />
+    </svg>
+  );
+}
+
+export function ShieldIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 3.5 19 6.5v5.2c0 4.6-3 7.8-7 8.8-4-1-7-4.2-7-8.8V6.5L12 3.5Z" />
+      <path d="m9 12 2.1 2.1L15.5 9.6" />
+    </svg>
+  );
+}
+
+export function DatabaseIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <ellipse cx="12" cy="5.5" rx="7.5" ry="2.5" />
+      <path d="M4.5 5.5v6c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5v-6" />
+      <path d="M4.5 11.5v6c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5v-6" />
+    </svg>
+  );
+}
+
+export function ChevronRightIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="m9 6 6 6-6 6" />
+    </svg>
+  );
+}
+
+export function LockIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="5" y="10.5" width="14" height="9.5" rx="1.8" />
+      <path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" />
+    </svg>
+  );
+}
+
+export function SunIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
+    </svg>
+  );
+}
+
+export function MoonIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z" />
+    </svg>
+  );
+}
+
+export function DesktopIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3.5" y="4.5" width="17" height="11" rx="1.6" />
+      <path d="M9 19.5h6M12 15.5v4" />
+    </svg>
+  );
+}
+
+export function PhoneIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M5.5 4.5h3l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5v3a1.5 1.5 0 0 1-1.6 1.5A16 16 0 0 1 4 5.5a1.5 1.5 0 0 1 1.5-1Z" />
+    </svg>
+  );
+}
+
+export function WhatsAppIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12.04 2.25a9.63 9.63 0 0 0-8.22 14.62L2.75 21.75l4.99-1.04a9.62 9.62 0 1 0 4.3-18.46Zm0 1.88a7.74 7.74 0 0 1 6.45 12.02 7.71 7.71 0 0 1-9.04 2.63l-.36-.16-3.82.8.82-3.72-.2-.39a7.74 7.74 0 0 1 6.15-11.18Zm-3.12 3.9c-.17 0-.43.06-.66.31-.22.25-.86.84-.86 2.06 0 1.21.88 2.38 1 2.54.13.16 1.7 2.73 4.22 3.72 2.09.82 2.52.66 2.98.62.45-.04 1.46-.6 1.67-1.18.2-.58.2-1.08.14-1.18-.06-.11-.23-.17-.48-.3-.26-.13-1.51-.75-1.74-.83-.23-.09-.4-.13-.57.13-.17.25-.65.83-.8 1-.15.17-.3.19-.55.06-.26-.13-1.08-.4-2.05-1.26-.76-.68-1.27-1.52-1.42-1.77-.15-.26-.02-.4.11-.52.12-.12.26-.3.39-.45.13-.15.17-.25.26-.42.08-.17.04-.32-.02-.45-.06-.13-.57-1.37-.78-1.88-.2-.49-.41-.42-.57-.43h-.47Z" />
+    </svg>
+  );
+}
+
+export function TrendUpIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4 16.5 10 10.5l3.5 3.5L20 7" />
+      <path d="M14.5 7h5.5v5.5" />
+    </svg>
+  );
+}
+
+export function TrendDownIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4 7.5 10 13.5l3.5-3.5L20 17" />
+      <path d="M14.5 17h5.5v-5.5" />
+    </svg>
+  );
+}
+
+export function DownloadIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 3.5v11.5M8 11.5l4 4 4-4" />
+      <path d="M4.5 17v2a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5v-2" />
+    </svg>
+  );
+}
+
+export function FilterIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4 5.5h16L14 13v6l-4 2v-8L4 5.5Z" />
+    </svg>
+  );
+}
+
+export function ArrowRightIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4.5 12h15M13.5 6l6 6-6 6" />
+    </svg>
+  );
+}
+
+export function CalendarIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3.5" y="5" width="17" height="15" rx="1.6" />
+      <path d="M3.5 9.5h17M8 3v3.5M16 3v3.5" />
+    </svg>
+  );
+}

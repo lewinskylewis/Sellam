@@ -8,6 +8,9 @@ import Properties from "./pages/Properties";
 import PropertyEditor from "./pages/PropertyEditor";
 import Enquiries from "./pages/Enquiries";
 import Messages from "./pages/Messages";
+import LeadsClients from "./pages/LeadsClients";
+import Analytics from "./pages/Analytics";
+import Settings from "./pages/Settings";
 import Communities from "./pages/Communities";
 import CommunityEditor from "./pages/CommunityEditor";
 import HeroManager from "./pages/website/HeroManager";
@@ -107,6 +110,36 @@ export default function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <Messages />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/leads"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <LeadsClients />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/analytics"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Analytics />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Settings />
                 </DashboardLayout>
               </ProtectedRoute>
             }
