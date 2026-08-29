@@ -124,7 +124,7 @@ export async function setConversationArchived(id: string, isArchived: boolean): 
 // (verified server-side via requireAuthenticatedAdmin).
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? "").replace(/\/$/, "");
 
-async function callMessagingApi(path: string, accessToken: string, body?: unknown): Promise<unknown> {
+async function callMessagingApi(path: string, accessToken: string, body?: unknown): Promise<{ status: number; payload: any }> {
   const response = await fetch(`${API_BASE_URL}${path}`, {
     method: "POST",
     headers: {
@@ -135,19 +135,27 @@ async function callMessagingApi(path: string, accessToken: string, body?: unknow
   });
 
   const payload = await response.json().catch(() => ({}));
-  if (!response.ok || payload?.ok === false) {
+  // 207 is /api/send-message's "the email already went out via Resend, but
+  // saving it to the conversation failed" response — the caller needs to
+  // treat this as sent (never retry, which would send a duplicate email),
+  // not as a plain failure, so it's deliberately not thrown here.
+  if (response.status !== 207 && (!response.ok || payload?.ok === false)) {
     throw new Error(payload?.error || `Request to ${path} failed (${response.status}).`);
   }
-  return payload;
+  return { status: response.status, payload };
 }
 
-export async function sendReply(accessToken: string, conversationId: string, bodyText: string): Promise<void> {
-  await callMessagingApi("/api/send-message", accessToken, { conversationId, bodyText });
+export type SendReplyResult = { saved: true } | { saved: false; warning: string };
+
+export async function sendReply(accessToken: string, conversationId: string, bodyText: string): Promise<SendReplyResult> {
+  const { status, payload } = await callMessagingApi("/api/send-message", accessToken, { conversationId, bodyText });
+  if (status === 207) {
+    return { saved: false, warning: payload?.error || "The reply was sent but could not be saved to this conversation." };
+  }
+  return { saved: true };
 }
 
 export async function triggerMailboxSync(accessToken: string): Promise<Record<string, { ok: boolean; newMessages?: number; error?: string }>> {
-  const result = (await callMessagingApi("/api/sync-mailboxes", accessToken)) as {
-    results: Record<string, { ok: boolean; newMessages?: number; error?: string }>;
-  };
-  return result.results;
+  const { payload } = await callMessagingApi("/api/sync-mailboxes", accessToken);
+  return (payload as { results: Record<string, { ok: boolean; newMessages?: number; error?: string }> }).results;
 }

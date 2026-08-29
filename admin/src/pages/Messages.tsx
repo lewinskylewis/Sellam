@@ -100,7 +100,7 @@ export default function Messages() {
 
   const [replyText, setReplyText] = useState("");
   const [sending, setSending] = useState(false);
-  const [sendError, setSendError] = useState<string | null>(null);
+  const [sendBanner, setSendBanner] = useState<{ kind: "success" | "warning" | "error"; text: string; detail?: string } | null>(null);
 
   const [syncing, setSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
@@ -141,7 +141,7 @@ export default function Messages() {
   function openConversation(conversation: EmailConversation) {
     setSelectedId(conversation.id);
     setReplyText("");
-    setSendError(null);
+    setSendBanner(null);
     setMessagesError(null);
     setMessagesLoading(true);
 
@@ -181,15 +181,24 @@ export default function Messages() {
   async function handleSend() {
     if (!selected || !accessToken || !replyText.trim() || sending) return;
     setSending(true);
-    setSendError(null);
+    setSendBanner(null);
+    const text = replyText.trim();
     try {
-      await sendReply(accessToken, selected.id, replyText.trim());
+      const result = await sendReply(accessToken, selected.id, text);
+      // Clear on both outcomes once the email has actually gone out — the
+      // draft must never sit in the box where clicking Send again would
+      // dispatch a second, duplicate email.
       setReplyText("");
+      setSendBanner(
+        result.saved
+          ? { kind: "success", text: "Message sent successfully", detail: `Your reply has been sent to ${selected.participant_email}.` }
+          : { kind: "warning", text: "Message sent successfully", detail: result.warning },
+      );
       const refreshed = await fetchMessagesForConversation(selected.id);
       setMessages(refreshed);
-      patchConversation(selected.id, { last_message_at: new Date().toISOString() });
+      loadConversations();
     } catch (err) {
-      setSendError(err instanceof Error ? err.message : "Failed to send the reply.");
+      setSendBanner({ kind: "error", text: "Message could not be sent", detail: err instanceof Error ? err.message : undefined });
     } finally {
       setSending(false);
     }
@@ -414,7 +423,20 @@ export default function Messages() {
               </div>
 
               <div className="border-t border-line p-4">
-                {sendError && <p className="mb-2 rounded-md bg-red-50 px-3 py-2 text-xs text-red-700">{sendError}</p>}
+                {sendBanner && (
+                  <div
+                    className={`mb-2 rounded-md px-3 py-2 text-xs ${
+                      sendBanner.kind === "success"
+                        ? "bg-emerald-50 text-emerald-700"
+                        : sendBanner.kind === "warning"
+                          ? "bg-amber-50 text-amber-800"
+                          : "bg-red-50 text-red-700"
+                    }`}
+                  >
+                    <p className="font-semibold">{sendBanner.text}</p>
+                    {sendBanner.detail && <p className="mt-0.5">{sendBanner.detail}</p>}
+                  </div>
+                )}
                 <div className="flex items-end gap-3">
                   <textarea
                     value={replyText}

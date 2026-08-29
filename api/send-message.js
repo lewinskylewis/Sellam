@@ -47,11 +47,15 @@ async function supabaseRequest(supabaseUrl, secretKey, path, init) {
     ...init,
     headers: { ...supabaseHeaders(secretKey, init.prefer), "User-Agent": USER_AGENT }
   });
+  const text = await response.text();
   if (!response.ok) {
-    const detail = await response.text().catch(() => "");
-    throw new Error(`Supabase ${init.method || "GET"} ${path} failed (${response.status}): ${detail.slice(0, 300)}`);
+    throw new Error(`Supabase ${init.method || "GET"} ${path} failed (${response.status}): ${text.slice(0, 300)}`);
   }
-  return response.status === 204 ? null : response.json();
+  // PostgREST returns 201 with an EMPTY body for POST + Prefer: return=minimal
+  // (only PATCH/return=minimal reliably uses 204) — checking status===204 alone
+  // treated that empty 201 body as "has JSON", and response.json() on an empty
+  // string throws, turning a successful insert into a false-positive failure.
+  return text ? JSON.parse(text) : null;
 }
 
 function escapeHtml(value) {
