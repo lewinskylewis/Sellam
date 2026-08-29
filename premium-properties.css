@@ -683,11 +683,14 @@ button {
   font-weight: 400;
 }
 
-/* Community page "About" section (admin-managed `overview` field) —
-   community-render.js renders each paragraph as a plain .intro-copy, this
-   just adds spacing between more than one. */
-.community-overview-copy .intro-copy + .intro-copy {
-  margin-top: 18px;
+/* Community page paragraph below the hero (the community's `description`,
+   moved out of the hero overlay) — community-render.js renders it as a
+   plain .intro-copy. Scoped to .community-overview-copy only, not the bare
+   .intro-copy class shared by other listing pages' static intro text, so
+   an admin-entered newline (e.g. an ALL-CAPS lead-in on its own line)
+   renders as a line break here without affecting those other pages. */
+.community-overview-copy .intro-copy {
+  white-space: pre-line;
 }
 
 .community-kicker {

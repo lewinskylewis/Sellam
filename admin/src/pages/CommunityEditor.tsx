@@ -199,7 +199,7 @@ export default function CommunityEditor() {
             label="Description"
             required
             error={errors.description}
-            hint="Short summary — appears in the carousel card, and as the short text overlaid on the community page's hero image."
+            hint="Appears in the carousel card, and as the paragraph below the community page's hero image. Press Enter to start a new line — useful for an ALL-CAPS lead-in on its own line above the rest of the text."
           >
             <textarea rows={3} className={inputClasses} value={description} onChange={(e) => setDescription(e.target.value)} />
           </Field>
@@ -207,22 +207,21 @@ export default function CommunityEditor() {
 
         <SectionCard
           title="Community Page Hero"
-          subtitle="The banner at the top of the community's own page. The title shown over it is the Label above, and the short overlay text is the Description above — set those to change what appears here."
+          subtitle="The banner at the top of the community's own page. It shows only the image and the title (the Label above) — set that to change what appears here."
         >
           <SingleImageField label="Hero Image" value={heroImage} onChange={setHeroImage} folderId={folderId} />
 
           <div className="rounded-xl border border-line bg-paper p-4">
             <p className="text-xs font-medium tracking-wide text-ink-soft uppercase">Preview of the hero overlay</p>
             <p className="mt-1.5 text-lg font-semibold text-ink">{label || "(Label)"}</p>
-            <p className="text-sm text-ink-soft">{description || "(Description)"}</p>
           </div>
         </SectionCard>
 
         <SectionCard
           title="About This Community"
-          subtitle="A fuller description shown in its own section on the community page, right below the hero — separate from the short summary above."
+          subtitle="Not currently shown on the community page — the page now shows the Description above in this position instead."
         >
-          <Field label="Overview" hint="Optional. Leave blank to keep the page as it is today, with no separate About section.">
+          <Field label="Overview" hint="Optional, kept for reference. Leave blank if unused.">
             <textarea rows={7} className={inputClasses} value={overview} onChange={(e) => setOverview(e.target.value)} />
           </Field>
         </SectionCard>

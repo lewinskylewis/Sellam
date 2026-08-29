@@ -100,10 +100,29 @@ async function findConversationByReferences(config, ids) {
   return rows && rows[0] ? rows[0].conversation_id : null;
 }
 
+// The public enquiry form's own notification email (api/enquiry.js's
+// sendNotification) is sent FROM a shared Sellam address (RESEND_FROM_EMAIL,
+// e.g. office@sellamre.com) but sets Reply-To to the actual customer's
+// address, exactly so replies reach the customer. When that first
+// notification lands in a monitored mailbox and starts a new conversation
+// here, using its raw From address as the "participant" makes the
+// conversation's customer look like office@sellamre.com instead of the real
+// customer — every reply then goes to the wrong place. Preferring a
+// Reply-To that differs from From fixes this for that one case while
+// leaving every genuine customer-initiated email (no such mismatch) using
+// From exactly as before.
+function participantFromMessage(parsed) {
+  const from = parsed.from?.value?.[0];
+  const replyTo = parsed.replyTo?.value?.[0];
+  if (replyTo?.address && replyTo.address.toLowerCase() !== (from?.address || "").toLowerCase()) {
+    return { address: replyTo.address, name: replyTo.name || from?.name || null };
+  }
+  return { address: from?.address || "", name: from?.name || null };
+}
+
 async function createConversation(config, mailboxKey, parsed) {
-  const fromAddress = parsed.from?.value?.[0]?.address || "";
-  const fromName = parsed.from?.value?.[0]?.name || null;
-  const enquiryId = await findRecentEnquiryId(config, fromAddress);
+  const participant = participantFromMessage(parsed);
+  const enquiryId = await findRecentEnquiryId(config, participant.address);
 
   const rows = await supabaseRequest(config, "/rest/v1/email_conversations", {
     method: "POST",
@@ -111,8 +130,8 @@ async function createConversation(config, mailboxKey, parsed) {
     body: JSON.stringify({
       mailbox: mailboxKey,
       subject: parsed.subject || "(no subject)",
-      participant_email: fromAddress,
-      participant_name: fromName,
+      participant_email: participant.address,
+      participant_name: participant.name,
       enquiry_id: enquiryId,
       last_message_at: parsed.date ? parsed.date.toISOString() : new Date().toISOString(),
       is_read: false

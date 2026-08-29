@@ -101,38 +101,35 @@
         heroSection.style.backgroundImage =
           "linear-gradient(rgba(4, 51, 65, 0.55), rgba(4, 51, 65, 0.55)), url('" + current.heroImage + "')";
       }
-      // Dedicated data-attributes, not the .buy-hero-title/-description
-      // classes themselves — those classes only carry position/typography,
-      // and using them (or a shared class like .intro-copy) as the JS
-      // selector too previously collided with premium-properties.css's
-      // other same-named rules by source order, silently overriding the
-      // gold/white hero colour with dark body-text colour.
+      // Dedicated data-attribute, not the .buy-hero-title class itself —
+      // that class only carries position/typography, and using it (or a
+      // shared class like .intro-copy) as the JS selector too previously
+      // collided with premium-properties.css's other same-named rules by
+      // source order, silently overriding the gold/white hero colour with
+      // dark body-text colour. The hero holds only the title now — the
+      // description that used to sit under it moved below the hero (see
+      // below).
       var titleEl = document.querySelector("[data-community-hero-title]");
       if (titleEl) titleEl.textContent = current.label;
-      var introEl = document.querySelector("[data-community-hero-description]");
-      if (introEl) introEl.textContent = current.description;
 
-      // "About this community" — a longer section below the hero, separate
-      // from the short intro above. Section stays hidden (as it is by
-      // default in every template) unless the admin has actually set an
-      // overview, so a community without one renders exactly as today.
+      // Paragraph below the hero — this is the former hero description
+      // (`description`), not `overview`; the section this replaces used to
+      // render the longer admin `overview` copy, but that below-hero
+      // paragraph was removed in favour of showing the moved description
+      // here instead. Always shown, since description is a required field.
+      // A `description` may contain admin-entered newlines (e.g. an
+      // ALL-CAPS lead-in on its own line) — set via textContent (safe, no
+      // markup injection) and preserved visually by the
+      // .community-overview-copy .intro-copy white-space: pre-line rule in
+      // premium-properties.css.
       var overviewSection = document.querySelector("[data-community-overview]");
       var overviewCopy = document.querySelector("[data-community-overview-copy]");
-      if (overviewSection && overviewCopy && current.overview) {
+      if (overviewSection && overviewCopy && current.description) {
         overviewCopy.innerHTML = "";
-        String(current.overview)
-          .split(/\n{2,}/)
-          .map(function (part) { return part.trim(); })
-          .filter(Boolean)
-          .forEach(function (part) {
-            var p = document.createElement("p");
-            // Reuses .intro-copy's existing typography (font/size/color) —
-            // no new CSS needed for a single paragraph. Multi-paragraph
-            // spacing is the one small addition, in premium-properties.css.
-            p.className = "intro-copy";
-            p.textContent = part;
-            overviewCopy.appendChild(p);
-          });
+        var p = document.createElement("p");
+        p.className = "intro-copy";
+        p.textContent = current.description;
+        overviewCopy.appendChild(p);
         overviewSection.hidden = false;
       }
     }

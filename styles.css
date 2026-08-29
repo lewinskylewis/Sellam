@@ -1223,6 +1223,10 @@ section {
   margin: 0 0 22px;
   max-width: 300px;
   line-height: 1.38;
+  /* Community summaries can carry an admin-entered newline (e.g. an
+     ALL-CAPS lead-in on its own line before the descriptive sentence) —
+     preserve it as a line break instead of collapsing it like normal text. */
+  white-space: pre-line;
 }
 
 .community-button {
