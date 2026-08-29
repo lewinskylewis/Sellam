@@ -89,6 +89,25 @@ function referencedMessageIds(parsed) {
   return ids.filter(Boolean);
 }
 
+// message_id is globally unique (see the email_messages schema), so once a
+// message has been stored it can never legitimately need inserting again —
+// but it CAN legitimately be re-encountered: a message can end up read from
+// either monitored mailbox's own INBOX (e.g. a misdirected reply that lands
+// in both), and highestKnownUid()'s cursor is scoped by the message's
+// conversation.mailbox, not by which mailbox actually fetched it, so a
+// later run of a different mailbox's sync can re-offer a UID this system
+// already has. Checked before anything else touches the conversation, so
+// re-seeing an already-known message can never mark an old, already-read
+// conversation unread again.
+async function messageExists(config, messageId) {
+  const rows = await supabaseRequest(
+    config,
+    `/rest/v1/email_messages?select=id&message_id=eq.${encodeURIComponent(messageId)}&limit=1`,
+    { method: "GET" }
+  );
+  return Boolean(rows && rows[0]);
+}
+
 async function findConversationByReferences(config, ids) {
   if (!ids.length) return null;
   const orClause = ids.map((id) => `message_id.eq.${encodeURIComponent(id)}`).join(",");
@@ -216,6 +235,7 @@ async function syncMailbox(config, mailboxKey, address, password) {
   });
 
   let processed = 0;
+  let skipped = 0;
   await client.connect();
   try {
     const lock = await client.getMailboxLock("INBOX");
@@ -227,11 +247,18 @@ async function syncMailbox(config, mailboxKey, address, password) {
       const range = `${sinceUid + 1}:*`;
 
       for await (const message of client.fetch(range, { uid: true, source: true }, { uid: true })) {
-        if (processed >= MAX_MESSAGES_PER_SYNC) break;
+        if (processed + skipped >= MAX_MESSAGES_PER_SYNC) break;
         if (sinceUid > 0 && message.uid <= sinceUid) continue; // "*" can re-include the last known UID
 
         const parsed = await simpleParser(message.source);
         if (!parsed.messageId) continue; // can't thread or dedupe without one — skip rather than guess
+
+        // Idempotency: already synced (possibly by another mailbox's run —
+        // see messageExists()'s comment) — not an error, nothing new to do.
+        if (await messageExists(config, parsed.messageId)) {
+          skipped += 1;
+          continue;
+        }
 
         const refs = referencedMessageIds(parsed);
         let conversationId = await findConversationByReferences(config, refs);
