@@ -110,6 +110,76 @@ function resolveHeroProperty(entry) {
   };
 }
 
+/* Homepage "Featured Properties" / "Exclusive Properties" teasers (Property
+   Highlights admin page — homepage_property_highlights table, fetched by
+   data/supabase-adapter.js into window.SELLAM_PROPERTY_HIGHLIGHTS as
+   { featured: [{id, caption, image}], exclusive: [...] }).
+
+   Unlike the hero carousel above, there is deliberately NO hardcoded JS
+   fallback array here: if curated data for a section isn't available yet
+   (fetch failed, migration not applied, nothing curated), this leaves that
+   section's existing static <a class="image-card"> markup in index.html
+   completely untouched, so a bug in this code can never leave the homepage
+   showing an empty or broken gallery — the worst case is simply "unchanged
+   from today". Each `.property-gallery` container to (possibly) replace is
+   found via its data-highlight-section="featured"/"exclusive" attribute. */
+
+function buildPropertyHighlightCard(entry, isTall) {
+  const inventory = (window.SELLAM_PROPERTIES || []).find((p) => p.id === entry.id);
+  if (!inventory) return null;
+
+  const caption = (entry.caption || inventory.title || "").trim();
+  const image = entry.image || inventory.image;
+  if (!caption || !image) return null;
+
+  const link = document.createElement("a");
+  link.className = isTall ? "image-card image-card-tall" : "image-card";
+  link.href = inventory.url || "#";
+
+  const frame = document.createElement("span");
+  frame.className = "image-frame";
+  const img = document.createElement("img");
+  img.src = image;
+  img.alt = caption;
+  frame.appendChild(img);
+
+  const label = document.createElement("span");
+  label.textContent = caption;
+
+  link.appendChild(frame);
+  link.appendChild(label);
+  return link;
+}
+
+function renderPropertyHighlightSection(sectionName) {
+  const container = document.querySelector('.property-gallery[data-highlight-section="' + sectionName + '"]');
+  if (!container) return;
+
+  const curated = window.SELLAM_PROPERTY_HIGHLIGHTS && window.SELLAM_PROPERTY_HIGHLIGHTS[sectionName];
+  if (!Array.isArray(curated) || curated.length === 0) return;
+
+  const cards = curated.map((entry, index) => buildPropertyHighlightCard(entry, index === 0)).filter(Boolean);
+  // Only swap in the new set once every curated entry resolved to a real,
+  // displayable card — a partial result would be worse than leaving the
+  // current (known-good) static cards in place.
+  if (cards.length !== curated.length) return;
+
+  container.innerHTML = "";
+  cards.forEach((card) => container.appendChild(card));
+
+  // The homepage's own motion bootstrap (index.html <head>) may already have
+  // revealed this container before this data arrived — if so, mirror what
+  // its reveal() does so the freshly-swapped cards don't stay stuck hidden.
+  if (container.classList.contains("is-visible")) {
+    cards.forEach((card) => card.classList.add("motion-item-visible"));
+  }
+}
+
+function renderPropertyHighlights() {
+  renderPropertyHighlightSection("featured");
+  renderPropertyHighlightSection("exclusive");
+}
+
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const heroCurrent = document.querySelector(".hero-bg-current");
 const heroNext = document.querySelector(".hero-bg-next");
@@ -711,3 +781,4 @@ setupCommunityCarousel();
 setupDiasporaCarousel();
 setupRevealAnimations();
 setupForms();
+renderPropertyHighlights();

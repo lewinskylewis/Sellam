@@ -21,6 +21,7 @@ export type PropertyRow = {
   community: string;
   location: string;
   letting: string;
+  image: string;
   listed_date: string | null;
   created_at: string;
   property_units: PropertyUnit[];
@@ -64,7 +65,7 @@ export async function fetchPropertiesList(): Promise<PropertyListItem[]> {
       supabase
         .from("properties")
         .select(
-          "id, legacy_id, slug, status, collection, title, property_type, community, location, letting, listed_date, created_at, property_units(id, unit_type, bedrooms, bathrooms, sale_price, rent_price, currency)",
+          "id, legacy_id, slug, status, collection, title, property_type, community, location, letting, image, listed_date, created_at, property_units(id, unit_type, bedrooms, bathrooms, sale_price, rent_price, currency)",
         )
         .order("created_at", { ascending: false }),
       supabase.from("communities").select("key, label"),

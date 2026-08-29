@@ -115,6 +115,19 @@
     );
   }
 
+  // Homepage "Featured Properties" / "Exclusive Properties" teasers
+  // (Property Highlights admin page). Same isolation contract as
+  // fetchHeroSlides above: fetched separately, never allowed to fail the
+  // main properties/communities load — see the .catch() around its call
+  // site in init(). caption/image are the only hand-curated fields; which
+  // property and its link are what this table is really curating.
+  function fetchPropertyHighlights(cfg) {
+    return supabaseGet(
+      cfg,
+      "/rest/v1/homepage_property_highlights?select=section,caption,image,sort_order,properties(legacy_id)&is_active=eq.true&order=section.asc,sort_order.asc"
+    );
+  }
+
   // --------------------------------------------------------------------
   // Reconstruction — reverses the Phase 1 migration's transform exactly,
   // field for field, back into the shape data/properties.js /
@@ -193,6 +206,18 @@
     return {
       id: row.properties ? row.properties.legacy_id : null,
       sections: Array.isArray(row.sections) ? row.sections : []
+    };
+  }
+
+  // id here is the property's legacy_id, exactly like reconstructHeroSlide
+  // above — script.js resolves title/link/etc. off window.SELLAM_PROPERTIES
+  // the same way it already does for hero entries. caption/image are null
+  // when not overridden, meaning "use the property's own title/image".
+  function reconstructPropertyHighlight(row) {
+    return {
+      id: row.properties ? row.properties.legacy_id : null,
+      caption: row.caption || null,
+      image: row.image || null
     };
   }
 
@@ -350,7 +375,7 @@
         // window.SELLAM_HERO_SLIDES unset, and script.js falls back to its
         // own hardcoded set — same graceful-degradation shape as
         // loadStaticFallback() above.
-        return fetchHeroSlides(cfg)
+        var heroSlidesLoaded = fetchHeroSlides(cfg)
           .then(function (rawHeroSlides) {
             window.SELLAM_HERO_SLIDES = rawHeroSlides
               .filter(function (row) { return row.properties && row.properties.legacy_id; })
@@ -358,10 +383,28 @@
           })
           .catch(function (heroError) {
             console.warn("[SellamData] Hero slides fetch failed, falling back to script.js's hardcoded set:", heroError.message);
-          })
-          .then(function () {
-            return { source: "supabase", communities: communities.length, properties: properties.length };
           });
+
+        // Same isolation contract as hero slides directly above: a problem
+        // here must never take down the properties/communities load. On
+        // failure this simply leaves window.SELLAM_PROPERTY_HIGHLIGHTS unset,
+        // and script.js leaves the homepage's existing static Featured/
+        // Exclusive markup untouched.
+        var propertyHighlightsLoaded = fetchPropertyHighlights(cfg)
+          .then(function (rawHighlights) {
+            var bySection = { featured: [], exclusive: [] };
+            rawHighlights
+              .filter(function (row) { return row.properties && row.properties.legacy_id && bySection[row.section]; })
+              .forEach(function (row) { bySection[row.section].push(reconstructPropertyHighlight(row)); });
+            window.SELLAM_PROPERTY_HIGHLIGHTS = bySection;
+          })
+          .catch(function (highlightsError) {
+            console.warn("[SellamData] Property highlights fetch failed, homepage keeps its existing static Featured/Exclusive cards:", highlightsError.message);
+          });
+
+        return Promise.all([heroSlidesLoaded, propertyHighlightsLoaded]).then(function () {
+          return { source: "supabase", communities: communities.length, properties: properties.length };
+        });
       })
       .catch(function (error) {
         return loadStaticFallback(error.message);
