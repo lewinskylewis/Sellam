@@ -56,7 +56,16 @@ function setupRevealAnimations() {
   revealItems.forEach((item) => observer.observe(item));
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function initPremiumProperties() {
   setupMobileMenu();
   setupRevealAnimations();
-});
+}
+
+// Guarded like property-search.js's / enquiry-modal.js's setup: this script
+// loads only after window.SellamData.ready resolves, by which point
+// DOMContentLoaded has already fired — a bare listener would never trigger.
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initPremiumProperties);
+} else {
+  initPremiumProperties();
+}
