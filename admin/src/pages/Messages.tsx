@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import type { ComponentType } from "react";
 import Avatar from "../components/Avatar";
 import { useAuth } from "../lib/auth";
 import {
@@ -27,9 +28,7 @@ import {
 } from "../lib/messages";
 
 type StatusFilter = "all" | "unread" | "starred" | "archived";
-
-const selectClasses =
-  "rounded-xl border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-brand focus:ring-1 focus:ring-brand";
+type NavFilter = "all" | Mailbox | "unread" | "starred" | "archived";
 
 function formatListDate(iso: string) {
   const d = new Date(iso);
@@ -51,6 +50,54 @@ function formatFullDate(iso: string) {
 
 function mailboxBadgeClasses(mailbox: Mailbox) {
   return mailbox === "sales" ? "bg-emerald-50 text-emerald-700" : "bg-sky-50 text-sky-700";
+}
+
+function mailboxDotClasses(mailbox: Mailbox) {
+  return mailbox === "sales" ? "bg-emerald-500" : "bg-sky-500";
+}
+
+// Left-rail folder/filter entry — same visual language as the dashboard's
+// own Sidebar (active = solid pill), scaled down for this inner rail.
+function NavItem({
+  label,
+  icon: Icon,
+  dotClassName,
+  active,
+  count,
+  onClick,
+}: {
+  label: string;
+  icon?: ComponentType<{ className?: string }>;
+  dotClassName?: string;
+  active: boolean;
+  count?: number;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+        active ? "bg-brand text-white" : "text-ink-soft hover:bg-paper hover:text-ink"
+      }`}
+    >
+      {Icon ? (
+        <Icon className="h-4 w-4 shrink-0" />
+      ) : (
+        <span className={`h-2 w-2 shrink-0 rounded-full ${dotClassName ?? "bg-line"}`} />
+      )}
+      <span className="min-w-0 flex-1 truncate text-left">{label}</span>
+      {typeof count === "number" && count > 0 && (
+        <span
+          className={`shrink-0 rounded-full px-1.5 py-0.5 text-[11px] font-semibold ${
+            active ? "bg-white/20 text-white" : "bg-paper text-ink-soft"
+          }`}
+        >
+          {count}
+        </span>
+      )}
+    </button>
+  );
 }
 
 function AttachmentPill({ filename, storagePath }: { filename: string; storagePath: string }) {
@@ -119,6 +166,31 @@ export default function Messages() {
   }, []);
 
   const selected = conversations?.find((c) => c.id === selectedId) ?? null;
+
+  const activeConversations = useMemo(() => (conversations ?? []).filter((c) => !c.is_archived), [conversations]);
+  const navCounts = useMemo(
+    () => ({
+      all: activeConversations.length,
+      sales: activeConversations.filter((c) => c.mailbox === "sales").length,
+      office: activeConversations.filter((c) => c.mailbox === "office").length,
+      unread: activeConversations.filter((c) => !c.is_read).length,
+      starred: activeConversations.filter((c) => c.is_starred).length,
+      archived: (conversations ?? []).filter((c) => c.is_archived).length,
+    }),
+    [activeConversations, conversations],
+  );
+
+  const activeNav: NavFilter = statusFilter !== "all" ? statusFilter : mailboxFilter;
+
+  function selectNav(nav: NavFilter) {
+    if (nav === "all" || nav === "sales" || nav === "office") {
+      setMailboxFilter(nav);
+      setStatusFilter("all");
+    } else {
+      setStatusFilter(nav);
+      setMailboxFilter("all");
+    }
+  }
 
   const filtered = useMemo(() => {
     if (!conversations) return [];
@@ -251,7 +323,38 @@ export default function Messages() {
       {syncMessage && <p className="mt-3 rounded-md bg-paper px-4 py-2 text-sm text-ink-soft">{syncMessage}</p>}
       {error && <p className="mt-4 rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">Unable to load messages. {error}</p>}
 
-      <div className="mt-6 flex h-[calc(100vh-230px)] min-h-[500px] overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_8px_30px_rgba(15,23,42,0.14)]">
+      <div className="mt-6 flex h-[calc(100vh-230px)] min-h-[560px] overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_8px_30px_rgba(15,23,42,0.14)]">
+        {/* Folder rail — mailbox accounts + saved views, mirrors a proper
+            email client's left navigation. Hidden on small screens in favour
+            of the compact mailbox pills inside the list column below. */}
+        <div className="hidden w-56 shrink-0 flex-col border-r border-line bg-paper/50 lg:flex">
+          <div className="px-3 pt-4 pb-2 text-xs font-semibold tracking-wide text-ink-soft uppercase">Mailboxes</div>
+          <nav className="space-y-0.5 px-3">
+            <NavItem label="All Mail" icon={MailIcon} active={activeNav === "all"} count={navCounts.all} onClick={() => selectNav("all")} />
+            <NavItem
+              label={MAILBOX_LABELS.sales}
+              dotClassName={mailboxDotClasses("sales")}
+              active={activeNav === "sales"}
+              count={navCounts.sales}
+              onClick={() => selectNav("sales")}
+            />
+            <NavItem
+              label={MAILBOX_LABELS.office}
+              dotClassName={mailboxDotClasses("office")}
+              active={activeNav === "office"}
+              count={navCounts.office}
+              onClick={() => selectNav("office")}
+            />
+          </nav>
+
+          <div className="px-3 pt-5 pb-2 text-xs font-semibold tracking-wide text-ink-soft uppercase">Views</div>
+          <nav className="flex-1 space-y-0.5 px-3 overflow-y-auto">
+            <NavItem label="Unread" icon={MailIcon} active={activeNav === "unread"} count={navCounts.unread} onClick={() => selectNav("unread")} />
+            <NavItem label="Starred" icon={StarIcon} active={activeNav === "starred"} count={navCounts.starred} onClick={() => selectNav("starred")} />
+            <NavItem label="Archived" icon={ArchiveIcon} active={activeNav === "archived"} count={navCounts.archived} onClick={() => selectNav("archived")} />
+          </nav>
+        </div>
+
         <div className="flex w-full max-w-sm shrink-0 flex-col border-r border-line">
           <div className="space-y-3 border-b border-line p-4">
             <div className="relative">
@@ -264,26 +367,21 @@ export default function Messages() {
                 className="w-full rounded-xl border border-line bg-white py-2 pr-3 pl-9 text-sm text-ink outline-none focus:border-brand focus:ring-1 focus:ring-brand"
               />
             </div>
-            <div className="flex gap-2">
+            {/* Compact mailbox switcher for screens too narrow for the rail. */}
+            <div className="flex gap-2 lg:hidden">
               {(["all", "sales", "office"] as const).map((m) => (
                 <button
                   key={m}
                   type="button"
-                  onClick={() => setMailboxFilter(m)}
+                  onClick={() => selectNav(m)}
                   className={`flex-1 rounded-lg px-2 py-1.5 text-xs font-semibold ${
-                    mailboxFilter === m ? "bg-brand text-white" : "bg-paper text-ink-soft hover:text-ink"
+                    activeNav === m ? "bg-brand text-white" : "bg-paper text-ink-soft hover:text-ink"
                   }`}
                 >
                   {m === "all" ? "All" : MAILBOX_LABELS[m]}
                 </button>
               ))}
             </div>
-            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as StatusFilter)} className={`${selectClasses} w-full`}>
-              <option value="all">All conversations</option>
-              <option value="unread">Unread</option>
-              <option value="starred">Starred</option>
-              <option value="archived">Archived</option>
-            </select>
           </div>
 
           <div className="flex-1 overflow-y-auto">
@@ -299,12 +397,20 @@ export default function Messages() {
                   key={c.id}
                   type="button"
                   onClick={() => openConversation(c)}
-                  className={`block w-full border-b border-line px-4 py-3 text-left last:border-b-0 hover:bg-paper/60 ${
+                  className={`block w-full border-b border-line px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-paper/60 ${
                     selectedId === c.id ? "bg-paper" : ""
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <Avatar name={c.participant_name || c.participant_email} size={32} />
+                  <div className="flex items-start gap-3">
+                    <div className="relative shrink-0">
+                      <Avatar name={c.participant_name || c.participant_email} size={36} />
+                      {!c.is_read && (
+                        <span
+                          className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-surface bg-brand"
+                          aria-label="Unread"
+                        />
+                      )}
+                    </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2">
                         <span className={`truncate text-sm ${c.is_read ? "font-medium text-ink" : "font-bold text-ink"}`}>
@@ -312,13 +418,12 @@ export default function Messages() {
                         </span>
                         <span className="shrink-0 text-xs text-ink-soft">{formatListDate(c.last_message_at)}</span>
                       </div>
-                      <div className="mt-0.5 flex items-center gap-1.5">
+                      <p className={`mt-0.5 truncate text-sm ${c.is_read ? "text-ink-soft" : "text-ink"}`}>{c.subject || "(no subject)"}</p>
+                      <div className="mt-1.5 flex items-center gap-1.5">
                         <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase ${mailboxBadgeClasses(c.mailbox)}`}>
                           {MAILBOX_LABELS[c.mailbox]}
                         </span>
-                        {!c.is_read && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-label="Unread" />}
                         {c.is_starred && <StarIcon className="h-3 w-3 shrink-0 fill-current text-amber-500" />}
-                        <span className="truncate text-xs text-ink-soft">{c.subject || "(no subject)"}</span>
                       </div>
                     </div>
                   </div>
@@ -328,7 +433,7 @@ export default function Messages() {
           </div>
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex min-w-0 flex-1 flex-col bg-paper/20">
           {!selected ? (
             <div className="flex flex-1 flex-col items-center justify-center text-ink-soft">
               <MailIcon className="h-10 w-10 text-line" />
@@ -336,23 +441,26 @@ export default function Messages() {
             </div>
           ) : (
             <>
-              <div className="flex flex-wrap items-start justify-between gap-3 border-b border-line px-6 py-4">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <h2 className="truncate text-base font-semibold text-ink">{selected.subject || "(no subject)"}</h2>
-                    <span className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase ${mailboxBadgeClasses(selected.mailbox)}`}>
-                      {MAILBOX_LABELS[selected.mailbox]}
-                    </span>
+              <div className="flex flex-wrap items-start justify-between gap-3 border-b border-line bg-surface px-6 py-4">
+                <div className="flex min-w-0 items-center gap-3">
+                  <Avatar name={selected.participant_name || selected.participant_email} size={40} />
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h2 className="truncate text-base font-semibold text-ink">{selected.subject || "(no subject)"}</h2>
+                      <span className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase ${mailboxBadgeClasses(selected.mailbox)}`}>
+                        {MAILBOX_LABELS[selected.mailbox]}
+                      </span>
+                    </div>
+                    <p className="truncate text-sm text-ink-soft">
+                      {selected.participant_name ? `${selected.participant_name} · ` : ""}
+                      {selected.participant_email}
+                    </p>
+                    {selected.enquiry_id && (
+                      <span className="mt-1 inline-block rounded-full bg-paper px-2 py-0.5 text-xs font-medium text-ink-soft">
+                        Linked to enquiry #{selected.enquiry_id}
+                      </span>
+                    )}
                   </div>
-                  <p className="mt-1 truncate text-sm text-ink-soft">
-                    {selected.participant_name ? `${selected.participant_name} · ` : ""}
-                    {selected.participant_email}
-                  </p>
-                  {selected.enquiry_id && (
-                    <span className="mt-1 inline-block rounded-full bg-paper px-2 py-0.5 text-xs font-medium text-ink-soft">
-                      Linked to enquiry #{selected.enquiry_id}
-                    </span>
-                  )}
                 </div>
                 <div className="flex shrink-0 items-center gap-1">
                   <button
@@ -390,7 +498,7 @@ export default function Messages() {
                 </div>
               </div>
 
-              <div className="flex-1 space-y-4 overflow-y-auto px-6 py-4">
+              <div className="flex-1 space-y-3 overflow-y-auto px-6 py-5">
                 {messagesLoading ? (
                   <p className="text-center text-sm text-ink-soft">Loading conversation…</p>
                 ) : messagesError ? (
@@ -399,8 +507,8 @@ export default function Messages() {
                   messages.map((m) => (
                     <div
                       key={m.id}
-                      className={`max-w-[85%] rounded-2xl border p-4 ${
-                        m.direction === "outbound" ? "ml-auto border-brand/20 bg-brand/5" : "border-line bg-paper/60"
+                      className={`max-w-[85%] rounded-2xl border p-4 shadow-[0_2px_10px_rgba(15,23,42,0.05)] ${
+                        m.direction === "outbound" ? "ml-auto border-brand/20 bg-brand/5" : "border-line bg-surface"
                       }`}
                     >
                       <div className="flex items-center justify-between gap-3 text-xs text-ink-soft">
@@ -422,7 +530,7 @@ export default function Messages() {
                 )}
               </div>
 
-              <div className="border-t border-line p-4">
+              <div className="border-t border-line bg-surface p-4">
                 {sendBanner && (
                   <div
                     className={`mb-2 rounded-md px-3 py-2 text-xs ${
@@ -437,23 +545,25 @@ export default function Messages() {
                     {sendBanner.detail && <p className="mt-0.5">{sendBanner.detail}</p>}
                   </div>
                 )}
-                <div className="flex items-end gap-3">
+                <div className="rounded-xl border border-line bg-white p-2">
                   <textarea
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
                     placeholder={`Reply as ${selected.mailbox === "sales" ? "sales@sellamre.com" : "office@sellamre.com"}…`}
                     rows={3}
-                    className="flex-1 resize-none rounded-xl border border-line bg-white px-3 py-2 text-sm text-ink outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+                    className="w-full resize-none rounded-lg border-0 px-2 py-1.5 text-sm text-ink outline-none"
                   />
-                  <button
-                    type="button"
-                    onClick={handleSend}
-                    disabled={sending || !replyText.trim()}
-                    className="flex items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-60"
-                  >
-                    <SendIcon className="h-4 w-4" />
-                    {sending ? "Sending…" : "Send"}
-                  </button>
+                  <div className="flex items-center justify-end border-t border-line px-1 pt-2">
+                    <button
+                      type="button"
+                      onClick={handleSend}
+                      disabled={sending || !replyText.trim()}
+                      className="flex items-center gap-2 rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-60"
+                    >
+                      <SendIcon className="h-4 w-4" />
+                      {sending ? "Sending…" : "Send"}
+                    </button>
+                  </div>
                 </div>
               </div>
             </>
