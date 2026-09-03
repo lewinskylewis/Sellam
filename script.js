@@ -183,25 +183,35 @@ function renderPropertyHighlights() {
 /* Homepage hero title/description (Homepage Hero admin page's title/
    description editor — homepage_hero_copy table, fetched by
    data/supabase-adapter.js into window.SELLAM_HERO_COPY as
-   { headingLine1, headingLine2, description } or null).
+   { heading, description } or null). `heading` is line-sensitive: each
+   newline the admin typed becomes its own <span> (the existing CSS,
+   .hero-copy h1 span { display: block }, already renders each span on its
+   own line — this just controls how many spans there are).
 
    Same safety philosophy as renderPropertyHighlights above: if this data
    isn't available (fetch failed, migration not applied, nothing saved
    yet), the existing static heading/description text in index.html is
    left completely untouched. This never touches the hero image carousel
-   (.hero-showcase/.hero-tiles/.hero-dots) in any way — only the two
-   heading <span>s and the description <p> inside .hero-copy. */
+   (.hero-showcase/.hero-tiles/.hero-dots) in any way — only the <h1> and
+   the description <p> inside .hero-copy. */
 function renderHeroTitleCopy() {
   const copy = window.SELLAM_HERO_COPY;
   if (!copy) return;
 
-  const line1 = document.querySelector('[data-hero-heading-line="1"]');
-  const line2 = document.querySelector('[data-hero-heading-line="2"]');
+  const heading = document.querySelector("[data-hero-heading]");
   const description = document.querySelector("[data-hero-description]");
-  if (!line1 || !line2 || !description) return;
+  if (!heading || !description) return;
 
-  line1.textContent = copy.headingLine1;
-  line2.textContent = copy.headingLine2;
+  const lines = copy.heading.split("\n").map((line) => line.trim()).filter(Boolean);
+  if (!lines.length) return;
+
+  heading.innerHTML = "";
+  lines.forEach((line) => {
+    const span = document.createElement("span");
+    span.textContent = line;
+    heading.appendChild(span);
+  });
+
   description.textContent = copy.description;
 }
 

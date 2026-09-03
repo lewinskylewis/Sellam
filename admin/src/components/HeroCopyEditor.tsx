@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { Field, SectionCard, inputClasses } from "./form";
 import { errorMessage, fetchHeroCopy, isMissingTableError, updateHeroCopy, type HeroCopy } from "../lib/heroCopy";
 
-type Draft = { heading_line_1: string; heading_line_2: string; description: string };
+type Draft = { heading: string; description: string };
 
 function draftFrom(copy: HeroCopy): Draft {
-  return { heading_line_1: copy.heading_line_1, heading_line_2: copy.heading_line_2, description: copy.description };
+  return { heading: copy.heading, description: copy.description };
 }
 
 export default function HeroCopyEditor() {
@@ -45,23 +45,22 @@ export default function HeroCopyEditor() {
     return () => clearTimeout(t);
   }, [savedNotice]);
 
-  const dirty = Boolean(copy && draft && (draft.heading_line_1 !== copy.heading_line_1 || draft.heading_line_2 !== copy.heading_line_2 || draft.description !== copy.description));
+  const dirty = Boolean(copy && draft && (draft.heading !== copy.heading || draft.description !== copy.description));
 
   async function handleSave() {
     if (!copy || !draft) return;
-    const heading_line_1 = draft.heading_line_1.trim();
-    const heading_line_2 = draft.heading_line_2.trim();
+    const heading = draft.heading.trim();
     const description = draft.description.trim();
-    if (!heading_line_1 || !heading_line_2 || !description) {
-      setSaveError("All three fields are required.");
+    if (!heading || !description) {
+      setSaveError("Both fields are required.");
       return;
     }
 
     setSaving(true);
     setSaveError(null);
     try {
-      await updateHeroCopy(copy.id, { heading_line_1, heading_line_2, description });
-      const updated = { ...copy, heading_line_1, heading_line_2, description };
+      await updateHeroCopy(copy.id, { heading, description });
+      const updated = { ...copy, heading, description };
       setCopy(updated);
       setDraft(draftFrom(updated));
       setSavedNotice(true);
@@ -104,14 +103,13 @@ export default function HeroCopyEditor() {
 
   return (
     <SectionCard title="Homepage Title & Description" subtitle="The heading and description shown next to the image carousel — the carousel itself is unaffected.">
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Title — Line 1" hint='Shown as "Connecting People"'>
-          <input className={inputClasses} value={draft.heading_line_1} onChange={(e) => setDraft({ ...draft, heading_line_1: e.target.value })} />
-        </Field>
-        <Field label="Title — Line 2" hint='Shown as "With Property"'>
-          <input className={inputClasses} value={draft.heading_line_2} onChange={(e) => setDraft({ ...draft, heading_line_2: e.target.value })} />
-        </Field>
-      </div>
+      <Field label="Title" hint="Line-sensitive: a new line here is a new line on the homepage.">
+        <textarea
+          className={`${inputClasses} min-h-[72px] resize-y`}
+          value={draft.heading}
+          onChange={(e) => setDraft({ ...draft, heading: e.target.value })}
+        />
+      </Field>
       <Field label="Description">
         <textarea
           className={`${inputClasses} min-h-[88px] resize-y`}

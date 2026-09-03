@@ -137,7 +137,7 @@
   function fetchHeroCopy(cfg) {
     return supabaseGet(
       cfg,
-      "/rest/v1/homepage_hero_copy?select=heading_line_1,heading_line_2,description&limit=1"
+      "/rest/v1/homepage_hero_copy?select=heading,description&limit=1"
     );
   }
 
@@ -235,10 +235,9 @@
   }
 
   function reconstructHeroCopy(row) {
-    if (!row || !row.heading_line_1 || !row.heading_line_2 || !row.description) return null;
+    if (!row || !row.heading || !row.description) return null;
     return {
-      headingLine1: row.heading_line_1,
-      headingLine2: row.heading_line_2,
+      heading: row.heading,
       description: row.description
     };
   }
