@@ -180,6 +180,31 @@ function renderPropertyHighlights() {
   renderPropertyHighlightSection("exclusive");
 }
 
+/* Homepage hero title/description (Homepage Hero admin page's title/
+   description editor — homepage_hero_copy table, fetched by
+   data/supabase-adapter.js into window.SELLAM_HERO_COPY as
+   { headingLine1, headingLine2, description } or null).
+
+   Same safety philosophy as renderPropertyHighlights above: if this data
+   isn't available (fetch failed, migration not applied, nothing saved
+   yet), the existing static heading/description text in index.html is
+   left completely untouched. This never touches the hero image carousel
+   (.hero-showcase/.hero-tiles/.hero-dots) in any way — only the two
+   heading <span>s and the description <p> inside .hero-copy. */
+function renderHeroTitleCopy() {
+  const copy = window.SELLAM_HERO_COPY;
+  if (!copy) return;
+
+  const line1 = document.querySelector('[data-hero-heading-line="1"]');
+  const line2 = document.querySelector('[data-hero-heading-line="2"]');
+  const description = document.querySelector("[data-hero-description]");
+  if (!line1 || !line2 || !description) return;
+
+  line1.textContent = copy.headingLine1;
+  line2.textContent = copy.headingLine2;
+  description.textContent = copy.description;
+}
+
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const heroCurrent = document.querySelector(".hero-bg-current");
 const heroNext = document.querySelector(".hero-bg-next");
@@ -782,3 +807,4 @@ setupDiasporaCarousel();
 setupRevealAnimations();
 setupForms();
 renderPropertyHighlights();
+renderHeroTitleCopy();

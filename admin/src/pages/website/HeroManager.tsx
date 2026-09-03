@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import HeroSlideCard from "../../components/HeroSlideCard";
+import HeroCopyEditor from "../../components/HeroCopyEditor";
 import ConfirmDeleteModal from "../../components/ConfirmDeleteModal";
 import { deleteHeroImageFolder } from "../../lib/heroImageStorage";
 import {
@@ -110,6 +111,10 @@ export default function HeroManager() {
             + Add Hero Slide
           </Link>
         )}
+      </div>
+
+      <div className="mt-6">
+        <HeroCopyEditor />
       </div>
 
       {notSetUp && (

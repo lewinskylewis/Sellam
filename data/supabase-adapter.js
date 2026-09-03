@@ -128,6 +128,19 @@
     );
   }
 
+  // Homepage hero title/description (Homepage Hero admin page's new
+  // editor). Singleton table — at most one row. Same isolation contract as
+  // the two fetches above: never allowed to fail the main load; on any
+  // problem script.js simply leaves the homepage's existing static
+  // heading/description text untouched. Does not touch the hero image
+  // carousel (homepage_hero_slides) in any way.
+  function fetchHeroCopy(cfg) {
+    return supabaseGet(
+      cfg,
+      "/rest/v1/homepage_hero_copy?select=heading_line_1,heading_line_2,description&limit=1"
+    );
+  }
+
   // --------------------------------------------------------------------
   // Reconstruction — reverses the Phase 1 migration's transform exactly,
   // field for field, back into the shape data/properties.js /
@@ -218,6 +231,15 @@
       id: row.properties ? row.properties.legacy_id : null,
       caption: row.caption || null,
       image: row.image || null
+    };
+  }
+
+  function reconstructHeroCopy(row) {
+    if (!row || !row.heading_line_1 || !row.heading_line_2 || !row.description) return null;
+    return {
+      headingLine1: row.heading_line_1,
+      headingLine2: row.heading_line_2,
+      description: row.description
     };
   }
 
@@ -402,7 +424,18 @@
             console.warn("[SellamData] Property highlights fetch failed, homepage keeps its existing static Featured/Exclusive cards:", highlightsError.message);
           });
 
-        return Promise.all([heroSlidesLoaded, propertyHighlightsLoaded]).then(function () {
+        // Same isolation contract again. On failure this simply leaves
+        // window.SELLAM_HERO_COPY unset, and script.js leaves the
+        // homepage's existing static heading/description text untouched.
+        var heroCopyLoaded = fetchHeroCopy(cfg)
+          .then(function (rawHeroCopy) {
+            window.SELLAM_HERO_COPY = reconstructHeroCopy(rawHeroCopy && rawHeroCopy[0]);
+          })
+          .catch(function (heroCopyError) {
+            console.warn("[SellamData] Hero title/description fetch failed, homepage keeps its existing static text:", heroCopyError.message);
+          });
+
+        return Promise.all([heroSlidesLoaded, propertyHighlightsLoaded, heroCopyLoaded]).then(function () {
           return { source: "supabase", communities: communities.length, properties: properties.length };
         });
       })
