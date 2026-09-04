@@ -867,6 +867,167 @@ section {
   gap: clamp(56px, 5vw, 104px);
 }
 
+.offmarket-section {
+  position: relative;
+  padding-block: var(--section-gap);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.offmarket-media,
+.offmarket-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.offmarket-media {
+  z-index: -2;
+  background-image: url("assets/images/Hephé Palace Swimming Pool (2).jpeg");
+  background-position: center;
+  background-size: cover;
+}
+
+.offmarket-overlay {
+  display: none;
+}
+
+.offmarket-layout {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 3vw, 40px);
+}
+
+.offmarket-enquiry-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.offmarket-form-panel {
+  width: 100%;
+  padding: clamp(24px, 2.2vw, 34px) clamp(28px, 3vw, 44px);
+  border-radius: clamp(16px, 1.4vw, 22px);
+  background: rgba(0, 47, 63, 0.82);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 34px 90px rgba(0, 18, 25, 0.38);
+}
+
+.offmarket-form {
+  display: grid;
+  gap: clamp(10px, 1vw, 14px);
+}
+
+.offmarket-form h3 {
+  margin: 0 0 2px;
+  color: var(--gold);
+  font-family: var(--font-optima);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.offmarket-intro {
+  margin: 0 0 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.offmarket-field-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--white);
+  font-size: 14px;
+}
+
+.offmarket-field-inline span {
+  color: rgba(255, 255, 255, 0.62);
+  font-weight: 600;
+}
+
+.offmarket-cc input {
+  flex: 1;
+  min-width: 0;
+  height: 38px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--ink);
+  background: rgba(219, 230, 234, 0.9);
+  outline: none;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  transition: background 220ms ease, box-shadow 220ms ease;
+}
+
+.offmarket-cc input:focus {
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(211, 162, 59, 0.35);
+}
+
+.offmarket-subject {
+  margin: 4px 0 0;
+  color: var(--white);
+  font-size: 14px;
+}
+
+.offmarket-message {
+  width: 100%;
+  min-height: 96px;
+  margin-top: 4px;
+  padding: 14px 18px;
+  border: 0;
+  border-radius: 12px;
+  color: var(--ink);
+  background: rgba(219, 230, 234, 0.9);
+  outline: none;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  resize: vertical;
+  transition: background 220ms ease, box-shadow 220ms ease;
+}
+
+.offmarket-message::placeholder {
+  color: rgba(0, 47, 63, 0.55);
+  font-style: italic;
+}
+
+.offmarket-message:focus {
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(211, 162, 59, 0.35);
+}
+
+.offmarket-submit {
+  min-width: 160px;
+  min-height: 44px;
+  padding: 0 30px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--ink-deep);
+  background: var(--gold);
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+.offmarket-submit:hover,
+.offmarket-submit:focus-visible {
+  background: #e0b155;
+  box-shadow: 0 14px 28px rgba(0, 18, 25, 0.35);
+  transform: translateY(-2px);
+}
+
 .section-copy {
   color: var(--black);
 }
@@ -1606,6 +1767,12 @@ section {
   font-size: 16px;
   line-height: 1.1;
   font-weight: 800;
+}
+
+.footer-logo {
+  display: block;
+  height: 18px;
+  width: auto;
 }
 
 .footer-contact address {
@@ -2744,6 +2911,10 @@ html:not(.motion-ready) .motion-item-visible {
 
   .exclusive-layout .property-gallery {
     order: 2;
+  }
+
+  .offmarket-form-panel {
+    padding: 26px 22px;
   }
 
   .section-kicker {
