@@ -245,7 +245,7 @@ async function sendNotification(config, enquiry, recordId) {
     body: JSON.stringify({
       from: config.resendFrom,
       to: config.recipients,
-      subject: `Property enquiry: ${enquiry.property_title}`.slice(0, 200),
+      subject: (enquiry.listing_category === "off-market" ? "Enquiry for Off-Market Listings" : `Property enquiry: ${enquiry.property_title}`).slice(0, 200),
       html: content.html,
       text: content.text,
       reply_to: enquiry.email

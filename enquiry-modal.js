@@ -286,7 +286,8 @@
     const targetForm = event.currentTarget;
     if (!targetForm.reportValidity()) return;
 
-    const submitButton = targetForm.querySelector("button[type='submit']");
+    const submitButton = targetForm.querySelector("button[type='submit']") ||
+      (targetForm.id && document.querySelector(`button[type='submit'][form='${targetForm.id}']`));
     const originalLabel = submitButton?.textContent || "Submit";
     const payload = buildPayload(targetForm);
 

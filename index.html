@@ -16,6 +16,7 @@
     >
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="preloader.css">
+    <link rel="stylesheet" href="enquiry-modal.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gabriela&display=swap" rel="stylesheet">
@@ -517,20 +518,37 @@
 
           <div class="offmarket-enquiry-block">
             <div class="offmarket-form-panel reveal">
-              <form class="offmarket-form" id="offmarket-enquiry-form" action="#" method="post">
+              <form class="offmarket-form enquiry-form" id="offmarket-enquiry-form" action="#" method="post">
+                <input type="hidden" name="property_id" value="off-market">
+                <input type="hidden" name="property_title" value="Off-Market Portfolio Enquiry">
+                <input type="hidden" name="property_url" value="https://sellamre.com/">
+                <input type="hidden" name="listing_category" value="off-market">
+                <input type="hidden" name="source_page" value="https://sellamre.com/">
+
                 <h3>Enquire Now</h3>
-                <p class="offmarket-intro">For our off-market portfolio, kindly email us using the form above to request for an appointment.</p>
+                <p class="offmarket-intro">For our off-market portfolio, kindly email us using the form below to request for an appointment.</p>
 
-                <p class="offmarket-field-inline"><span>To:</span> office@sellamre.com</p>
+                <div class="offmarket-field-row">
+                  <label class="offmarket-field">
+                    <span>Full name:</span>
+                    <input class="offmarket-input" type="text" name="name" autocomplete="name" required>
+                  </label>
+                  <label class="offmarket-field">
+                    <span>Phone Number:</span>
+                    <input class="offmarket-input" type="tel" name="phone" autocomplete="tel" required>
+                  </label>
+                </div>
 
-                <label class="offmarket-field-inline offmarket-cc">
-                  <span>Cc:</span>
-                  <input type="email" name="cc" autocomplete="email">
+                <label class="offmarket-field">
+                  <span>Email address:</span>
+                  <input class="offmarket-input" type="email" name="email" autocomplete="email" required>
                 </label>
 
                 <p class="offmarket-subject">Subject: Enquiry for Off-Market Listings</p>
 
                 <textarea class="offmarket-message" name="message" rows="4" placeholder="Message" required></textarea>
+
+                <p class="enquiry-status" data-enquiry-status aria-live="polite"></p>
               </form>
             </div>
 
@@ -728,7 +746,7 @@
     <script src="data/supabase-adapter.js"></script>
     <script>
       window.SellamData.ready.then(function () {
-        var deferred = ["community-render.js", "property-search.js", "script.js"];
+        var deferred = ["community-render.js", "property-search.js", "enquiry-config.js", "enquiry-modal.js", "script.js"];
         (function loadNext(i) {
           if (i >= deferred.length) return;
           var el = document.createElement("script");

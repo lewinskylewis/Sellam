@@ -903,8 +903,6 @@ section {
   align-items: flex-start;
   gap: 20px;
   width: 100%;
-  max-width: 900px;
-  margin-inline: auto;
 }
 
 .offmarket-form-panel {
@@ -940,27 +938,30 @@ section {
   line-height: 1.5;
 }
 
-.offmarket-field-inline {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  color: var(--white);
-  font-size: 14px;
+.offmarket-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
-.offmarket-field-inline span {
+.offmarket-field {
+  display: grid;
+  gap: 6px;
+}
+
+.offmarket-field span {
   color: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
   font-weight: 600;
+  letter-spacing: 0.05em;
 }
 
-.offmarket-cc input {
-  flex: 1;
-  min-width: 0;
-  height: 38px;
-  padding: 0 14px;
+.offmarket-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 18px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 12px;
   color: var(--ink);
   background: rgba(219, 230, 234, 0.9);
   outline: none;
@@ -969,7 +970,7 @@ section {
   transition: background 220ms ease, box-shadow 220ms ease;
 }
 
-.offmarket-cc input:focus {
+.offmarket-input:focus {
   background: var(--white);
   box-shadow: 0 0 0 3px rgba(211, 162, 59, 0.35);
 }
@@ -2915,6 +2916,10 @@ html:not(.motion-ready) .motion-item-visible {
 
   .offmarket-form-panel {
     padding: 26px 22px;
+  }
+
+  .offmarket-field-row {
+    grid-template-columns: 1fr;
   }
 
   .section-kicker {

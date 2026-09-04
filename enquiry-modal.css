@@ -226,6 +226,21 @@ body.enquiry-modal-open {
   color: #26713a;
 }
 
+/* Off-market enquiry form sits on a dark panel (unlike the light modal
+   forms this file otherwise styles) — override just the status text
+   colors so messages stay readable. */
+.offmarket-form.enquiry-form .enquiry-status {
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.offmarket-form.enquiry-form .enquiry-status.is-error {
+  color: #ffd4c7;
+}
+
+.offmarket-form.enquiry-form .enquiry-status.is-success {
+  color: #e6f7e8;
+}
+
 .enquiry-form button:disabled {
   cursor: wait;
   opacity: 0.72;
