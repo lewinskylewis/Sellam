@@ -61,8 +61,8 @@ export default function CommercialPerformanceSection({ events, loading }: { even
       </div>
 
       <p className="rounded-xl border border-line bg-paper/50 px-4 py-2.5 text-xs text-ink-soft">
-        <span className="font-medium text-ink">Listing Value</span> (pipeline) is the estimated value of active, qualified opportunities based on listing price. <span className="font-medium text-ink">Closed Value</span> reflects only opportunities that actually reached Won.
-        These are estimates from mock data, not real transactions.
+        <span className="font-medium text-ink">Pipeline Value</span> and <span className="font-medium text-ink">Closed Value</span> are estimates based on each contact's own stated budget (their declared maximum, or minimum if no maximum was given) —
+        there is no confirmed sale price recorded anywhere in Sellam's database, so these are estimates, not actual transaction values.
       </p>
 
       <div className="grid gap-5 lg:grid-cols-2">

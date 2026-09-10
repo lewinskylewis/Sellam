@@ -1,13 +1,24 @@
-// Local-only mock analytics data for the Analytics module. No Supabase, no
-// API calls, no external analytics services — every number on screen is
-// computed from the synthetic event dataset generated below, the same way
-// real analytics would later be computed from live enquiry/lead records.
-// Nothing in this file talks to a backend.
+// Real Supabase-backed data layer for the Analytics module. Every exported
+// type/function signature here is unchanged from the module's original
+// design so that admin/src/components/analytics/**/*.tsx (10 section
+// components + FiltersBar) keep working untouched — only the *source* of
+// AnalyticsEvent[] changed, from a synthetic seeded-RNG generator to
+// fetchAnalyticsEvents(), which reads real contacts/property_enquiries/
+// properties/communities/contact_activities rows.
+//
+// There is no page-view/session/social-media data anywhere in this project
+// (no GA4, Search Console, Meta/Instagram/TikTok integration, no pageview
+// logging table) — see WebsitePerformanceSection.tsx, which now shows an
+// "integration required" state instead of fabricated traffic numbers.
 
-import { AGENTS, COMMUNITIES, SOURCES, type Agent, type LeadSource } from "./leadsData";
+import { supabase } from "./supabase";
+import { SOURCES, type LeadSource } from "./leads";
 
-export type PropertyType = "Apartment" | "Villa" | "Townhouse" | "Penthouse" | "Land" | "Commercial" | "Other";
-export type ListingType = "Sale" | "Rent" | "Lease";
+export { SOURCES };
+export type { LeadSource };
+
+export type PropertyType = string;
+export type ListingType = string;
 export type FunnelStage = "Enquiry" | "Contacted" | "Qualified" | "Viewing" | "Negotiation" | "Won" | "Lost";
 
 export type AnalyticsProperty = {
@@ -16,212 +27,200 @@ export type AnalyticsProperty = {
   community: string;
   propertyType: PropertyType;
   listingType: ListingType;
-  price: number;
-  currency: "KES";
-  weight: number;
 };
-
-// A small, deliberately uneven catalogue — some listings are far more
-// popular than others, which is what makes "top performing" vs "low
-// engagement" comparisons meaningful rather than arbitrary.
-export const ANALYTICS_PROPERTIES: AnalyticsProperty[] = [
-  { id: "pr1", title: "Westlands 3BR Apartment", community: "Westlands", propertyType: "Apartment", listingType: "Sale", price: 12_500_000, currency: "KES", weight: 9.5 },
-  { id: "pr2", title: "Runda Villa", community: "Runda", propertyType: "Villa", listingType: "Sale", price: 28_000_000, currency: "KES", weight: 7.2 },
-  { id: "pr3", title: "Karen Townhouse", community: "Karen", propertyType: "Townhouse", listingType: "Sale", price: 19_500_000, currency: "KES", weight: 5.6 },
-  { id: "pr4", title: "Kilimani 2BR", community: "Kilimani", propertyType: "Apartment", listingType: "Sale", price: 8_900_000, currency: "KES", weight: 4.8 },
-  { id: "pr5", title: "Karen Estate Villa", community: "Karen", propertyType: "Villa", listingType: "Sale", price: 28_000_000, currency: "KES", weight: 3.4 },
-  { id: "pr6", title: "Kileleshwa 2BR Apartment", community: "Kileleshwa", propertyType: "Apartment", listingType: "Sale", price: 8_200_000, currency: "KES", weight: 4.1 },
-  { id: "pr7", title: "Vipingo Beach Villa", community: "Vipingo", propertyType: "Villa", listingType: "Rent", price: 220_000, currency: "KES", weight: 3.0 },
-  { id: "pr8", title: "Lavington Townhouse", community: "Lavington", propertyType: "Townhouse", listingType: "Sale", price: 16_800_000, currency: "KES", weight: 2.6 },
-  { id: "pr9", title: "Runda Townhouse", community: "Runda", propertyType: "Townhouse", listingType: "Sale", price: 15_200_000, currency: "KES", weight: 2.9 },
-  { id: "pr10", title: "Gigiri 4BR Apartment", community: "Gigiri", propertyType: "Apartment", listingType: "Rent", price: 280_000, currency: "KES", weight: 2.2 },
-  { id: "pr11", title: "Muthaiga Villa", community: "Muthaiga", propertyType: "Villa", listingType: "Sale", price: 42_000_000, currency: "KES", weight: 1.4 },
-  { id: "pr12", title: "Ridgeways Apartment", community: "Ridgeways", propertyType: "Apartment", listingType: "Sale", price: 7_100_000, currency: "KES", weight: 1.9 },
-  { id: "pr13", title: "Kilimani Penthouse", community: "Kilimani", propertyType: "Penthouse", listingType: "Sale", price: 34_500_000, currency: "KES", weight: 1.1 },
-  { id: "pr14", title: "Westlands Commercial Suite", community: "Westlands", propertyType: "Commercial", listingType: "Lease", price: 450_000, currency: "KES", weight: 0.9 },
-];
 
 export type AnalyticsEvent = {
   id: string;
-  date: Date; // when the enquiry was received
-  property: AnalyticsProperty;
+  date: Date; // contacts.date_added — when this lead/client relationship started
+  property: AnalyticsProperty | null; // resolved via a matched property_enquiries row, if any
+  community: string | null; // property's community, falling back to the contact's first preferred location
+  propertyType: PropertyType | null; // property's type, falling back to the contact's stated property_type
   source: LeadSource;
-  agent: Agent;
-  finalStage: FunnelStage; // furthest stage genuinely reached
+  agent: string; // "" when unassigned
+  finalStage: FunnelStage; // contacts.stage ("New" is presented as "Enquiry")
   lost: boolean;
   lostAt: Date | null;
   contactedAt: Date | null;
   qualifiedAt: Date | null;
   viewingAt: Date | null;
   negotiationAt: Date | null;
-  closedAt: Date | null; // Won only
-  responseMinutes: number | null;
-  dealValue: number | null; // Won only
-};
-
-// --- deterministic PRNG (mulberry32) so the dataset is stable across
-// reloads/renders instead of re-randomizing on every render. ---
-function mulberry32(seed: number) {
-  let a = seed;
-  return function () {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-function weightedPick<T>(rng: () => number, items: T[], weight: (item: T) => number): T {
-  const total = items.reduce((sum, item) => sum + weight(item), 0);
-  let roll = rng() * total;
-  for (const item of items) {
-    roll -= weight(item);
-    if (roll <= 0) return item;
-  }
-  return items[items.length - 1];
-}
-
-const SOURCE_WEIGHTS: Record<LeadSource, number> = {
-  Website: 42,
-  "Enquiry Form": 12,
-  WhatsApp: 20,
-  Phone: 11,
-  Referral: 9,
-  "Social Media": 4,
-  "Walk-in": 1.4,
-  Other: 0.6,
-};
-
-const AGENT_WEIGHTS: Record<Agent, number> = { Alex: 38, Sarah: 33, Brian: 29 };
-
-// Agents differ slightly in speed and follow-through — this is what gives
-// Agent Performance something real to compare rather than a flat table.
-const AGENT_PROFILE: Record<Agent, { responseFactor: number; contactRate: number; qualifyRate: number }> = {
-  Alex: { responseFactor: 0.72, contactRate: 0.82, qualifyRate: 0.6 },
-  Sarah: { responseFactor: 0.92, contactRate: 0.76, qualifyRate: 0.55 },
-  Brian: { responseFactor: 1.28, contactRate: 0.68, qualifyRate: 0.47 },
+  closedAt: Date | null;
+  responseMinutes: number | null; // date_added -> first "→ Contacted" stage_change activity
+  budgetValue: number | null; // contact's stated budget_max (or budget_min) — a real declared figure, not a confirmed transaction value
+  followUpsCompleted: number; // count of logged "Follow-up completed" activities for this contact
 };
 
 const DAY_MS = 86_400_000;
-const DATASET_DAYS = 450; // ~15 months of history
 
-function generateDataset(): AnalyticsEvent[] {
-  const rng = mulberry32(20260829);
-  const events: AnalyticsEvent[] = [];
-  const now = new Date();
-  const start = new Date(now.getTime() - DATASET_DAYS * DAY_MS);
-  let counter = 0;
+// --------------------------------------------------------------------
+// Fetch + map real data
+// --------------------------------------------------------------------
 
-  for (let dayOffset = 0; dayOffset < DATASET_DAYS; dayOffset++) {
-    const day = new Date(start.getTime() + dayOffset * DAY_MS);
-    const dow = day.getDay();
-    const weekendFactor = dow === 0 || dow === 6 ? 0.65 : 1;
-    // Gentle organic growth over the dataset lifetime, plus a slow seasonal wave.
-    const growthFactor = 0.72 + (dayOffset / DATASET_DAYS) * 0.6;
-    const seasonal = 1 + 0.18 * Math.sin((dayOffset / 30) * Math.PI);
-    const baseRate = 4.1 * weekendFactor * growthFactor * seasonal;
-    const noise = 0.55 + rng() * 0.9;
-    const count = Math.max(0, Math.round(baseRate * noise));
+type ContactRow = {
+  id: string;
+  email: string | null;
+  date_added: string;
+  type: string;
+  stage: string;
+  source: string;
+  assigned_agent: string | null;
+  budget_min: number | null;
+  budget_max: number | null;
+  property_type: string | null;
+  preferred_locations: string[];
+  archived: boolean;
+};
 
-    for (let i = 0; i < count; i++) {
-      counter++;
-      const hour = 7 + Math.floor(rng() * 13);
-      const minute = Math.floor(rng() * 60);
-      const enquiryDate = new Date(day.getFullYear(), day.getMonth(), day.getDate(), hour, minute);
-      const property = weightedPick(rng, ANALYTICS_PROPERTIES, (p) => p.weight);
-      const source = weightedPick(rng, SOURCES, (s) => SOURCE_WEIGHTS[s]);
-      const agent = weightedPick(rng, AGENTS, (a) => AGENT_WEIGHTS[a]);
-      const profile = AGENT_PROFILE[agent];
-      const daysSinceEnquiry = (now.getTime() - enquiryDate.getTime()) / DAY_MS;
+function titleCase(s: string): string {
+  return s
+    .split(/[\s-]+/)
+    .filter(Boolean)
+    .map((w) => w[0].toUpperCase() + w.slice(1))
+    .join(" ");
+}
 
-      let finalStage: FunnelStage = "Enquiry";
-      let lost = false;
-      let lostAt: Date | null = null;
-      let contactedAt: Date | null = null;
-      let qualifiedAt: Date | null = null;
-      let viewingAt: Date | null = null;
-      let negotiationAt: Date | null = null;
-      let closedAt: Date | null = null;
-      let responseMinutes: number | null = null;
-      let dealValue: number | null = null;
+function extractStageTimestamps(activities: { type: string; detail: string | null; created_at: string }[]) {
+  const out: Partial<Record<FunnelStage, Date>> = {};
+  for (const a of activities) {
+    if (a.type !== "stage_change" || !a.detail) continue;
+    const parts = a.detail.split("→");
+    const target = parts[1]?.trim();
+    if (!target) continue;
+    // First occurrence only — later re-entries into the same stage don't
+    // overwrite when it was first reached.
+    if (!out[target as FunnelStage]) out[target as FunnelStage] = new Date(a.created_at);
+  }
+  return out;
+}
 
-      // Response speed trends faster over the dataset's timeline (recent
-      // enquiries get answered quicker), matching the "improved by N
-      // minutes" insight the module is meant to surface.
-      const eraFactor = 1.4 - (dayOffset / DATASET_DAYS) * 0.55;
-      const baseResponse = 12 + rng() * 90;
-      const thisResponse = Math.max(4, Math.round(baseResponse * eraFactor * profile.responseFactor));
+export async function fetchAnalyticsEvents(): Promise<AnalyticsEvent[]> {
+  const [{ data: contactRows, error: contactsError }, { data: activityRows, error: activityError }, { data: enquiryRows, error: enquiryError }, { data: propertyRows, error: propertiesError }, { data: communityRows, error: communitiesError }] =
+    await Promise.all([
+      supabase
+        .from("contacts")
+        .select("id, email, date_added, type, stage, source, assigned_agent, budget_min, budget_max, property_type, preferred_locations, archived"),
+      supabase.from("contact_activities").select("contact_id, type, title, detail, created_at").order("created_at", { ascending: true }),
+      supabase.from("property_enquiries").select("id, contact_id, email, property_id, submitted_at"),
+      supabase.from("properties").select("id, legacy_id, title, community, property_type, letting"),
+      supabase.from("communities").select("key, label"),
+    ]);
 
-      const contacted = rng() < profile.contactRate;
-      if (contacted) {
-        responseMinutes = thisResponse;
-        contactedAt = new Date(enquiryDate.getTime() + thisResponse * 60_000);
-        finalStage = "Contacted";
+  if (contactsError) throw contactsError;
+  if (activityError) throw activityError;
+  if (enquiryError) throw enquiryError;
+  if (propertiesError) throw propertiesError;
+  if (communitiesError) throw communitiesError;
 
-        const qualified = rng() < profile.qualifyRate;
-        if (qualified) {
-          qualifiedAt = new Date(contactedAt.getTime() + (1 + rng() * 4) * DAY_MS);
-          finalStage = "Qualified";
+  const communityLabelByKey = new Map((communityRows ?? []).map((c) => [c.key, c.label]));
+  const propertyByLegacyId = new Map(
+    (propertyRows ?? []).map((p) => [
+      p.legacy_id,
+      {
+        id: p.id,
+        title: p.title,
+        community: communityLabelByKey.get(p.community) ?? p.community,
+        propertyType: titleCase(p.property_type),
+        listingType: titleCase(p.letting),
+      } satisfies AnalyticsProperty,
+    ]),
+  );
 
-          const viewed = rng() < 0.63;
-          if (viewed) {
-            viewingAt = new Date(qualifiedAt.getTime() + (1 + rng() * 6) * DAY_MS);
-            finalStage = "Viewing";
-
-            const negotiated = rng() < 0.45;
-            if (negotiated) {
-              negotiationAt = new Date(viewingAt.getTime() + (1 + rng() * 5) * DAY_MS);
-              finalStage = "Negotiation";
-
-              const won = rng() < 0.42;
-              if (won) {
-                closedAt = new Date(negotiationAt.getTime() + (2 + rng() * 10) * DAY_MS);
-                if (closedAt.getTime() <= now.getTime()) {
-                  finalStage = "Won";
-                  const variance = 0.9 + rng() * 0.18;
-                  dealValue = Math.round(property.price * (property.listingType === "Sale" ? variance : variance * 12));
-                } else {
-                  closedAt = null;
-                }
-              }
-            }
-          }
-        }
-      }
-
-      // Anything that stalled and is old enough to no longer be "active
-      // pipeline" is resolved as Lost — recent stalls are left open,
-      // representing enquiries still genuinely in progress.
-      if (finalStage !== "Won" && daysSinceEnquiry > 21 && rng() < 0.78) {
-        lost = true;
-        lostAt = new Date(enquiryDate.getTime() + (10 + rng() * 30) * DAY_MS);
-      }
-
-      events.push({
-        id: `ev${counter}`,
-        date: enquiryDate,
-        property,
-        source,
-        agent,
-        finalStage,
-        lost,
-        lostAt,
-        contactedAt,
-        qualifiedAt,
-        viewingAt,
-        negotiationAt,
-        closedAt,
-        responseMinutes,
-        dealValue,
-      });
+  const enquiries = enquiryRows ?? [];
+  const enquiriesByContactId = new Map<string, typeof enquiries>();
+  const enquiriesByEmail = new Map<string, typeof enquiries>();
+  for (const e of enquiries) {
+    if (e.contact_id) {
+      const list = enquiriesByContactId.get(e.contact_id) ?? [];
+      list.push(e);
+      enquiriesByContactId.set(e.contact_id, list);
+    }
+    const email = (e.email ?? "").trim().toLowerCase();
+    if (email) {
+      const list = enquiriesByEmail.get(email) ?? [];
+      list.push(e);
+      enquiriesByEmail.set(email, list);
     }
   }
 
-  return events;
+  const activitiesByContactId = new Map<string, { type: string; title: string; detail: string | null; created_at: string }[]>();
+  for (const a of activityRows ?? []) {
+    const list = activitiesByContactId.get(a.contact_id) ?? [];
+    list.push(a);
+    activitiesByContactId.set(a.contact_id, list);
+  }
+
+  const contacts = (contactRows ?? []) as ContactRow[];
+
+  return contacts
+    .filter((c) => !c.archived)
+    .map((c) => {
+      const linked = enquiriesByContactId.get(c.id) ?? [];
+      const byEmail = c.email ? (enquiriesByEmail.get(c.email.trim().toLowerCase()) ?? []) : [];
+      const seen = new Set<number>();
+      const matched = [...linked, ...byEmail].filter((e) => (seen.has(e.id) ? false : (seen.add(e.id), true))).sort((a, b) => new Date(b.submitted_at).getTime() - new Date(a.submitted_at).getTime());
+
+      let property: AnalyticsProperty | null = null;
+      for (const e of matched) {
+        const p = propertyByLegacyId.get(e.property_id);
+        if (p) {
+          property = p;
+          break;
+        }
+      }
+
+      const activities = activitiesByContactId.get(c.id) ?? [];
+      const stageTimestamps = extractStageTimestamps(activities);
+      const dateAdded = new Date(c.date_added);
+      const contactedAt = stageTimestamps.Contacted ?? null;
+      const followUpsCompleted = activities.filter((a) => a.type === "follow_up" && a.title === "Follow-up completed").length;
+
+      const finalStage: FunnelStage = c.stage === "New" ? "Enquiry" : (c.stage as FunnelStage);
+      const lost = c.stage === "Lost";
+      const budgetValue = c.budget_max ?? c.budget_min ?? null;
+
+      return {
+        id: c.id,
+        date: dateAdded,
+        property,
+        community: property?.community ?? c.preferred_locations?.[0] ?? null,
+        propertyType: property?.propertyType ?? (c.property_type ? titleCase(c.property_type) : null),
+        source: c.source as LeadSource,
+        agent: c.assigned_agent ?? "",
+        finalStage,
+        lost,
+        lostAt: stageTimestamps.Lost ?? null,
+        contactedAt,
+        qualifiedAt: stageTimestamps.Qualified ?? null,
+        viewingAt: stageTimestamps.Viewing ?? null,
+        negotiationAt: stageTimestamps.Negotiation ?? null,
+        closedAt: stageTimestamps.Won ?? null,
+        responseMinutes: contactedAt ? Math.round((contactedAt.getTime() - dateAdded.getTime()) / 60_000) : null,
+        budgetValue,
+        followUpsCompleted,
+      } satisfies AnalyticsEvent;
+    });
 }
 
-export const ANALYTICS_EVENTS: AnalyticsEvent[] = generateDataset();
+// Distinct, non-empty option lists for the filter bar — computed from
+// whatever is actually in the fetched dataset (not a fixed catalogue), so a
+// filter never offers a choice that matches nothing.
+export function distinctAgents(events: AnalyticsEvent[]): string[] {
+  return Array.from(new Set(events.map((e) => e.agent).filter(Boolean))).sort();
+}
+export function distinctCommunities(events: AnalyticsEvent[]): string[] {
+  return Array.from(new Set(events.map((e) => e.community).filter((c): c is string => !!c))).sort();
+}
+export function distinctPropertyTypes(events: AnalyticsEvent[]): string[] {
+  return Array.from(new Set(events.map((e) => e.propertyType).filter((t): t is string => !!t))).sort();
+}
+export function distinctListingTypes(events: AnalyticsEvent[]): string[] {
+  return Array.from(new Set(events.map((e) => e.property?.listingType).filter((t): t is string => !!t))).sort();
+}
+export function distinctProperties(events: AnalyticsEvent[]): { id: string; title: string }[] {
+  const map = new Map<string, string>();
+  for (const e of events) if (e.property) map.set(e.property.id, e.property.title);
+  return Array.from(map, ([id, title]) => ({ id, title })).sort((a, b) => a.title.localeCompare(b.title));
+}
 
 // ---------- date range + comparison ----------
 
@@ -286,7 +285,7 @@ export type AnalyticsFilters = {
   propertyTypes: PropertyType[];
   listingTypes: ListingType[];
   sources: LeadSource[];
-  agents: Agent[];
+  agents: string[];
 };
 
 export function emptyFilters(): AnalyticsFilters {
@@ -300,10 +299,10 @@ export function hasActiveFilters(f: AnalyticsFilters): boolean {
 export function filterEvents(events: AnalyticsEvent[], range: DateRange, filters: AnalyticsFilters): AnalyticsEvent[] {
   return events.filter((e) => {
     if (e.date < range.start || e.date > range.end) return false;
-    if (filters.properties.length && !filters.properties.includes(e.property.id)) return false;
-    if (filters.communities.length && !filters.communities.includes(e.property.community)) return false;
-    if (filters.propertyTypes.length && !filters.propertyTypes.includes(e.property.propertyType)) return false;
-    if (filters.listingTypes.length && !filters.listingTypes.includes(e.property.listingType)) return false;
+    if (filters.properties.length && !(e.property && filters.properties.includes(e.property.id))) return false;
+    if (filters.communities.length && !(e.community && filters.communities.includes(e.community))) return false;
+    if (filters.propertyTypes.length && !(e.propertyType && filters.propertyTypes.includes(e.propertyType))) return false;
+    if (filters.listingTypes.length && !(e.property && filters.listingTypes.includes(e.property.listingType))) return false;
     if (filters.sources.length && !filters.sources.includes(e.source)) return false;
     if (filters.agents.length && !filters.agents.includes(e.agent)) return false;
     return true;
@@ -460,18 +459,18 @@ export type PropertyPerformance = {
 
 export function propertyPerformance(events: AnalyticsEvent[]): PropertyPerformance[] {
   const map = new Map<string, PropertyPerformance>();
-  for (const p of ANALYTICS_PROPERTIES) map.set(p.id, { property: p, enquiries: 0, leads: 0, viewings: 0, closed: 0, conversion: null });
   for (const e of events) {
-    const row = map.get(e.property.id);
-    if (!row) continue;
+    if (!e.property) continue;
+    if (!map.has(e.property.id)) map.set(e.property.id, { property: e.property, enquiries: 0, leads: 0, viewings: 0, closed: 0, conversion: null });
+    const row = map.get(e.property.id)!;
     row.enquiries += 1;
     if (reached(e, "Qualified")) row.leads += 1;
     if (reached(e, "Viewing")) row.viewings += 1;
     if (e.finalStage === "Won") row.closed += 1;
   }
-  const rows = Array.from(map.values()).filter((r) => r.enquiries > 0);
+  const rows = Array.from(map.values());
   for (const r of rows) r.conversion = r.enquiries > 0 ? (r.closed / r.enquiries) * 100 : null;
-  return rows;
+  return rows.sort((a, b) => b.enquiries - a.enquiries);
 }
 
 // ---------- community performance ----------
@@ -480,16 +479,16 @@ export type CommunityPerformance = { community: string; enquiries: number; leads
 
 export function communityPerformance(events: AnalyticsEvent[]): CommunityPerformance[] {
   const map = new Map<string, CommunityPerformance>();
-  for (const c of COMMUNITIES) map.set(c, { community: c, enquiries: 0, leads: 0, viewings: 0, closed: 0, conversion: null });
   for (const e of events) {
-    const row = map.get(e.property.community);
-    if (!row) continue;
+    if (!e.community) continue;
+    if (!map.has(e.community)) map.set(e.community, { community: e.community, enquiries: 0, leads: 0, viewings: 0, closed: 0, conversion: null });
+    const row = map.get(e.community)!;
     row.enquiries += 1;
     if (reached(e, "Qualified")) row.leads += 1;
     if (reached(e, "Viewing")) row.viewings += 1;
     if (e.finalStage === "Won") row.closed += 1;
   }
-  const rows = Array.from(map.values()).filter((r) => r.enquiries > 0);
+  const rows = Array.from(map.values());
   for (const r of rows) r.conversion = r.enquiries > 0 ? (r.closed / r.enquiries) * 100 : null;
   return rows.sort((a, b) => b.enquiries - a.enquiries);
 }
@@ -526,7 +525,7 @@ export function leadSourceQuality(events: AnalyticsEvent[]): SourceQuality[] {
 // ---------- agent performance ----------
 
 export type AgentPerformance = {
-  agent: Agent;
+  agent: string;
   leads: number;
   viewings: number;
   closed: number;
@@ -540,30 +539,32 @@ export type AgentPerformance = {
 };
 
 export function agentPerformance(events: AnalyticsEvent[]): AgentPerformance[] {
-  return AGENTS.map((agent) => {
-    const rows = events.filter((e) => e.agent === agent);
-    const enquiries = rows.length;
-    const contacted = rows.filter((e) => reached(e, "Contacted"));
-    const qualified = rows.filter((e) => reached(e, "Qualified"));
-    const viewings = rows.filter((e) => reached(e, "Viewing"));
-    const closed = rows.filter((e) => e.finalStage === "Won");
-    const responses = contacted.map((e) => e.responseMinutes as number).filter((n) => n != null);
+  const agents = distinctAgents(events);
+  return agents
+    .map((agent) => {
+      const rows = events.filter((e) => e.agent === agent);
+      const enquiries = rows.length;
+      const contacted = rows.filter((e) => reached(e, "Contacted"));
+      const qualified = rows.filter((e) => reached(e, "Qualified"));
+      const viewings = rows.filter((e) => reached(e, "Viewing"));
+      const closed = rows.filter((e) => e.finalStage === "Won");
+      const responses = contacted.map((e) => e.responseMinutes as number).filter((n) => n != null);
 
-    return {
-      agent,
-      leads: qualified.length,
-      viewings: viewings.length,
-      closed: closed.length,
-      conversion: qualified.length > 0 ? (closed.length / qualified.length) * 100 : null,
-      avgResponseMinutes: responses.length ? responses.reduce((a, b) => a + b, 0) / responses.length : null,
-      contactRate: enquiries > 0 ? (contacted.length / enquiries) * 100 : null,
-      leadConversion: contacted.length > 0 ? (qualified.length / contacted.length) * 100 : null,
-      viewingConversion: qualified.length > 0 ? (viewings.length / qualified.length) * 100 : null,
-      closeRate: viewings.length > 0 ? (closed.length / viewings.length) * 100 : null,
-      // Deterministic mock — proportional to lead volume with a per-agent modifier.
-      followUpsCompleted: Math.round(qualified.length * (agent === "Alex" ? 0.86 : agent === "Sarah" ? 0.79 : 0.68)),
-    };
-  }).filter((a) => a.leads > 0 || a.viewings > 0);
+      return {
+        agent,
+        leads: qualified.length,
+        viewings: viewings.length,
+        closed: closed.length,
+        conversion: qualified.length > 0 ? (closed.length / qualified.length) * 100 : null,
+        avgResponseMinutes: responses.length ? responses.reduce((a, b) => a + b, 0) / responses.length : null,
+        contactRate: enquiries > 0 ? (contacted.length / enquiries) * 100 : null,
+        leadConversion: contacted.length > 0 ? (qualified.length / contacted.length) * 100 : null,
+        viewingConversion: qualified.length > 0 ? (viewings.length / qualified.length) * 100 : null,
+        closeRate: viewings.length > 0 ? (closed.length / viewings.length) * 100 : null,
+        followUpsCompleted: rows.reduce((sum, e) => sum + e.followUpsCompleted, 0),
+      };
+    })
+    .filter((a) => a.leads > 0 || a.viewings > 0);
 }
 
 // ---------- response time analytics ----------
@@ -613,59 +614,14 @@ export function responseTimeAnalytics(events: AnalyticsEvent[], _range: DateRang
   };
 }
 
-// ---------- website performance (simulated, not derived from CRM events) ----------
-
-export type WebsitePerformance = {
-  visitors: number;
-  pageViews: number;
-  enquirySubmissions: number;
-  conversionRate: number | null;
-  series: { key: string; label: string; date: Date; visitors: number }[];
-  mostViewed: { property: AnalyticsProperty; views: number; enquiries: number; leads: number }[];
-  trafficSources: { source: string; pct: number }[];
-};
-
-export function websitePerformance(events: AnalyticsEvent[], range: DateRange, granularity: Granularity): WebsitePerformance {
-  const rng = mulberry32(Math.floor(range.start.getTime() / DAY_MS) + 7);
-  const websiteEvents = events.filter((e) => e.source === "Website" || e.source === "Enquiry Form");
-
-  const series = buildTimeSeries(events, range, granularity).map((point) => ({
-    key: point.key,
-    label: point.label,
-    date: point.date,
-    // Each website enquiry implies a much larger visitor/browsing base.
-    visitors: Math.round(point.enquiries * (34 + rng() * 22) + rng() * 12),
-  }));
-  const visitors = series.reduce((sum, s) => sum + s.visitors, 0);
-  const pageViews = Math.round(visitors * (2.1 + rng() * 0.8));
-  const enquirySubmissions = websiteEvents.length;
-
-  const perf = propertyPerformance(events);
-  const mostViewed = perf
-    .map((row) => ({
-      property: row.property,
-      views: Math.round(row.enquiries * (55 + rng() * 40) + row.property.weight * 20),
-      enquiries: row.enquiries,
-      leads: row.leads,
-    }))
-    .sort((a, b) => b.views - a.views)
-    .slice(0, 6);
-
-  const src = sourceBreakdown(events);
-  const trafficSources = src.map((s) => ({ source: s.source, pct: s.pct }));
-
-  return {
-    visitors,
-    pageViews,
-    enquirySubmissions,
-    conversionRate: visitors > 0 ? (enquirySubmissions / visitors) * 100 : null,
-    series,
-    mostViewed,
-    trafficSources,
-  };
-}
-
 // ---------- commercial performance ----------
+//
+// There is no "confirmed sale price" field anywhere in the schema — the
+// closest real, non-fabricated figure is a contact's own stated budget
+// (contacts.budget_max, falling back to budget_min). Pipeline/Closed value
+// here are explicitly estimates built from that declared figure, not actual
+// transaction values — see the disclaimer text in
+// CommercialPerformanceSection.tsx.
 
 export type CommercialBreakdownRow = { label: string; pipelineValue: number; closedValue: number; closedDeals: number };
 export type CommercialPerformance = {
@@ -679,29 +635,27 @@ export type CommercialPerformance = {
   byAgent: CommercialBreakdownRow[];
 };
 
-function estimatedValue(e: AnalyticsEvent): number {
-  return e.property.listingType === "Sale" ? e.property.price : e.property.price * 12;
-}
-
 export function commercialPerformance(events: AnalyticsEvent[]): CommercialPerformance {
-  const active = events.filter((e) => !e.lost && e.finalStage !== "Won" && reached(e, "Qualified"));
-  const won = events.filter((e) => e.finalStage === "Won" && e.dealValue != null);
+  const active = events.filter((e) => !e.lost && e.finalStage !== "Won" && reached(e, "Qualified") && e.budgetValue != null);
+  const won = events.filter((e) => e.finalStage === "Won" && e.budgetValue != null);
 
-  const pipelineValue = active.reduce((sum, e) => sum + estimatedValue(e), 0);
-  const closedValue = won.reduce((sum, e) => sum + (e.dealValue ?? 0), 0);
+  const pipelineValue = active.reduce((sum, e) => sum + (e.budgetValue ?? 0), 0);
+  const closedValue = won.reduce((sum, e) => sum + (e.budgetValue ?? 0), 0);
 
-  function breakdown(keyFn: (e: AnalyticsEvent) => string): CommercialBreakdownRow[] {
+  function breakdown(keyFn: (e: AnalyticsEvent) => string | null): CommercialBreakdownRow[] {
     const map = new Map<string, CommercialBreakdownRow>();
     for (const e of active) {
       const key = keyFn(e);
+      if (!key) continue;
       if (!map.has(key)) map.set(key, { label: key, pipelineValue: 0, closedValue: 0, closedDeals: 0 });
-      map.get(key)!.pipelineValue += estimatedValue(e);
+      map.get(key)!.pipelineValue += e.budgetValue ?? 0;
     }
     for (const e of won) {
       const key = keyFn(e);
+      if (!key) continue;
       if (!map.has(key)) map.set(key, { label: key, pipelineValue: 0, closedValue: 0, closedDeals: 0 });
       const row = map.get(key)!;
-      row.closedValue += e.dealValue ?? 0;
+      row.closedValue += e.budgetValue ?? 0;
       row.closedDeals += 1;
     }
     return Array.from(map.values()).sort((a, b) => b.pipelineValue + b.closedValue - (a.pipelineValue + a.closedValue));
@@ -712,14 +666,14 @@ export function commercialPerformance(events: AnalyticsEvent[]): CommercialPerfo
     closedValue,
     avgDealValue: won.length ? closedValue / won.length : null,
     closedDeals: won.length,
-    byListingType: breakdown((e) => e.property.listingType),
-    byCommunity: breakdown((e) => e.property.community),
-    byPropertyType: breakdown((e) => e.property.propertyType),
-    byAgent: breakdown((e) => e.agent),
+    byListingType: breakdown((e) => e.property?.listingType ?? null),
+    byCommunity: breakdown((e) => e.community),
+    byPropertyType: breakdown((e) => e.propertyType),
+    byAgent: breakdown((e) => e.agent || null),
   };
 }
 
-// ---------- insights (deterministic, derived from the mock dataset) ----------
+// ---------- insights (derived from real events) ----------
 
 export type Insight = { text: string; tone: "positive" | "negative" | "neutral" };
 
@@ -761,7 +715,7 @@ export function buildInsights(events: AnalyticsEvent[], prevEvents: AnalyticsEve
     }
   }
 
-  const properties = propertyPerformance(events).sort((a, b) => b.enquiries - a.enquiries);
+  const properties = propertyPerformance(events);
   if (properties[0]) {
     insights.push({ text: `${properties[0].property.title} is generating the highest enquiry volume in this period (${properties[0].enquiries} enquiries).`, tone: "neutral" });
   }

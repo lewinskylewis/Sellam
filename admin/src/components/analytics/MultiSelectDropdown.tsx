@@ -44,7 +44,7 @@ export default function MultiSelectDropdown<T extends string>({
         onClick={() => setOpen((v) => !v)}
         className={`flex items-center gap-1.5 rounded-xl border px-3 py-2 text-sm ${selected.length ? "border-brand/40 bg-brand/5 text-ink" : "border-line bg-surface text-ink"}`}
       >
-        <span className="text-ink-soft">{label}:</span> {summary}
+        <span className="text-ink">{label}:</span> {summary}
         <ChevronDownIcon className={`h-3.5 w-3.5 text-ink-soft transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
       {open && (

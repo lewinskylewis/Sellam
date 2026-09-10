@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { AGENTS, COMMUNITIES } from "../../lib/leadsData";
-import { ANALYTICS_PROPERTIES, hasActiveFilters, type AnalyticsFilters, type ComparisonKey, type DateRangeKey, type ListingType, type PropertyType } from "../../lib/analyticsData";
+import { SOURCES, hasActiveFilters, type AnalyticsFilters, type ComparisonKey, type DateRangeKey } from "../../lib/analyticsData";
 import { CalendarIcon, CloseIcon, DownloadIcon, FilterIcon } from "../icons";
 import MultiSelectDropdown from "./MultiSelectDropdown";
 
@@ -19,10 +18,15 @@ const COMPARISON_OPTIONS: { value: ComparisonKey; label: string }[] = [
   { value: "previous_year", label: "Previous year" },
 ];
 
-const PROPERTY_TYPES: PropertyType[] = ["Apartment", "Villa", "Townhouse", "Penthouse", "Land", "Commercial", "Other"];
-const LISTING_TYPES: ListingType[] = ["Sale", "Rent", "Lease"];
-
 const selectClasses = "rounded-xl border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-brand focus:ring-1 focus:ring-brand";
+
+export type FilterOptions = {
+  properties: { id: string; title: string }[];
+  communities: string[];
+  propertyTypes: string[];
+  listingTypes: string[];
+  agents: string[];
+};
 
 export type ExportState = "idle" | "preparing" | "ready";
 
@@ -43,23 +47,25 @@ export function ExportButton({ state, onExport }: { state: ExportState; onExport
 function FilterControls({
   filters,
   onFiltersChange,
+  options,
 }: {
   filters: AnalyticsFilters;
   onFiltersChange: (next: AnalyticsFilters) => void;
+  options: FilterOptions;
 }) {
   return (
     <>
-      <MultiSelectDropdown label="Property" options={ANALYTICS_PROPERTIES.map((p) => ({ value: p.id, label: p.title }))} selected={filters.properties} onChange={(v) => onFiltersChange({ ...filters, properties: v })} />
-      <MultiSelectDropdown label="Community" options={COMMUNITIES.map((c) => ({ value: c, label: c }))} selected={filters.communities} onChange={(v) => onFiltersChange({ ...filters, communities: v })} />
-      <MultiSelectDropdown label="Type" options={PROPERTY_TYPES.map((t) => ({ value: t, label: t }))} selected={filters.propertyTypes} onChange={(v) => onFiltersChange({ ...filters, propertyTypes: v })} />
-      <MultiSelectDropdown label="Listing" options={LISTING_TYPES.map((t) => ({ value: t, label: t }))} selected={filters.listingTypes} onChange={(v) => onFiltersChange({ ...filters, listingTypes: v })} />
+      <MultiSelectDropdown label="Property" options={options.properties.map((p) => ({ value: p.id, label: p.title }))} selected={filters.properties} onChange={(v) => onFiltersChange({ ...filters, properties: v })} />
+      <MultiSelectDropdown label="Community" options={options.communities.map((c) => ({ value: c, label: c }))} selected={filters.communities} onChange={(v) => onFiltersChange({ ...filters, communities: v })} />
+      <MultiSelectDropdown label="Type" options={options.propertyTypes.map((t) => ({ value: t, label: t }))} selected={filters.propertyTypes} onChange={(v) => onFiltersChange({ ...filters, propertyTypes: v })} />
+      <MultiSelectDropdown label="Listing" options={options.listingTypes.map((t) => ({ value: t, label: t }))} selected={filters.listingTypes} onChange={(v) => onFiltersChange({ ...filters, listingTypes: v })} />
       <MultiSelectDropdown
         label="Source"
-        options={["Website", "Enquiry Form", "WhatsApp", "Phone", "Referral", "Social Media", "Walk-in", "Other"].map((s) => ({ value: s, label: s }))}
+        options={SOURCES.map((s) => ({ value: s, label: s }))}
         selected={filters.sources}
         onChange={(v) => onFiltersChange({ ...filters, sources: v as AnalyticsFilters["sources"] })}
       />
-      <MultiSelectDropdown label="Agent" options={AGENTS.map((a) => ({ value: a, label: a }))} selected={filters.agents} onChange={(v) => onFiltersChange({ ...filters, agents: v })} />
+      <MultiSelectDropdown label="Agent" options={options.agents.map((a) => ({ value: a, label: a }))} selected={filters.agents} onChange={(v) => onFiltersChange({ ...filters, agents: v })} />
     </>
   );
 }
@@ -77,6 +83,7 @@ export default function FiltersBar({
   exportState,
   onExport,
   rangeLabel,
+  options,
 }: {
   dateRangeKey: DateRangeKey;
   onDateRangeKey: (v: DateRangeKey) => void;
@@ -90,6 +97,7 @@ export default function FiltersBar({
   exportState: ExportState;
   onExport: () => void;
   rangeLabel: string;
+  options: FilterOptions;
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const active = hasActiveFilters(filters);
@@ -103,7 +111,7 @@ export default function FiltersBar({
               key={opt.value}
               type="button"
               onClick={() => onDateRangeKey(opt.value)}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${dateRangeKey === opt.value ? "bg-brand text-white" : "text-ink-soft hover:text-ink"}`}
+              className={`rounded-lg px-3 py-1.5 text-sm transition-colors ${dateRangeKey === opt.value ? "bg-brand text-white font-bold underline underline-offset-2" : "text-ink font-medium hover:text-brand"}`}
             >
               {opt.label}
             </button>
@@ -114,7 +122,7 @@ export default function FiltersBar({
           <div className="flex items-center gap-1.5">
             <CalendarIcon className="h-4 w-4 text-ink-soft" />
             <input type="date" value={customRange.start} onChange={(e) => onCustomRange({ ...customRange, start: e.target.value })} className={selectClasses} />
-            <span className="text-ink-soft">–</span>
+            <span className="text-ink">–</span>
             <input type="date" value={customRange.end} onChange={(e) => onCustomRange({ ...customRange, end: e.target.value })} className={selectClasses} />
           </div>
         )}
@@ -129,10 +137,10 @@ export default function FiltersBar({
 
         <div className="mx-1 h-6 w-px bg-line" />
 
-        <FilterControls filters={filters} onFiltersChange={onFiltersChange} />
+        <FilterControls filters={filters} onFiltersChange={onFiltersChange} options={options} />
 
         {active && (
-          <button type="button" onClick={onClearFilters} className="text-xs font-medium text-ink-soft underline decoration-line underline-offset-2 hover:text-brand">
+          <button type="button" onClick={onClearFilters} className="text-xs font-medium text-ink underline decoration-line underline-offset-2 hover:text-brand">
             Clear Filters
           </button>
         )}
@@ -150,7 +158,7 @@ export default function FiltersBar({
               key={opt.value}
               type="button"
               onClick={() => onDateRangeKey(opt.value)}
-              className={`shrink-0 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors ${dateRangeKey === opt.value ? "bg-brand text-white" : "text-ink-soft"}`}
+              className={`shrink-0 rounded-lg px-2.5 py-1.5 text-xs transition-colors ${dateRangeKey === opt.value ? "bg-brand text-white font-bold underline underline-offset-2" : "text-ink font-medium"}`}
             >
               {opt.label}
             </button>
@@ -162,7 +170,7 @@ export default function FiltersBar({
         </button>
       </div>
 
-      <p className="mt-2 text-xs text-ink-soft">
+      <p className="mt-2 text-xs text-ink">
         Showing <span className="font-medium text-ink">{rangeLabel}</span> · comparing to {COMPARISON_OPTIONS.find((o) => o.value === comparisonKey)?.label.toLowerCase()}
       </p>
 
@@ -195,7 +203,7 @@ export default function FiltersBar({
                 </div>
               )}
               <div className="flex flex-wrap gap-2">
-                <FilterControls filters={filters} onFiltersChange={onFiltersChange} />
+                <FilterControls filters={filters} onFiltersChange={onFiltersChange} options={options} />
               </div>
             </div>
 

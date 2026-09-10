@@ -1,12 +1,18 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  ANALYTICS_EVENTS,
+  distinctAgents,
+  distinctCommunities,
+  distinctListingTypes,
+  distinctProperties,
+  distinctPropertyTypes,
   emptyFilters,
+  fetchAnalyticsEvents,
   filterEvents,
   hasActiveFilters,
   resolveComparisonRange,
   resolveDateRange,
+  type AnalyticsEvent,
   type AnalyticsFilters,
   type ComparisonKey,
   type DateRangeKey,
@@ -48,40 +54,53 @@ export default function Analytics() {
   const [comparisonKey, setComparisonKey] = useState<ComparisonKey>("previous_period");
   const [filters, setFilters] = useState<AnalyticsFilters>(emptyFilters());
 
+  const [allEvents, setAllEvents] = useState<AnalyticsEvent[] | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [exportState, setExportState] = useState<ExportState>("idle");
-  const loadToken = useRef(0);
 
   const range = useMemo(() => resolveDateRange(dateRangeKey, customRange), [dateRangeKey, customRange]);
   const comparisonRange = useMemo(() => resolveComparisonRange(range, comparisonKey), [range, comparisonKey]);
   const comparisonLabel = comparisonKey === "previous_period" ? "Previous period" : comparisonKey === "previous_month" ? "Previous month" : "Previous year";
 
   function runLoad() {
-    const token = ++loadToken.current;
+    let cancelled = false;
     setLoading(true);
-    setError(false);
-    const delay = 420 + Math.random() * 380;
-    window.setTimeout(() => {
-      if (loadToken.current !== token) return;
-      // Small simulated failure chance, purely to demonstrate the error/retry
-      // state — this is mock/local only, nothing actually failed.
-      if (Math.random() < 0.1) {
-        setError(true);
-        setLoading(false);
-        return;
-      }
-      setLoading(false);
-    }, delay);
+    setError(null);
+    fetchAnalyticsEvents()
+      .then((events) => {
+        if (cancelled) return;
+        setAllEvents(events);
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        setError(err?.message ?? "Unable to load analytics data.");
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }
 
   useEffect(() => {
-    runLoad();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dateRangeKey, customRange.start, customRange.end, comparisonKey, JSON.stringify(filters)]);
+    return runLoad();
+  }, []);
 
-  const events = useMemo(() => filterEvents(ANALYTICS_EVENTS, range, filters), [range, filters]);
-  const prevEvents = useMemo(() => filterEvents(ANALYTICS_EVENTS, comparisonRange, filters), [comparisonRange, filters]);
+  const events = useMemo(() => filterEvents(allEvents ?? [], range, filters), [allEvents, range, filters]);
+  const prevEvents = useMemo(() => filterEvents(allEvents ?? [], comparisonRange, filters), [allEvents, comparisonRange, filters]);
+
+  const filterOptions = useMemo(
+    () => ({
+      properties: distinctProperties(allEvents ?? []),
+      communities: distinctCommunities(allEvents ?? []),
+      propertyTypes: distinctPropertyTypes(allEvents ?? []),
+      listingTypes: distinctListingTypes(allEvents ?? []),
+      agents: distinctAgents(allEvents ?? []),
+    }),
+    [allEvents],
+  );
 
   function handleExport() {
     setExportState("preparing");
@@ -114,7 +133,7 @@ export default function Analytics() {
       case "response":
         return <ResponseActivitySection events={events} range={range} loading={loading} />;
       case "website":
-        return <WebsitePerformanceSection events={events} range={range} loading={loading} />;
+        return <WebsitePerformanceSection />;
       case "commercial":
         return <CommercialPerformanceSection events={events} loading={loading} />;
     }
@@ -125,7 +144,7 @@ export default function Analytics() {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Analytics</h1>
-          <p className="mt-1 text-ink-soft">Understand Sellam's performance, demand and conversion across the business.</p>
+          <p className="mt-1 text-ink">Understand Sellam's performance, demand and conversion across the business.</p>
         </div>
       </div>
 
@@ -142,6 +161,7 @@ export default function Analytics() {
         exportState={exportState}
         onExport={handleExport}
         rangeLabel={rangeLabel}
+        options={filterOptions}
       />
 
       <div className="mt-5 flex gap-1.5 overflow-x-auto border-b border-line pb-px">
@@ -150,8 +170,8 @@ export default function Analytics() {
             key={s.id}
             type="button"
             onClick={() => setSection(s.id)}
-            className={`shrink-0 rounded-t-lg border-b-2 px-3.5 py-2.5 text-sm font-medium whitespace-nowrap transition-colors ${
-              section === s.id ? "border-brand text-ink" : "border-transparent text-ink-soft hover:text-ink"
+            className={`shrink-0 rounded-t-lg border-b-2 px-3.5 py-2.5 text-sm whitespace-nowrap transition-colors ${
+              section === s.id ? "border-brand text-ink font-bold underline underline-offset-4" : "border-transparent text-ink font-medium hover:text-brand"
             }`}
           >
             {s.label}
@@ -159,10 +179,12 @@ export default function Analytics() {
         ))}
       </div>
 
+      {error && <p className="mt-4 rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">Unable to load analytics data. {error}</p>}
+
       <div className="mt-5">{renderSection()}</div>
 
-      {!loading && !error && events.length === 0 && (
-        <p className="mt-3 text-center text-xs text-ink-soft">
+      {!loading && !error && section !== "website" && events.length === 0 && (
+        <p className="mt-3 text-center text-xs text-ink">
           No activity matches the selected filters. {hasActiveFilters(filters) && "Try clearing filters or widening the date range."}
         </p>
       )}
