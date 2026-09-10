@@ -14,7 +14,9 @@ export default function EmailSection({ value, onChange }: { value: Email; onChan
     <div className="divide-y divide-line">
       <section>
         <h4 className="mb-1 text-sm font-semibold text-ink">Sender Defaults</h4>
-        <p className="mb-2 text-xs text-ink-soft">Configuration only — no email provider is connected from this screen.</p>
+        <p className="mb-2 text-xs text-ink-soft">
+          Configuration only — saved here, but does not change what the Messages module actually sends from. Outgoing mail always sends from sales@sellamre.com or office@sellamre.com, whichever mailbox owns the conversation.
+        </p>
         <Field label="Sender name">
           <TextInput value={sender.name} onChange={(e) => onChange({ ...value, sender: { ...sender, name: e.target.value } })} />
         </Field>

@@ -9,3 +9,9 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+// Injected by vite.config.ts's `define` from Vercel's build-time env vars —
+// see SystemSection.tsx.
+declare const __SELLAM_BUILD_SHA__: string | null;
+declare const __SELLAM_BUILD_ENV__: string | null;
+declare const __SELLAM_BUILD_TIME__: string;

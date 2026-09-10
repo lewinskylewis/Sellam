@@ -1,7 +1,11 @@
-// Local-only mock settings for the Settings module. No Supabase, no API
-// calls — every value here is UI state, persisted at most to localStorage
-// as a demonstration of "save" actually sticking across a reload. Nothing
-// in this file talks to a backend.
+// Settings module: shape, defaults, and pure (non-Supabase) helpers. Actual
+// persistence lives in two places:
+//   - admin/src/lib/adminSettings.ts — Supabase-backed, for every category
+//     except appearance/accessibility (see PERSISTED_CATEGORIES below).
+//   - loadLocalSettings/saveLocalSettings in this file — localStorage-backed,
+//     for appearance/accessibility only, which are genuinely per-browser/
+//     per-device UI chrome and have no reason to sync across devices.
+// This file itself makes no Supabase calls.
 
 export type NotificationChannelPref = {
   key: string;
@@ -30,7 +34,9 @@ export type SettingsState = {
     };
     branding: {
       logoUploaded: boolean;
+      logoUrl: string | null;
       faviconUploaded: boolean;
+      faviconUrl: string | null;
       previewMode: "light" | "dark";
     };
     regional: {
@@ -150,7 +156,7 @@ export const DEFAULT_SETTINGS: SettingsState = {
       city: "Nairobi",
       country: "Kenya",
     },
-    branding: { logoUploaded: true, faviconUploaded: true, previewMode: "light" },
+    branding: { logoUploaded: false, logoUrl: null, faviconUploaded: false, faviconUrl: null, previewMode: "light" },
     regional: {
       country: "Kenya",
       currency: "KES",
@@ -377,26 +383,93 @@ export const SETTINGS_SEARCH_INDEX: SearchableField[] = [
   { category: "system", label: "Local storage status" },
 ];
 
+// ---------- category split: what's Supabase-backed vs. device-local ----------
+
+// Appearance/Accessibility are genuine per-browser/per-device UI chrome
+// (theme, font size, sidebar state) with no reason to sync across devices —
+// kept local rather than forced into Supabase for consistency's sake.
+// "system" isn't in this list because it isn't part of SettingsState at all
+// (SystemSection is read-only, derived live — nothing to persist).
+export const LOCAL_ONLY_CATEGORIES = ["appearance", "accessibility"] as const;
+export type LocalOnlyCategory = (typeof LOCAL_ONLY_CATEGORIES)[number];
+export type PersistedCategory = Exclude<keyof SettingsState, LocalOnlyCategory>;
+export type LocalSettings = Pick<SettingsState, LocalOnlyCategory>;
+export type PersistedSettings = Pick<SettingsState, PersistedCategory>;
+
+export const PERSISTED_CATEGORIES = (Object.keys(DEFAULT_SETTINGS) as (keyof SettingsState)[]).filter(
+  (k): k is PersistedCategory => !(LOCAL_ONLY_CATEGORIES as readonly string[]).includes(k),
+);
+
+export function pickPersisted(state: SettingsState): PersistedSettings {
+  const out = {} as PersistedSettings;
+  for (const key of PERSISTED_CATEGORIES) {
+    (out as Record<string, unknown>)[key] = state[key];
+  }
+  return out;
+}
+
+function isPlainObject(v: unknown): v is Record<string, unknown> {
+  return typeof v === "object" && v !== null && !Array.isArray(v);
+}
+
+// Deep-merges `incoming` over `defaults`, recursing into plain objects,
+// replacing arrays wholesale when `incoming` provides one (arrays here —
+// notifications.dashboard, email.communication — are always written back in
+// full by the UI, never partially), and falling back to the default value
+// whenever `incoming` is missing, malformed, or type-mismatched. This is
+// what keeps a partial/older object (from Supabase or localStorage) from
+// ever losing a newly-added default field or crashing the UI on a
+// corrupted value.
+function deepMergeDefaults<T>(defaults: T, incoming: unknown): T {
+  if (Array.isArray(defaults)) {
+    return (Array.isArray(incoming) ? incoming : defaults) as T;
+  }
+  if (isPlainObject(defaults)) {
+    if (!isPlainObject(incoming)) return defaults;
+    const result: Record<string, unknown> = { ...defaults };
+    for (const key of Object.keys(defaults)) {
+      result[key] = deepMergeDefaults(defaults[key], incoming[key]);
+    }
+    return result as T;
+  }
+  // primitive default — accept incoming only if it's a matching, defined type
+  return incoming !== undefined && incoming !== null && typeof incoming === typeof defaults ? (incoming as T) : defaults;
+}
+
+// Merges an arbitrary (possibly partial/corrupt) object against the full
+// DEFAULT_SETTINGS shape — safe to call with anything from Supabase or
+// localStorage.
+export function mergeWithDefaults(incoming: unknown): SettingsState {
+  return deepMergeDefaults(DEFAULT_SETTINGS, isPlainObject(incoming) ? incoming : {});
+}
+
+// ---------- local-only persistence (appearance + accessibility) ----------
+
 export const STORAGE_KEY = "sellam-admin-settings-v1";
 
-export function loadStoredSettings(): SettingsState {
+// Reads whatever raw object is stored under STORAGE_KEY, unmerged — used
+// both by loadLocalSettings (below) and by the one-time Supabase migration
+// in adminSettings-consuming code (Settings.tsx), which needs the *whole*
+// legacy blob (every category, from before this module was split), not
+// just the local-only slice.
+export function readRawLocalStorageBlob(): unknown {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return DEFAULT_SETTINGS;
-    const parsed = JSON.parse(raw);
-    // Shallow-merge per top-level category so a future new field added to
-    // DEFAULT_SETTINGS doesn't get silently lost for a user with an older
-    // stored blob — this is a demo/local convenience, not a migration system.
-    return { ...DEFAULT_SETTINGS, ...parsed };
+    return raw ? JSON.parse(raw) : null;
   } catch {
-    return DEFAULT_SETTINGS;
+    return null;
   }
 }
 
-export function saveStoredSettings(state: SettingsState) {
+export function loadLocalSettings(): LocalSettings {
+  const merged = mergeWithDefaults(readRawLocalStorageBlob());
+  return { appearance: merged.appearance, accessibility: merged.accessibility };
+}
+
+export function saveLocalSettings(local: LocalSettings) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(local));
   } catch {
-    // best-effort only — local demo persistence, not a real data store
+    // best-effort — device-local convenience only
   }
 }

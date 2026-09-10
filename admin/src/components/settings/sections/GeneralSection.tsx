@@ -1,7 +1,70 @@
+import { useRef, useState } from "react";
 import { Field, RadioCards, Select, TextArea, TextInput, Toggle } from "../Controls";
 import type { SettingsState } from "../../../lib/settingsDefaults";
+import { MAX_FAVICON_BYTES, MAX_LOGO_BYTES, uploadSiteAsset, validateSiteAssetFile } from "../../../lib/siteAssetsStorage";
 
 type General = SettingsState["general"];
+
+function AssetUploader({
+  label,
+  currentUrl,
+  maxBytes,
+  previewClassName,
+  placeholder,
+  onUploaded,
+}: {
+  label: string;
+  currentUrl: string | null;
+  maxBytes: number;
+  previewClassName: string;
+  placeholder: string;
+  onUploaded: (url: string) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleFile(file: File | undefined) {
+    if (!file) return;
+    setError(null);
+    const validationError = validateSiteAssetFile(file, maxBytes);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+    setUploading(true);
+    try {
+      const kind = label.toLowerCase().includes("favicon") ? "favicon" : "logo";
+      const { publicUrl } = await uploadSiteAsset(kind, file);
+      onUploaded(publicUrl);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed.");
+    } finally {
+      setUploading(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  }
+
+  return (
+    <div>
+      <div className="flex items-center gap-3">
+        <div className={`flex items-center justify-center overflow-hidden rounded-xl border border-line bg-paper text-ink-soft ${previewClassName}`}>
+          {currentUrl ? <img src={currentUrl} alt={label} className="h-full w-full object-contain" /> : <span className="text-[10px]">{placeholder}</span>}
+        </div>
+        <button
+          type="button"
+          disabled={uploading}
+          onClick={() => inputRef.current?.click()}
+          className="rounded-lg border border-line px-3 py-1.5 text-sm font-medium text-ink hover:border-brand hover:text-brand disabled:opacity-60"
+        >
+          {uploading ? "Uploading…" : currentUrl ? "Replace" : "Upload"}
+        </button>
+        <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleFile(e.target.files?.[0])} />
+      </div>
+      {error && <p className="mt-1.5 text-xs text-red-600">{error}</p>}
+    </div>
+  );
+}
 
 export default function GeneralSection({ value, onChange }: { value: General; onChange: (next: General) => void }) {
   const { company, branding, regional, preferences } = value;
@@ -44,41 +107,41 @@ export default function GeneralSection({ value, onChange }: { value: General; on
 
       <section className="pt-6">
         <h4 className="mb-1 text-sm font-semibold text-ink">Branding</h4>
-        <Field label="Company logo" description="Used across the dashboard and outgoing email signatures.">
-          <div className="flex items-center gap-3">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-line bg-paper text-xs text-ink-soft">
-              {branding.logoUploaded ? "LOGO" : "None"}
-            </div>
-            <button type="button" className="rounded-lg border border-line px-3 py-1.5 text-sm font-medium text-ink hover:border-brand hover:text-brand">
-              Replace
-            </button>
-          </div>
+        <Field label="Company logo" description="Used across the dashboard. Remember to click Save changes to keep it.">
+          <AssetUploader
+            label="Company logo"
+            currentUrl={branding.logoUrl}
+            maxBytes={MAX_LOGO_BYTES}
+            previewClassName="h-14 w-14"
+            placeholder="None"
+            onUploaded={(url) => onChange({ ...value, branding: { ...branding, logoUrl: url, logoUploaded: true } })}
+          />
         </Field>
         <Field label="Favicon">
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md border border-line bg-paper text-[10px] text-ink-soft">
-              {branding.faviconUploaded ? "ICO" : "—"}
-            </div>
-            <button type="button" className="rounded-lg border border-line px-3 py-1.5 text-sm font-medium text-ink hover:border-brand hover:text-brand">
-              Replace
-            </button>
-          </div>
+          <AssetUploader
+            label="Favicon"
+            currentUrl={branding.faviconUrl}
+            maxBytes={MAX_FAVICON_BYTES}
+            previewClassName="h-8 w-8"
+            placeholder="—"
+            onUploaded={(url) => onChange({ ...value, branding: { ...branding, faviconUrl: url, faviconUploaded: true } })}
+          />
         </Field>
         <Field label="Brand preview" description="Preview how the logo appears on light and dark surfaces.">
           <div className="flex gap-3">
             <button
               type="button"
               onClick={() => onChange({ ...value, branding: { ...branding, previewMode: "light" } })}
-              className={`flex h-16 w-28 items-center justify-center rounded-lg border text-xs font-medium ${branding.previewMode === "light" ? "border-brand ring-1 ring-brand" : "border-line"} bg-white text-ink`}
+              className={`flex h-16 w-28 items-center justify-center overflow-hidden rounded-lg border text-xs font-medium ${branding.previewMode === "light" ? "border-brand ring-1 ring-brand" : "border-line"} bg-white text-ink`}
             >
-              Light
+              {branding.logoUrl ? <img src={branding.logoUrl} alt="Logo preview" className="h-10 w-24 object-contain" /> : "Light"}
             </button>
             <button
               type="button"
               onClick={() => onChange({ ...value, branding: { ...branding, previewMode: "dark" } })}
-              className={`flex h-16 w-28 items-center justify-center rounded-lg border text-xs font-medium ${branding.previewMode === "dark" ? "border-brand ring-1 ring-brand" : "border-line"} bg-ink text-white`}
+              className={`flex h-16 w-28 items-center justify-center overflow-hidden rounded-lg border text-xs font-medium ${branding.previewMode === "dark" ? "border-brand ring-1 ring-brand" : "border-line"} bg-ink text-white`}
             >
-              Dark
+              {branding.logoUrl ? <img src={branding.logoUrl} alt="Logo preview" className="h-10 w-24 object-contain" /> : "Dark"}
             </button>
           </div>
         </Field>

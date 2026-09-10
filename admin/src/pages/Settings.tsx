@@ -20,11 +20,15 @@ import {
   DEFAULT_SETTINGS,
   SETTINGS_CATEGORIES,
   SETTINGS_SEARCH_INDEX,
-  loadStoredSettings,
-  saveStoredSettings,
+  loadLocalSettings,
+  mergeWithDefaults,
+  pickPersisted,
+  readRawLocalStorageBlob,
+  saveLocalSettings,
   type SettingsCategoryId,
   type SettingsState,
 } from "../lib/settingsDefaults";
+import { errorMessage, fetchAdminSettingsRow, isMissingTableError, saveAdminSettingsRow } from "../lib/adminSettings";
 import GeneralSection from "../components/settings/sections/GeneralSection";
 import NotificationsSection from "../components/settings/sections/NotificationsSection";
 import EmailSection from "../components/settings/sections/EmailSection";
@@ -56,8 +60,8 @@ const CATEGORY_DESCRIPTIONS: Record<SettingsCategoryId, string> = {
   website: "Global defaults for how the public website presents itself.",
   propertyDefaults: "Starting defaults used when creating or editing a property.",
   enquiryLead: "Default behaviour for new enquiries, leads, and viewings.",
-  appearance: "Theme, accent colour, density, and sidebar style.",
-  accessibility: "Font size, motion, contrast, and confirmation preferences.",
+  appearance: "Theme, accent colour, density, and sidebar style. Stored on this device only.",
+  accessibility: "Font size, motion, contrast, and confirmation preferences. Stored on this device only.",
   privacy: "Activity retention and visibility, plus data controls.",
   security: "Password, two-factor authentication, and active sessions.",
   system: "Read-only application and environment information.",
@@ -67,10 +71,41 @@ function deepEqual(a: unknown, b: unknown) {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
+// Loads the full SettingsState: persisted categories from Supabase
+// (admin_settings), local-only categories (appearance/accessibility) from
+// localStorage. If the Supabase row has never been configured (empty
+// settings object — see the migration's seed), this is the first
+// authenticated load ever: any existing legacy localStorage blob (the old,
+// pre-Supabase full-SettingsState shape) is merged with defaults and saved
+// to Supabase once, becoming authoritative from then on. This never runs
+// again once the row has real content, so it can't repeatedly clobber
+// server settings with a stale local copy.
+async function loadSettings(): Promise<SettingsState> {
+  const row = await fetchAdminSettingsRow();
+  const persistedRaw = row?.settings;
+  const hasPersisted = persistedRaw && typeof persistedRaw === "object" && Object.keys(persistedRaw).length > 0;
+
+  const persisted = hasPersisted
+    ? pickPersisted(mergeWithDefaults(persistedRaw))
+    : await (async () => {
+        const legacy = readRawLocalStorageBlob();
+        const merged = pickPersisted(mergeWithDefaults(legacy));
+        await saveAdminSettingsRow(merged);
+        return merged;
+      })();
+
+  const local = loadLocalSettings();
+  return { ...persisted, ...local } as SettingsState;
+}
+
 export default function Settings() {
   const navigate = useNavigate();
-  const [saved, setSaved] = useState<SettingsState>(() => loadStoredSettings());
-  const [draft, setDraft] = useState<SettingsState>(saved);
+  const [saved, setSaved] = useState<SettingsState>(DEFAULT_SETTINGS);
+  const [draft, setDraft] = useState<SettingsState>(DEFAULT_SETTINGS);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<SettingsCategoryId>("general");
   const [mobileShowDetail, setMobileShowDetail] = useState(false);
   const [search, setSearch] = useState("");
@@ -78,10 +113,35 @@ export default function Settings() {
   const [toast, setToast] = useState<string | null>(null);
   const [resetConfirm, setResetConfirm] = useState<keyof SettingsState | null>(null);
   const [leaveTarget, setLeaveTarget] = useState<string | null>(null);
+  const loadToken = useRef(0);
 
   const dirty = useMemo(() => !deepEqual(saved, draft), [saved, draft]);
   const dirtyRef = useRef(dirty);
   dirtyRef.current = dirty;
+
+  function runLoad() {
+    const token = ++loadToken.current;
+    setLoading(true);
+    setLoadError(null);
+    loadSettings()
+      .then((state) => {
+        if (loadToken.current !== token) return;
+        setSaved(state);
+        setDraft(state);
+      })
+      .catch((err) => {
+        if (loadToken.current !== token) return;
+        setLoadError(isMissingTableError(err) ? "Settings storage isn't set up yet — ask an administrator to run the pending database migration." : errorMessage(err, "Unable to load settings."));
+      })
+      .finally(() => {
+        if (loadToken.current === token) setLoading(false);
+      });
+  }
+
+  useEffect(() => {
+    runLoad();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Real browser-close/refresh protection — the only text a browser shows
   // here is its own native prompt, not this string, but returning a value
@@ -129,14 +189,27 @@ export default function Settings() {
     setDraft((prev) => ({ ...prev, [key]: next }));
   }
 
-  function handleSave() {
-    setSaved(draft);
-    saveStoredSettings(draft);
-    setToast("Changes saved successfully.");
+  async function handleSave() {
+    if (saving) return; // prevent duplicate submissions
+    setSaving(true);
+    setSaveError(null);
+    try {
+      await saveAdminSettingsRow(pickPersisted(draft));
+      saveLocalSettings({ appearance: draft.appearance, accessibility: draft.accessibility });
+      setSaved(draft);
+      setToast("Changes saved successfully.");
+    } catch (err) {
+      // Never falsely report success — saved/dirty state is untouched, so
+      // nothing the user typed is lost and the bottom bar stays visible.
+      setSaveError(isMissingTableError(err) ? "Settings storage isn't set up yet — ask an administrator to run the pending database migration." : errorMessage(err, "Failed to save changes."));
+    } finally {
+      setSaving(false);
+    }
   }
 
   function handleDiscard() {
     setDraft(saved);
+    setSaveError(null);
   }
 
   function handleResetCategory(id: keyof SettingsState) {
@@ -166,6 +239,15 @@ export default function Settings() {
         <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Settings</h1>
         <p className="mt-1 text-ink-soft">Manage your Sellam Dashboard preferences and configuration.</p>
       </div>
+
+      {loadError && (
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">
+          <span>Unable to load settings. {loadError}</span>
+          <button type="button" onClick={runLoad} className="shrink-0 rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-semibold text-red-700 hover:bg-red-50">
+            Retry
+          </button>
+        </div>
+      )}
 
       <div className="relative mt-5 max-w-md">
         <SearchIcon className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink-soft" />
@@ -259,34 +341,48 @@ export default function Settings() {
             )}
           </div>
 
-          {activeCategory === "general" && <GeneralSection value={draft.general} onChange={(v) => updateCategory("general", v)} />}
-          {activeCategory === "notifications" && <NotificationsSection value={draft.notifications} onChange={(v) => updateCategory("notifications", v)} />}
-          {activeCategory === "email" && <EmailSection value={draft.email} onChange={(v) => updateCategory("email", v)} />}
-          {activeCategory === "website" && <WebsiteSection value={draft.website} onChange={(v) => updateCategory("website", v)} />}
-          {activeCategory === "propertyDefaults" && <PropertyDefaultsSection value={draft.propertyDefaults} onChange={(v) => updateCategory("propertyDefaults", v)} />}
-          {activeCategory === "enquiryLead" && <EnquiryLeadSection value={draft.enquiryLead} onChange={(v) => updateCategory("enquiryLead", v)} />}
-          {activeCategory === "appearance" && <AppearanceSection value={draft.appearance} onChange={(v) => updateCategory("appearance", v)} />}
-          {activeCategory === "accessibility" && <AccessibilitySection value={draft.accessibility} onChange={(v) => updateCategory("accessibility", v)} />}
-          {activeCategory === "privacy" && (
-            <PrivacySection
-              value={draft.privacy}
-              onChange={(v) => updateCategory("privacy", v)}
-              onExport={() => {
-                const blob = new Blob([JSON.stringify(saved, null, 2)], { type: "application/json" });
-                const url = URL.createObjectURL(blob);
-                window.open(url, "_blank");
-                setTimeout(() => URL.revokeObjectURL(url), 10000);
-              }}
-              onResetPreferences={() => {
-                setDraft(DEFAULT_SETTINGS);
-                setSaved(DEFAULT_SETTINGS);
-                saveStoredSettings(DEFAULT_SETTINGS);
-                setToast("Dashboard preferences reset to defaults.");
-              }}
-            />
+          {loading ? (
+            <p className="py-10 text-center text-sm text-ink-soft">Loading settings…</p>
+          ) : (
+            <>
+              {activeCategory === "general" && <GeneralSection value={draft.general} onChange={(v) => updateCategory("general", v)} />}
+              {activeCategory === "notifications" && <NotificationsSection value={draft.notifications} onChange={(v) => updateCategory("notifications", v)} />}
+              {activeCategory === "email" && <EmailSection value={draft.email} onChange={(v) => updateCategory("email", v)} />}
+              {activeCategory === "website" && <WebsiteSection value={draft.website} onChange={(v) => updateCategory("website", v)} />}
+              {activeCategory === "propertyDefaults" && <PropertyDefaultsSection value={draft.propertyDefaults} onChange={(v) => updateCategory("propertyDefaults", v)} />}
+              {activeCategory === "enquiryLead" && <EnquiryLeadSection value={draft.enquiryLead} onChange={(v) => updateCategory("enquiryLead", v)} />}
+              {activeCategory === "appearance" && <AppearanceSection value={draft.appearance} onChange={(v) => updateCategory("appearance", v)} />}
+              {activeCategory === "accessibility" && <AccessibilitySection value={draft.accessibility} onChange={(v) => updateCategory("accessibility", v)} />}
+              {activeCategory === "privacy" && (
+                <PrivacySection
+                  value={draft.privacy}
+                  onChange={(v) => updateCategory("privacy", v)}
+                  onExport={() => {
+                    const blob = new Blob([JSON.stringify(saved, null, 2)], { type: "application/json" });
+                    const url = URL.createObjectURL(blob);
+                    window.open(url, "_blank");
+                    setTimeout(() => URL.revokeObjectURL(url), 10000);
+                  }}
+                  onResetPreferences={() => {
+                    // Scoped to the local-only categories (appearance,
+                    // accessibility) — matches this action's own confirm-modal
+                    // wording ("This only affects local preferences on this
+                    // device"). Applies immediately per its existing UX (the
+                    // confirm dialog is the explicit confirmation), same as
+                    // before — it just no longer touches account-wide
+                    // Supabase-backed settings.
+                    const resetLocal = { appearance: DEFAULT_SETTINGS.appearance, accessibility: DEFAULT_SETTINGS.accessibility };
+                    setDraft((prev) => ({ ...prev, ...resetLocal }));
+                    setSaved((prev) => ({ ...prev, ...resetLocal }));
+                    saveLocalSettings(resetLocal);
+                    setToast("Local dashboard preferences reset to defaults.");
+                  }}
+                />
+              )}
+              {activeCategory === "security" && <SecuritySection value={draft.security} onChange={(v) => updateCategory("security", v)} />}
+              {activeCategory === "system" && <SystemSection />}
+            </>
           )}
-          {activeCategory === "security" && <SecuritySection value={draft.security} onChange={(v) => updateCategory("security", v)} />}
-          {activeCategory === "system" && <SystemSection />}
         </div>
       </div>
 
@@ -333,16 +429,19 @@ export default function Settings() {
         </div>
       )}
 
-      {dirty && (
+      {dirty && !loading && (
         <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 backdrop-blur">
           <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-3 px-5 py-3 md:px-10">
-            <p className="text-sm font-medium text-ink">Unsaved changes</p>
+            <div>
+              <p className="text-sm font-medium text-ink">Unsaved changes</p>
+              {saveError && <p className="text-xs font-medium text-red-600">{saveError}</p>}
+            </div>
             <div className="flex gap-2">
-              <button type="button" onClick={handleDiscard} className="rounded-lg border border-line px-4 py-2 text-sm font-medium text-ink hover:bg-paper">
+              <button type="button" onClick={handleDiscard} disabled={saving} className="rounded-lg border border-line px-4 py-2 text-sm font-medium text-ink hover:bg-paper disabled:opacity-50">
                 Discard changes
               </button>
-              <button type="button" onClick={handleSave} className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:opacity-90">
-                Save changes
+              <button type="button" onClick={handleSave} disabled={saving} className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-60">
+                {saving ? "Saving…" : "Save changes"}
               </button>
             </div>
           </div>
