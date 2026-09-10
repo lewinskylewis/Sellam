@@ -127,6 +127,19 @@
       .replace(/>/g, "&gt;");
   }
 
+  // Listing cards display their image at a fraction of the source photo's
+  // resolution (see .property-card's ~220-284px image column in
+  // premium-properties.css) — route through Vercel's Image Optimization so
+  // the browser downloads a card-sized file instead of the full-resolution
+  // original. Property detail pages read the same `image` field directly
+  // (property-detail.js), unaffected, so full quality is preserved there.
+  function cardImageSrc(image) {
+    if (window.SellamImageOptim) {
+      return window.SellamImageOptim.url(image, 640, 70);
+    }
+    return image;
+  }
+
   // Listing cards show which bedroom counts this property comes in, never
   // bathrooms (bathrooms are a detail-page-only field — see property.html /
   // property-detail.js). A property with more than one floor plan (`units`,
@@ -214,7 +227,9 @@
         ' data-bedrooms="' + escapeAttr(bedroomsAttr) + '"' +
         ' data-bathrooms="' + escapeAttr(bathroomsAttr) + '">' +
         '<a class="property-image" href="' + url + '">' +
-          '<img src="' + escapeAttr(p.image) + '" alt="' + title + '" loading="lazy" decoding="async">' +
+          '<img src="' + escapeAttr(cardImageSrc(p.image)) + '"' +
+            ' onerror="this.onerror=null;this.src=\'' + escapeAttr(p.image).replace(/'/g, "\\'") + '\';"' +
+            ' alt="' + title + '" loading="lazy" decoding="async">' +
         "</a>" +
         '<div class="property-info">' +
           "<h2>" + p.title + "</h2>" +

@@ -19,53 +19,63 @@
    { id, sections } shape. If that fetch failed or returned nothing (table
    not migrated yet, RLS not applied, no active slides), this hardcoded set
    is used instead, so the homepage never ships with an empty hero. */
+// Hero-only WebP performance test (quality-first, ~q87 pre-converted — see
+// image-optimize.js's .webp bypass below): these six properties' images now
+// point at pre-converted WebP copies uploaded to the existing hero-images
+// Supabase Storage bucket, under fallback-webp-test/. Originals are
+// untouched at their assets/images/ paths; nothing else on the site
+// references these Storage objects. Property/community/listing images are
+// completely unaffected — this swap only touches this fallback array.
+const HERO_WEBP_BASE =
+  "https://uvqcpqefrygodfrpaynq.supabase.co/storage/v1/object/public/hero-images/fallback-webp-test/";
+
 const FALLBACK_HERO_PROPERTIES = [
   {
     id: "sl-001",
     sections: [
-      { label: "Gym", image: "assets/images/Silva Gigiri Residences Gym (2).jpeg" },
-      { label: "Living Room", image: "assets/images/Silva Gigiri Residences Living room.jpeg" },
-      { label: "Kitchen", image: "assets/images/Silva Gigiri Residences Kitchen.jpeg" }
+      { label: "Gym", image: HERO_WEBP_BASE + "Silva%20Gigiri%20Residences%20Gym%20(2).webp" },
+      { label: "Living Room", image: HERO_WEBP_BASE + "Silva%20Gigiri%20Residences%20Living%20room.webp" },
+      { label: "Kitchen", image: HERO_WEBP_BASE + "Silva%20Gigiri%20Residences%20Kitchen.webp" }
     ]
   },
   {
     id: "sl-002",
     sections: [
-      { label: "Exterior", image: "assets/images/Cheval Riverside Exterior (3).jpeg" },
-      { label: "Swimming Pool", image: "assets/images/Cheval Riverside Swimming pool.jpeg" },
-      { label: "Outdoor Living", image: "assets/images/Cheval Riverside Outdoor.jpeg" }
+      { label: "Exterior", image: HERO_WEBP_BASE + "Cheval%20Riverside%20Exterior%20(3).webp" },
+      { label: "Swimming Pool", image: HERO_WEBP_BASE + "Cheval%20Riverside%20Swimming%20pool.webp" },
+      { label: "Outdoor Living", image: HERO_WEBP_BASE + "Cheval%20Riverside%20Outdoor.webp" }
     ]
   },
   {
     id: "sl-003",
     sections: [
-      { label: "Exterior", image: "assets/images/Diplomat Residences Exterior (2).jpeg" },
-      { label: "Living Room", image: "assets/images/Diplomat Residences Living.jpeg" },
-      { label: "Kitchen", image: "assets/images/Diplomat Residences Kitchen.jpeg" }
+      { label: "Exterior", image: HERO_WEBP_BASE + "Diplomat%20Residences%20Exterior%20(2).webp" },
+      { label: "Living Room", image: HERO_WEBP_BASE + "Diplomat%20Residences%20Living.webp" },
+      { label: "Kitchen", image: HERO_WEBP_BASE + "Diplomat%20Residences%20Kitchen.webp" }
     ]
   },
   {
     id: "sl-004",
     sections: [
-      { label: "Exterior", image: "assets/images/Gaia Brookside Forest Exterior (6).jpeg" },
-      { label: "Living Room", image: "assets/images/Gaia Brookside Forest Living Room.jpeg" },
-      { label: "Dining", image: "assets/images/Gaia Brookside Forest Dinning.jpeg" }
+      { label: "Exterior", image: HERO_WEBP_BASE + "Gaia%20Brookside%20Forest%20Exterior%20(6).webp" },
+      { label: "Living Room", image: HERO_WEBP_BASE + "Gaia%20Brookside%20Forest%20Living%20Room.webp" },
+      { label: "Dining", image: HERO_WEBP_BASE + "Gaia%20Brookside%20Forest%20Dinning.webp" }
     ]
   },
   {
     id: "sl-005",
     sections: [
-      { label: "Exterior", image: "assets/images/Hephé Palace Exterior.jpeg" },
-      { label: "Living Room", image: "assets/images/Hephé Palace Living room.jpeg" },
-      { label: "Bedroom", image: "assets/images/Hephé Palace Bedroom.jpeg" }
+      { label: "Exterior", image: HERO_WEBP_BASE + "Hephe%20Palace%20Exterior.webp" },
+      { label: "Living Room", image: HERO_WEBP_BASE + "Hephe%20Palace%20Living%20room.webp" },
+      { label: "Bedroom", image: HERO_WEBP_BASE + "Hephe%20Palace%20Bedroom.webp" }
     ]
   },
   {
     id: "sl-006",
     sections: [
-      { label: "Exterior", image: "assets/images/Amethyst Residences Outdoors.jpeg" },
-      { label: "Living Room", image: "assets/images/Amethyst Residences Living Room (2).jpeg" },
-      { label: "Interior", image: "assets/images/Amethyst Residences (10).jpeg" }
+      { label: "Exterior", image: HERO_WEBP_BASE + "Amethyst%20Residences%20Outdoors.webp" },
+      { label: "Living Room", image: HERO_WEBP_BASE + "Amethyst%20Residences%20Living%20Room%20(2).webp" },
+      { label: "Interior", image: HERO_WEBP_BASE + "Amethyst%20Residences%20(10).webp" }
     ]
   }
 ];
@@ -227,8 +237,46 @@ let activeBgLayer = heroCurrent;
 let inactiveBgLayer = heroNext;
 let heroTimer;
 
+// Full-bleed background, so its requested width tracks viewport width
+// rather than a fixed thumbnail size — capped well below the multi-megabyte
+// originals these photos ship as, at a size a full-bleed photo backdrop
+// doesn't need retina-sharp precision at anyway.
+function heroBackgroundWidth() {
+  const vw = window.innerWidth || 1280;
+  if (vw <= 640) return 900;
+  if (vw <= 1024) return 1400;
+  return 1920;
+}
+
+// Pre-converted WebP (see FALLBACK_HERO_PROPERTIES above) is served as-is —
+// it's already a deliberately quality-tuned, appropriately-sized asset, so
+// routing it through the Vercel optimizer too would just be a second,
+// redundant transform and would confound this test's before/after
+// comparison. Anything else (a live Hero Manager slide's JPEG, etc.) is
+// unaffected and still goes through the optimizer exactly as before.
+function isPreconvertedWebp(src) {
+  return /\.webp(\?|$)/i.test(src);
+}
+
 function setBackgroundImage(layer, src) {
-  layer.style.backgroundImage = `url("${src}")`;
+  if (!isPreconvertedWebp(src) && window.SellamImageOptim) {
+    window.SellamImageOptim.applyToBackground(layer, src, heroBackgroundWidth(), 75);
+  } else {
+    layer.style.backgroundImage = `url("${src}")`;
+  }
+}
+
+// Warms the browser cache for the next property's background a beat ahead
+// of when it's actually needed (the scheduled auto-advance, or a dot/swipe
+// jump), so that transition never has to wait on a fresh network request —
+// same optimized URL setBackgroundImage() will end up using for it.
+function preloadHeroBackground(propertyIndex) {
+  const entry = heroProperties[(propertyIndex + heroProperties.length) % heroProperties.length];
+  if (!entry || !entry.sections[0]) return;
+  const probe = new Image();
+  probe.src = !isPreconvertedWebp(entry.sections[0].image) && window.SellamImageOptim
+    ? window.SellamImageOptim.url(entry.sections[0].image, heroBackgroundWidth(), 75)
+    : entry.sections[0].image;
 }
 
 // Crossfades the big hero background to `src` — used by both a section
@@ -278,7 +326,11 @@ function renderTiles(property) {
   heroTiles.querySelectorAll(".hero-tile").forEach((button, index) => {
     const section = property.sections[index];
     const img = button.querySelector("img");
-    img.src = section.image;
+    if (!isPreconvertedWebp(section.image) && window.SellamImageOptim) {
+      window.SellamImageOptim.applyToImg(img, section.image, 300, 70);
+    } else {
+      img.src = section.image;
+    }
     img.alt = `${property.title} — ${section.label}`;
     button.setAttribute("aria-label", `Show ${property.title} — ${section.label}`);
   });
@@ -343,6 +395,7 @@ function setActiveProperty(propertyIndex) {
   updateActivePropertyUI();
   updateActiveSectionUI();
   swapBackground(property.sections[0].image);
+  preloadHeroBackground(nextIndex + 1);
 }
 
 function startHeroTimer() {
@@ -807,6 +860,7 @@ renderTiles(initialHeroProperty);
 updateCopy(initialHeroProperty);
 updateActivePropertyUI();
 updateActiveSectionUI();
+preloadHeroBackground(1);
 startHeroTimer();
 setupHeroSwipe();
 setupMobileMenu();
