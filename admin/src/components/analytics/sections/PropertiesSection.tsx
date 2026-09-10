@@ -105,7 +105,7 @@ function PropertyRow({ row, onNavigate }: { row: PropertyPerformance; onNavigate
     <tr className="border-b border-line/60 last:border-0 hover:bg-paper/40">
       <td className="px-3 py-2.5">
         <p className="font-medium text-ink">{row.property.title}</p>
-        <p className="text-xs text-ink-soft">{row.property.community} · {row.property.propertyType}</p>
+        <p className="text-xs text-ink-soft">{[row.property.community, row.property.propertyType].filter(Boolean).join(" · ") || "—"}</p>
       </td>
       <td className="px-3 py-2.5 text-right tabular-nums">{formatNumber(row.enquiries)}</td>
       <td className="px-3 py-2.5 text-right tabular-nums">{formatNumber(row.leads)}</td>

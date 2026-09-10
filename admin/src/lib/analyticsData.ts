@@ -24,9 +24,9 @@ export type FunnelStage = "Enquiry" | "Contacted" | "Qualified" | "Viewing" | "N
 export type AnalyticsProperty = {
   id: string;
   title: string;
-  community: string;
-  propertyType: PropertyType;
-  listingType: ListingType;
+  community: string | null;
+  propertyType: PropertyType | null;
+  listingType: ListingType | null;
 };
 
 export type AnalyticsEvent = {
@@ -71,7 +71,13 @@ type ContactRow = {
   archived: boolean;
 };
 
-function titleCase(s: string): string {
+// properties.property_type and properties.letting were both relaxed from
+// NOT NULL to nullable by 202608251500_amend_properties_international_support.sql
+// (international listings with no clean classification) — so a real row can
+// legitimately have either as null. Passing that straight to `.split()`
+// crashed in production; this returns null instead of fabricating a label.
+function titleCase(s: string | null): string | null {
+  if (!s) return null;
   return s
     .split(/[\s-]+/)
     .filter(Boolean)
@@ -302,7 +308,7 @@ export function filterEvents(events: AnalyticsEvent[], range: DateRange, filters
     if (filters.properties.length && !(e.property && filters.properties.includes(e.property.id))) return false;
     if (filters.communities.length && !(e.community && filters.communities.includes(e.community))) return false;
     if (filters.propertyTypes.length && !(e.propertyType && filters.propertyTypes.includes(e.propertyType))) return false;
-    if (filters.listingTypes.length && !(e.property && filters.listingTypes.includes(e.property.listingType))) return false;
+    if (filters.listingTypes.length && !(e.property?.listingType && filters.listingTypes.includes(e.property.listingType))) return false;
     if (filters.sources.length && !filters.sources.includes(e.source)) return false;
     if (filters.agents.length && !filters.agents.includes(e.agent)) return false;
     return true;
