@@ -54,10 +54,23 @@ async function supabaseRequest(config, path, init) {
 
 // Highest imap_uid already stored for this mailbox, so sync only asks IMAP
 // for messages newer than what's already in Supabase.
+//
+// Filtered by to_addresses (a property of the message itself, set correctly
+// at insert time from the message's own parsed To header) rather than by
+// email_conversations.mailbox (a property of the conversation, assigned
+// once at creation from whichever mailbox happened to create it). A
+// conversation can end up containing messages actually fetched from either
+// monitored mailbox — confirmed in production: office@ genuinely produced
+// UIDs 49-53, but they were stored under conversations tagged mailbox
+// "sales" from an earlier message in the same thread, making them invisible
+// to office@'s cursor (repeated re-scanning) while polluting sales@'s
+// cursor with UIDs from a different mailbox's number space (risking missed
+// sales@ mail). to_addresses is per-message and immune to this.
 async function highestKnownUid(config, mailbox) {
+  const address = MAILBOXES[mailbox];
   const rows = await supabaseRequest(
     config,
-    `/rest/v1/email_messages?select=imap_uid,email_conversations!inner(mailbox)&email_conversations.mailbox=eq.${mailbox}&direction=eq.inbound&imap_uid=not.is.null&order=imap_uid.desc&limit=1`,
+    `/rest/v1/email_messages?select=imap_uid&to_addresses=ilike.*${encodeURIComponent(address)}*&direction=eq.inbound&imap_uid=not.is.null&order=imap_uid.desc&limit=1`,
     { method: "GET" }
   );
   return rows && rows[0] ? Number(rows[0].imap_uid) : 0;
