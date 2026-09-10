@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Avatar from "../Avatar";
 import { formatMoney, formatRelative } from "./shared";
-import { PIPELINE_COLUMNS, fullName, type Contact, type Stage } from "../../lib/leadsData";
+import { PIPELINE_COLUMNS, fullName, type Contact, type Stage } from "../../lib/leads";
 
 export default function PipelineBoard({
   contacts,

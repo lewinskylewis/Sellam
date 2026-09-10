@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { Stage } from "../../lib/leadsData";
+import type { Stage } from "../../lib/leads";
 
 // Deliberately restrained — a subtle tint per stage, not a rainbow of CRM
 // pipeline colours.

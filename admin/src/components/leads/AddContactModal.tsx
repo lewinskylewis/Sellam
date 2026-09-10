@@ -1,14 +1,46 @@
 import { useState } from "react";
-import { AGENTS, COMMUNITIES, INTENTS, SOURCES, blankContact, type Contact, type Intent, type LeadSource } from "../../lib/leadsData";
+import { INTENTS, SOURCES, type Intent, type LeadSource, type NewContactInput } from "../../lib/leads";
 
 const inputClasses = "w-full rounded-lg border border-line bg-white px-3 py-2 text-sm text-ink outline-none focus:border-brand focus:ring-1 focus:ring-brand";
 const labelClasses = "mb-1 block text-xs font-medium text-ink-soft";
 
-export default function AddContactModal({ onClose, onCreate }: { onClose: () => void; onCreate: (contact: Contact) => void }) {
-  const [draft, setDraft] = useState<Contact>(() => blankContact());
-  const [errors, setErrors] = useState<Record<string, string>>({});
+function blank(defaultAgent: string): NewContactInput {
+  return {
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    source: "Website",
+    intent: "Buy",
+    budgetMin: null,
+    budgetMax: null,
+    currency: "KES",
+    preferredLocations: [],
+    propertyType: "",
+    assignedAgent: defaultAgent,
+    otherRequirements: "",
+  };
+}
 
-  function patch(fields: Partial<Contact>) {
+export default function AddContactModal({
+  agents,
+  communities,
+  defaultAgent,
+  onClose,
+  onCreate,
+}: {
+  agents: string[];
+  communities: string[];
+  defaultAgent: string;
+  onClose: () => void;
+  onCreate: (contact: NewContactInput) => Promise<void>;
+}) {
+  const [draft, setDraft] = useState<NewContactInput>(() => blank(defaultAgent));
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+
+  function patch(fields: Partial<NewContactInput>) {
     setDraft((prev) => ({ ...prev, ...fields }));
   }
 
@@ -19,14 +51,22 @@ export default function AddContactModal({ onClose, onCreate }: { onClose: () => 
     }));
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const nextErrors: Record<string, string> = {};
     if (!draft.firstName.trim()) nextErrors.firstName = "First name is required.";
     if (!draft.lastName.trim()) nextErrors.lastName = "Last name is required.";
     if (!draft.email.trim() && !draft.phone.trim()) nextErrors.contact = "Provide at least an email or phone number.";
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
-    onCreate(draft);
+
+    setSaving(true);
+    setSaveError(null);
+    try {
+      await onCreate(draft);
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : "Failed to add contact.");
+      setSaving(false);
+    }
   }
 
   return (
@@ -89,7 +129,8 @@ export default function AddContactModal({ onClose, onCreate }: { onClose: () => 
           <div className="col-span-2">
             <label className={labelClasses}>Preferred locations</label>
             <div className="flex flex-wrap gap-1.5">
-              {COMMUNITIES.map((loc) => (
+              {communities.length === 0 && <span className="text-xs text-ink-soft">No communities set up yet.</span>}
+              {communities.map((loc) => (
                 <button
                   key={loc}
                   type="button"
@@ -110,13 +151,18 @@ export default function AddContactModal({ onClose, onCreate }: { onClose: () => 
           </div>
           <div>
             <label className={labelClasses}>Assigned agent</label>
-            <select className={inputClasses} value={draft.assignedAgent} onChange={(e) => patch({ assignedAgent: e.target.value as Contact["assignedAgent"] })}>
-              {AGENTS.map((a) => (
-                <option key={a} value={a}>
-                  {a}
-                </option>
+            <input
+              list="lead-agents"
+              className={inputClasses}
+              value={draft.assignedAgent}
+              onChange={(e) => patch({ assignedAgent: e.target.value })}
+              placeholder="Agent name"
+            />
+            <datalist id="lead-agents">
+              {agents.map((a) => (
+                <option key={a} value={a} />
               ))}
-            </select>
+            </datalist>
           </div>
 
           <div className="col-span-2">
@@ -125,12 +171,14 @@ export default function AddContactModal({ onClose, onCreate }: { onClose: () => 
           </div>
         </div>
 
+        {saveError && <p className="mt-3 text-xs text-red-600">{saveError}</p>}
+
         <div className="mt-6 flex justify-end gap-2">
-          <button type="button" onClick={onClose} className="rounded-lg border border-line px-4 py-2 text-sm font-medium text-ink hover:bg-paper">
+          <button type="button" onClick={onClose} disabled={saving} className="rounded-lg border border-line px-4 py-2 text-sm font-medium text-ink hover:bg-paper disabled:opacity-50">
             Cancel
           </button>
-          <button type="button" onClick={handleSubmit} className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:opacity-90">
-            Add Contact
+          <button type="button" onClick={handleSubmit} disabled={saving} className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-60">
+            {saving ? "Adding…" : "Add Contact"}
           </button>
         </div>
       </div>

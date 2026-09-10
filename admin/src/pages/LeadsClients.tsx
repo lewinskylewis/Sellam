@@ -6,18 +6,22 @@ import { ConfirmDialog, EmptyState, StageBadge, Toast, TypeBadge, formatRelative
 import AddContactModal from "../components/leads/AddContactModal";
 import ContactProfile from "../components/leads/ContactProfile";
 import PipelineBoard from "../components/leads/PipelineBoard";
+import { useAuth, displayName } from "../lib/auth";
 import {
-  AGENTS,
   SOURCES,
+  archiveContact,
+  changeContactStage,
+  createContact,
+  deleteContact,
+  fetchCommunityLabels,
+  fetchContacts,
+  fetchDistinctAgents,
   fullName,
-  loadStoredContacts,
-  newActivity,
-  saveStoredContacts,
-  type Agent,
   type Contact,
   type LeadSource,
+  type NewContactInput,
   type Stage,
-} from "../lib/leadsData";
+} from "../lib/leads";
 
 type View = "contacts" | "pipeline";
 type StatusFilter = "all" | "leads" | "clients" | Stage | "archived";
@@ -27,12 +31,20 @@ const selectClasses = "rounded-xl border border-line bg-surface px-3 py-2 text-s
 
 export default function LeadsClients() {
   const navigate = useNavigate();
-  const [contacts, setContacts] = useState<Contact[]>(() => loadStoredContacts());
+  const { session } = useAuth();
+  const currentAgent = displayName(session);
+
+  const [contacts, setContacts] = useState<Contact[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [agents, setAgents] = useState<string[]>([]);
+  const [communities, setCommunities] = useState<string[]>([]);
+
   const [view, setView] = useState<View>("contacts");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [sourceFilter, setSourceFilter] = useState<"all" | LeadSource>("all");
-  const [agentFilter, setAgentFilter] = useState<"all" | Agent>("all");
+  const [agentFilter, setAgentFilter] = useState<string>("all");
   const [sort, setSort] = useState<SortKey>("recent-active");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -40,20 +52,49 @@ export default function LeadsClients() {
   const [followUpFilter, setFollowUpFilter] = useState<"today" | "tomorrow" | "week" | "overdue">("today");
   const [confirmMove, setConfirmMove] = useState<{ id: string; stage: Stage } | null>(null);
 
-  useEffect(() => saveStoredContacts(contacts), [contacts]);
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+
+    Promise.all([fetchContacts(), fetchDistinctAgents().catch(() => []), fetchCommunityLabels().catch(() => [])])
+      .then(([contactData, agentData, communityData]) => {
+        if (cancelled) return;
+        setContacts(contactData);
+        setAgents(agentData);
+        setCommunities(communityData);
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err?.message ?? "Unable to load contacts.");
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   useEffect(() => {
     if (!toast) return;
     const t = setTimeout(() => setToast(null), 3000);
     return () => clearTimeout(t);
   }, [toast]);
 
+  const agentOptions = useMemo(() => {
+    const set = new Set(agents);
+    if (currentAgent) set.add(currentAgent);
+    return Array.from(set).sort();
+  }, [agents, currentAgent]);
+
   function updateContact(id: string, updater: (c: Contact) => Contact) {
-    setContacts((prev) => prev.map((c) => (c.id === id ? updater(c) : c)));
+    setContacts((prev) => (prev ? prev.map((c) => (c.id === id ? updater(c) : c)) : prev));
   }
 
-  const selected = contacts.find((c) => c.id === selectedId) ?? null;
+  const selected = (contacts ?? []).find((c) => c.id === selectedId) ?? null;
 
-  const active = useMemo(() => contacts.filter((c) => !c.archived), [contacts]);
+  const active = useMemo(() => (contacts ?? []).filter((c) => !c.archived), [contacts]);
 
   const summary = useMemo(
     () => ({
@@ -67,7 +108,7 @@ export default function LeadsClients() {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    let rows = contacts.filter((c) => {
+    let rows = (contacts ?? []).filter((c) => {
       if (statusFilter === "archived") return c.archived;
       if (c.archived) return false;
       if (statusFilter === "leads" && c.type !== "Lead") return false;
@@ -121,36 +162,53 @@ export default function LeadsClients() {
       .sort((a, b) => a.due.getTime() - b.due.getTime());
   }, [active, followUpFilter]);
 
-  function handleCreateContact(contact: Contact) {
-    setContacts((prev) => [contact, ...prev]);
+  async function handleCreateContact(input: NewContactInput) {
+    const contact = await createContact(input);
+    setContacts((prev) => (prev ? [contact, ...prev] : [contact]));
     setShowAddModal(false);
     setToast(`${fullName(contact)} added.`);
     setSelectedId(contact.id);
   }
 
-  function handleArchive(id: string) {
-    const c = contacts.find((x) => x.id === id);
-    updateContact(id, (contact) => ({ ...contact, archived: true }));
+  async function handleArchive(id: string) {
+    const c = (contacts ?? []).find((x) => x.id === id);
+    try {
+      await archiveContact(id);
+      updateContact(id, (contact) => ({ ...contact, archived: true }));
+      setSelectedId(null);
+      if (c) setToast(`${fullName(c)} archived.`);
+    } catch (err) {
+      setToast(err instanceof Error ? err.message : "Failed to archive contact.");
+    }
+  }
+
+  async function handleDelete(id: string) {
+    const c = (contacts ?? []).find((x) => x.id === id);
+    await deleteContact(id);
+    setContacts((prev) => (prev ? prev.filter((x) => x.id !== id) : prev));
     setSelectedId(null);
-    if (c) setToast(`${fullName(c)} archived.`);
+    if (c) setToast(`${fullName(c)} deleted.`);
   }
 
   function handleMoveStage(id: string, stage: Stage) {
-    const contact = contacts.find((c) => c.id === id);
+    const contact = (contacts ?? []).find((c) => c.id === id);
     if (!contact || contact.stage === stage) return;
     setConfirmMove({ id, stage });
   }
 
-  function confirmMoveStage() {
+  async function confirmMoveStage() {
     if (!confirmMove) return;
     const { id, stage } = confirmMove;
-    const contact = contacts.find((c) => c.id === id);
-    if (contact) {
-      const prevStage = contact.stage;
-      updateContact(id, (c) => ({ ...c, stage, lastActivityAt: new Date().toISOString(), activity: [newActivity("stage_change", "Stage changed", `${prevStage} → ${stage}`), ...c.activity] }));
-      setToast(`${fullName(contact)} moved to ${stage}`);
-    }
+    const contact = (contacts ?? []).find((c) => c.id === id);
     setConfirmMove(null);
+    if (!contact) return;
+    try {
+      const activity = await changeContactStage(id, contact.stage, stage);
+      updateContact(id, (c) => ({ ...c, stage, lastActivityAt: activity.timestamp, activity: [activity, ...c.activity] }));
+      setToast(`${fullName(contact)} moved to ${stage}`);
+    } catch (err) {
+      setToast(err instanceof Error ? err.message : "Failed to update stage.");
+    }
   }
 
   return (
@@ -158,12 +216,14 @@ export default function LeadsClients() {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="font-display text-2xl font-bold tracking-tight text-ink">Leads & Clients</h1>
-          <p className="mt-1 text-ink-soft">Manage prospects, leads and clients throughout their relationship with Sellam.</p>
+          <p className="mt-1 text-ink">Manage prospects, leads and clients throughout their relationship with Sellam.</p>
         </div>
         <button type="button" onClick={() => setShowAddModal(true)} className="rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-white hover:opacity-90">
           + Add Contact
         </button>
       </div>
+
+      {error && <p className="mt-4 rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">Unable to load contacts. {error}</p>}
 
       <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
@@ -174,7 +234,7 @@ export default function LeadsClients() {
         ].map((s) => (
           <div key={s.label} className="rounded-2xl border border-line bg-surface p-4">
             <p className="text-xs font-medium tracking-wide text-ink-soft uppercase">{s.label}</p>
-            <p className="mt-1 text-2xl font-semibold text-ink">{s.value}</p>
+            <p className="mt-1 text-2xl font-semibold text-ink">{loading ? "—" : s.value}</p>
           </div>
         ))}
       </div>
@@ -225,9 +285,9 @@ export default function LeadsClients() {
                   <option key={s} value={s}>{s}</option>
                 ))}
               </select>
-              <select value={agentFilter} onChange={(e) => setAgentFilter(e.target.value as typeof agentFilter)} className={selectClasses}>
+              <select value={agentFilter} onChange={(e) => setAgentFilter(e.target.value)} className={selectClasses}>
                 <option value="all">All agents</option>
-                {AGENTS.map((a) => (
+                {agentOptions.map((a) => (
                   <option key={a} value={a}>{a}</option>
                 ))}
               </select>
@@ -243,15 +303,17 @@ export default function LeadsClients() {
                 </select>
               )}
             </div>
-            <p className="mt-3 text-xs text-ink-soft">{filtered.length} contact{filtered.length === 1 ? "" : "s"} found</p>
+            <p className="mt-3 text-xs text-ink-soft">{loading ? "Fetching contacts…" : `${filtered.length} contact${filtered.length === 1 ? "" : "s"} found`}</p>
           </div>
 
           <div className="mt-4">
-            {view === "pipeline" ? (
+            {loading ? (
+              <div className="rounded-2xl border border-line bg-surface py-16 text-center text-sm text-ink-soft">Fetching contacts…</div>
+            ) : view === "pipeline" ? (
               <PipelineBoard contacts={filtered.filter((c) => !c.archived && c.stage !== "Lost")} onOpenContact={setSelectedId} onMoveStage={handleMoveStage} />
             ) : filtered.length === 0 ? (
               <div className="rounded-2xl border border-line bg-surface">
-                {contacts.length === 0 ? (
+                {(contacts ?? []).length === 0 ? (
                   <EmptyState icon={<UsersIcon className="h-8 w-8" />} title="No leads or clients yet." action={
                     <button type="button" onClick={() => setShowAddModal(true)} className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:opacity-90">
                       Add Contact
@@ -297,7 +359,7 @@ export default function LeadsClients() {
                           <td className="px-3 py-3"><StageBadge stage={c.stage} /></td>
                           <td className="px-3 py-3 whitespace-nowrap text-ink-soft">{formatRelative(c.lastActivityAt)}</td>
                           <td className="px-3 py-3 whitespace-nowrap text-ink-soft">{c.nextFollowUp ? `${c.nextFollowUp.date} · ${c.nextFollowUp.time}` : "—"}</td>
-                          <td className="px-6 py-3 text-ink-soft">{c.assignedAgent}</td>
+                          <td className="px-6 py-3 text-ink-soft">{c.assignedAgent || "—"}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -324,7 +386,9 @@ export default function LeadsClients() {
               </button>
             ))}
           </div>
-          {upcomingFollowUps.length === 0 ? (
+          {loading ? (
+            <p className="py-6 text-center text-sm text-ink-soft">Loading…</p>
+          ) : upcomingFollowUps.length === 0 ? (
             <p className="py-6 text-center text-sm text-ink-soft">You're all caught up.</p>
           ) : (
             <div className="space-y-2.5">
@@ -343,18 +407,31 @@ export default function LeadsClients() {
       {selected && (
         <ContactProfile
           contact={selected}
+          agents={agentOptions}
+          communities={communities}
+          currentAgent={currentAgent}
           onUpdate={(updater) => updateContact(selected.id, updater)}
           onClose={() => setSelectedId(null)}
           onArchive={() => handleArchive(selected.id)}
+          onDelete={() => handleDelete(selected.id)}
           onNavigateToMessages={() => navigate("/messages")}
+          onToast={setToast}
         />
       )}
 
-      {showAddModal && <AddContactModal onClose={() => setShowAddModal(false)} onCreate={handleCreateContact} />}
+      {showAddModal && (
+        <AddContactModal
+          agents={agentOptions}
+          communities={communities}
+          defaultAgent={currentAgent}
+          onClose={() => setShowAddModal(false)}
+          onCreate={handleCreateContact}
+        />
+      )}
 
       {confirmMove && (
         <ConfirmDialog
-          title={`Move ${fullName(contacts.find((c) => c.id === confirmMove.id)!)} to ${confirmMove.stage}?`}
+          title={`Move ${fullName((contacts ?? []).find((c) => c.id === confirmMove.id)!)} to ${confirmMove.stage}?`}
           description="This updates their lifecycle stage and records the change in their activity timeline."
           confirmLabel="Move"
           onCancel={() => setConfirmMove(null)}

@@ -3,20 +3,26 @@ import Avatar from "../Avatar";
 import { CloseIcon, MailIcon, PaperclipIcon, PhoneIcon, SendIcon, StarIcon, WhatsAppIcon } from "../icons";
 import { ConfirmDialog, StageBadge, TypeBadge, formatMoney, formatRelative } from "./shared";
 import {
-  AGENTS,
-  COMMUNITIES,
   INTENTS,
   SOURCES,
   STAGES,
+  addContactNote,
+  changeContactStage,
+  completeFollowUp as completeFollowUpRequest,
+  convertToClient as convertToClientRequest,
   emptyFollowUp,
   fullName,
-  newActivity,
+  scheduleFollowUp as scheduleFollowUpRequest,
+  updateContactInfo,
+  updateContactLeadInfo,
   type Contact,
+  type ContactInfoPatch,
+  type ContactLeadPatch,
   type FollowUp,
   type Intent,
   type LeadSource,
   type Stage,
-} from "../../lib/leadsData";
+} from "../../lib/leads";
 
 type Tab = "overview" | "activity" | "followups" | "relationship";
 
@@ -45,80 +51,179 @@ const ACTIVITY_DOT: Record<string, string> = {
 
 export default function ContactProfile({
   contact,
+  agents,
+  communities,
+  currentAgent,
   onUpdate,
   onClose,
   onArchive,
+  onDelete,
   onNavigateToMessages,
+  onToast,
 }: {
   contact: Contact;
+  agents: string[];
+  communities: string[];
+  currentAgent: string;
   onUpdate: (updater: (c: Contact) => Contact) => void;
   onClose: () => void;
   onArchive: () => void;
+  onDelete: () => Promise<void>;
   onNavigateToMessages: () => void;
+  onToast: (message: string) => void;
 }) {
   const [tab, setTab] = useState<Tab>("overview");
   const [editingInfo, setEditingInfo] = useState(false);
   const [editingLead, setEditingLead] = useState(false);
   const [infoDraft, setInfoDraft] = useState(contact);
   const [leadDraft, setLeadDraft] = useState(contact);
+  const [savingInfo, setSavingInfo] = useState(false);
+  const [savingLead, setSavingLead] = useState(false);
   const [addingNote, setAddingNote] = useState(false);
   const [noteText, setNoteText] = useState("");
+  const [savingNote, setSavingNote] = useState(false);
   const [confirmConvert, setConfirmConvert] = useState(false);
   const [confirmArchive, setConfirmArchive] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [schedulingFollowUp, setSchedulingFollowUp] = useState(false);
   const [followUpDraft, setFollowUpDraft] = useState<FollowUp>(emptyFollowUp());
+  const [savingFollowUp, setSavingFollowUp] = useState(false);
+  const [changingStage, setChangingStage] = useState(false);
 
-  function touch(c: Contact): Contact {
-    return { ...c, lastActivityAt: new Date().toISOString() };
+  function touch(c: Contact, timestamp: string): Contact {
+    return { ...c, lastActivityAt: timestamp };
   }
 
-  function changeStage(next: Stage) {
-    if (next === contact.stage) return;
-    const prev = contact.stage;
-    onUpdate((c) => touch({ ...c, stage: next, activity: [newActivity("stage_change", "Stage changed", `${prev} → ${next}`), ...c.activity] }));
+  function fail(err: unknown, fallback: string) {
+    onToast(err instanceof Error ? err.message : fallback);
   }
 
-  function convertToClient() {
-    onUpdate((c) => touch({ ...c, type: "Client", activity: [newActivity("conversion", "Converted to client"), ...c.activity] }));
-    setConfirmConvert(false);
+  async function changeStage(next: Stage) {
+    if (next === contact.stage || changingStage) return;
+    setChangingStage(true);
+    try {
+      const activity = await changeContactStage(contact.id, contact.stage, next);
+      onUpdate((c) => touch({ ...c, stage: next, activity: [activity, ...c.activity] }, activity.timestamp));
+    } catch (err) {
+      fail(err, "Failed to update stage.");
+    } finally {
+      setChangingStage(false);
+    }
   }
 
-  function saveInfo() {
-    onUpdate(() => touch(infoDraft));
-    setEditingInfo(false);
+  async function convertToClient() {
+    try {
+      const activity = await convertToClientRequest(contact.id);
+      onUpdate((c) => touch({ ...c, type: "Client", activity: [activity, ...c.activity] }, activity.timestamp));
+    } catch (err) {
+      fail(err, "Failed to convert contact.");
+    } finally {
+      setConfirmConvert(false);
+    }
   }
 
-  function saveLead() {
-    onUpdate(() => touch(leadDraft));
-    setEditingLead(false);
+  async function saveInfo() {
+    const patch: ContactInfoPatch = {
+      firstName: infoDraft.firstName,
+      lastName: infoDraft.lastName,
+      email: infoDraft.email,
+      phone: infoDraft.phone,
+      altPhone: infoDraft.altPhone,
+      preferredContact: infoDraft.preferredContact,
+      location: infoDraft.location,
+      assignedAgent: infoDraft.assignedAgent,
+    };
+    setSavingInfo(true);
+    try {
+      await updateContactInfo(contact.id, patch);
+      const now = new Date().toISOString();
+      onUpdate(() => touch({ ...infoDraft }, now));
+      setEditingInfo(false);
+    } catch (err) {
+      fail(err, "Failed to save contact info.");
+    } finally {
+      setSavingInfo(false);
+    }
   }
 
-  function addNote() {
-    if (!noteText.trim()) return;
-    onUpdate((c) =>
-      touch({
-        ...c,
-        notes: [{ id: `${Date.now()}`, text: noteText.trim(), timestamp: new Date().toISOString(), author: c.assignedAgent }, ...c.notes],
-        activity: [newActivity("note", "Agent note", noteText.trim()), ...c.activity],
-      }),
-    );
-    setNoteText("");
-    setAddingNote(false);
+  async function saveLead() {
+    const patch: ContactLeadPatch = {
+      intent: leadDraft.intent,
+      source: leadDraft.source,
+      budgetMin: leadDraft.budgetMin,
+      budgetMax: leadDraft.budgetMax,
+      propertyType: leadDraft.propertyType,
+      bedrooms: leadDraft.bedrooms,
+      bathrooms: leadDraft.bathrooms,
+      preferredLocations: leadDraft.preferredLocations,
+      otherRequirements: leadDraft.otherRequirements,
+    };
+    setSavingLead(true);
+    try {
+      await updateContactLeadInfo(contact.id, patch);
+      const now = new Date().toISOString();
+      onUpdate(() => touch({ ...leadDraft }, now));
+      setEditingLead(false);
+    } catch (err) {
+      fail(err, "Failed to save lead details.");
+    } finally {
+      setSavingLead(false);
+    }
   }
 
-  function completeFollowUp() {
-    onUpdate((c) => touch({ ...c, nextFollowUp: null, activity: [newActivity("follow_up", "Follow-up completed", c.nextFollowUp?.title), ...c.activity] }));
+  async function addNote() {
+    if (!noteText.trim() || savingNote) return;
+    setSavingNote(true);
+    try {
+      const { note, activity } = await addContactNote(contact.id, noteText.trim(), contact.assignedAgent || currentAgent);
+      onUpdate((c) => touch({ ...c, notes: [note, ...c.notes], activity: [activity, ...c.activity] }, activity.timestamp));
+      setNoteText("");
+      setAddingNote(false);
+    } catch (err) {
+      fail(err, "Failed to add note.");
+    } finally {
+      setSavingNote(false);
+    }
   }
 
-  function scheduleFollowUp() {
-    if (!followUpDraft.title.trim() || !followUpDraft.date) return;
-    onUpdate((c) => touch({ ...c, nextFollowUp: followUpDraft, activity: [newActivity("follow_up", "Follow-up scheduled", `${followUpDraft.title} · ${followUpDraft.date}`), ...c.activity] }));
-    setSchedulingFollowUp(false);
-    setFollowUpDraft(emptyFollowUp());
+  async function completeFollowUp() {
+    try {
+      const activity = await completeFollowUpRequest(contact.id, contact.nextFollowUp?.title);
+      onUpdate((c) => touch({ ...c, nextFollowUp: null, activity: [activity, ...c.activity] }, activity.timestamp));
+    } catch (err) {
+      fail(err, "Failed to complete follow-up.");
+    }
+  }
+
+  async function scheduleFollowUpSave() {
+    if (!followUpDraft.title.trim() || !followUpDraft.date || savingFollowUp) return;
+    setSavingFollowUp(true);
+    try {
+      const activity = await scheduleFollowUpRequest(contact.id, followUpDraft);
+      onUpdate((c) => touch({ ...c, nextFollowUp: followUpDraft, activity: [activity, ...c.activity] }, activity.timestamp));
+      setSchedulingFollowUp(false);
+      setFollowUpDraft(emptyFollowUp());
+    } catch (err) {
+      fail(err, "Failed to schedule follow-up.");
+    } finally {
+      setSavingFollowUp(false);
+    }
   }
 
   function toggleLocation(list: string[], loc: string) {
     return list.includes(loc) ? list.filter((l) => l !== loc) : [...list, loc];
+  }
+
+  async function handleDelete() {
+    setDeleting(true);
+    try {
+      await onDelete();
+    } catch (err) {
+      fail(err, "Failed to delete contact.");
+      setDeleting(false);
+      setConfirmDelete(false);
+    }
   }
 
   return (
@@ -205,7 +310,7 @@ export default function ContactProfile({
                 <div className="grid grid-cols-2 gap-4 rounded-xl border border-line bg-paper/40 p-4 sm:grid-cols-3">
                   <SummaryItem label="Contact since" value={new Date(contact.dateAdded).toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric" })} />
                   <SummaryItem label="Source" value={contact.source} />
-                  <SummaryItem label="Assigned to" value={contact.assignedAgent} />
+                  <SummaryItem label="Assigned to" value={contact.assignedAgent || "Unassigned"} />
                   <SummaryItem label="Current stage" value={contact.stage} />
                   <SummaryItem label="Last activity" value={formatRelative(contact.lastActivityAt)} />
                   <SummaryItem label="Next follow-up" value={contact.nextFollowUp ? `${contact.nextFollowUp.date} · ${contact.nextFollowUp.time}` : "None scheduled"} />
@@ -214,8 +319,9 @@ export default function ContactProfile({
                   <span className="text-xs font-medium text-ink-soft">Lifecycle stage</span>
                   <select
                     value={contact.stage}
+                    disabled={changingStage}
                     onChange={(e) => changeStage(e.target.value as Stage)}
-                    className="rounded-lg border border-line bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none focus:border-brand"
+                    className="rounded-lg border border-line bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none focus:border-brand disabled:opacity-60"
                   >
                     {[...STAGES, "Lost" as Stage].map((s) => (
                       <option key={s} value={s}>
@@ -236,11 +342,11 @@ export default function ContactProfile({
                     </button>
                   ) : (
                     <div className="flex gap-2">
-                      <button type="button" onClick={() => setEditingInfo(false)} className="text-xs font-medium text-ink-soft hover:text-ink">
+                      <button type="button" disabled={savingInfo} onClick={() => setEditingInfo(false)} className="text-xs font-medium text-ink-soft hover:text-ink disabled:opacity-50">
                         Cancel
                       </button>
-                      <button type="button" onClick={saveInfo} className="text-xs font-medium text-brand hover:underline">
-                        Save
+                      <button type="button" disabled={savingInfo} onClick={saveInfo} className="text-xs font-medium text-brand hover:underline disabled:opacity-50">
+                        {savingInfo ? "Saving…" : "Save"}
                       </button>
                     </div>
                   )}
@@ -254,7 +360,7 @@ export default function ContactProfile({
                     <p className="text-ink-soft">Alt. phone <span className="ml-1 font-medium text-ink">{contact.altPhone || "—"}</span></p>
                     <p className="text-ink-soft">Preferred contact <span className="ml-1 font-medium text-ink">{contact.preferredContact}</span></p>
                     <p className="text-ink-soft">Location <span className="ml-1 font-medium text-ink">{contact.location || "—"}</span></p>
-                    <p className="text-ink-soft">Assigned agent <span className="ml-1 font-medium text-ink">{contact.assignedAgent}</span></p>
+                    <p className="text-ink-soft">Assigned agent <span className="ml-1 font-medium text-ink">{contact.assignedAgent || "—"}</span></p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 gap-3">
@@ -274,11 +380,17 @@ export default function ContactProfile({
                     <div><label className={labelClasses}>Location</label><input className={inputClasses} value={infoDraft.location} onChange={(e) => setInfoDraft({ ...infoDraft, location: e.target.value })} /></div>
                     <div>
                       <label className={labelClasses}>Assigned agent</label>
-                      <select className={inputClasses} value={infoDraft.assignedAgent} onChange={(e) => setInfoDraft({ ...infoDraft, assignedAgent: e.target.value as Contact["assignedAgent"] })}>
-                        {AGENTS.map((a) => (
-                          <option key={a} value={a}>{a}</option>
+                      <input
+                        list="lead-profile-agents"
+                        className={inputClasses}
+                        value={infoDraft.assignedAgent}
+                        onChange={(e) => setInfoDraft({ ...infoDraft, assignedAgent: e.target.value })}
+                      />
+                      <datalist id="lead-profile-agents">
+                        {agents.map((a) => (
+                          <option key={a} value={a} />
                         ))}
-                      </select>
+                      </datalist>
                     </div>
                   </div>
                 )}
@@ -293,11 +405,11 @@ export default function ContactProfile({
                     </button>
                   ) : (
                     <div className="flex gap-2">
-                      <button type="button" onClick={() => setEditingLead(false)} className="text-xs font-medium text-ink-soft hover:text-ink">
+                      <button type="button" disabled={savingLead} onClick={() => setEditingLead(false)} className="text-xs font-medium text-ink-soft hover:text-ink disabled:opacity-50">
                         Cancel
                       </button>
-                      <button type="button" onClick={saveLead} className="text-xs font-medium text-brand hover:underline">
-                        Save
+                      <button type="button" disabled={savingLead} onClick={saveLead} className="text-xs font-medium text-brand hover:underline disabled:opacity-50">
+                        {savingLead ? "Saving…" : "Save"}
                       </button>
                     </div>
                   )}
@@ -357,7 +469,8 @@ export default function ContactProfile({
                     <div>
                       <label className={labelClasses}>Preferred locations</label>
                       <div className="flex flex-wrap gap-1.5">
-                        {COMMUNITIES.map((loc) => (
+                        {communities.length === 0 && <span className="text-xs text-ink-soft">No communities set up yet.</span>}
+                        {communities.map((loc) => (
                           <button
                             key={loc}
                             type="button"
@@ -504,7 +617,7 @@ export default function ContactProfile({
                         </div>
                         <span
                           className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                            v.status === "Scheduled" ? "bg-sky-50 text-sky-700" : v.status === "Completed" ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"
+                            v.status === "Scheduled" ? "bg-sky-50 text-sky-700" : "bg-emerald-50 text-emerald-700"
                           }`}
                         >
                           {v.status}
@@ -538,9 +651,12 @@ export default function ContactProfile({
           )}
         </div>
 
-        <div className="border-t border-line px-6 py-3">
+        <div className="flex items-center justify-between border-t border-line px-6 py-3">
           <button type="button" onClick={() => setConfirmArchive(true)} className="text-xs font-medium text-ink-soft hover:text-red-600">
             Archive Contact
+          </button>
+          <button type="button" onClick={() => setConfirmDelete(true)} className="text-xs font-semibold text-red-600 hover:text-red-700">
+            Delete Contact
           </button>
         </div>
       </div>
@@ -558,11 +674,11 @@ export default function ContactProfile({
               className="mt-3 w-full resize-none rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-brand focus:ring-1 focus:ring-brand"
             />
             <div className="mt-4 flex justify-end gap-2">
-              <button type="button" onClick={() => { setAddingNote(false); setNoteText(""); }} className="rounded-lg border border-line px-4 py-2 text-sm font-medium text-ink hover:bg-paper">
+              <button type="button" disabled={savingNote} onClick={() => { setAddingNote(false); setNoteText(""); }} className="rounded-lg border border-line px-4 py-2 text-sm font-medium text-ink hover:bg-paper disabled:opacity-50">
                 Cancel
               </button>
-              <button type="button" onClick={addNote} className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:opacity-90">
-                Add Note
+              <button type="button" disabled={savingNote} onClick={addNote} className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-60">
+                {savingNote ? "Adding…" : "Add Note"}
               </button>
             </div>
           </div>
@@ -598,11 +714,11 @@ export default function ContactProfile({
               </label>
             </div>
             <div className="mt-4 flex justify-end gap-2">
-              <button type="button" onClick={() => setSchedulingFollowUp(false)} className="rounded-lg border border-line px-4 py-2 text-sm font-medium text-ink hover:bg-paper">
+              <button type="button" disabled={savingFollowUp} onClick={() => setSchedulingFollowUp(false)} className="rounded-lg border border-line px-4 py-2 text-sm font-medium text-ink hover:bg-paper disabled:opacity-50">
                 Cancel
               </button>
-              <button type="button" onClick={scheduleFollowUp} className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:opacity-90">
-                Save
+              <button type="button" disabled={savingFollowUp} onClick={scheduleFollowUpSave} className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-60">
+                {savingFollowUp ? "Saving…" : "Save"}
               </button>
             </div>
           </div>
@@ -627,6 +743,17 @@ export default function ContactProfile({
           destructive
           onCancel={() => setConfirmArchive(false)}
           onConfirm={() => { onArchive(); setConfirmArchive(false); }}
+        />
+      )}
+
+      {confirmDelete && (
+        <ConfirmDialog
+          title={`Delete ${fullName(contact)} permanently?`}
+          description="This removes the contact and all of their notes and activity history for good — it cannot be undone. If you just want to stop seeing them in active views, Archive instead."
+          confirmLabel={deleting ? "Deleting…" : "Delete"}
+          destructive
+          onCancel={() => setConfirmDelete(false)}
+          onConfirm={handleDelete}
         />
       )}
     </div>
