@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import type { ReactNode } from "react";
 import type { Stage } from "../../lib/leads";
+import { usePreferences } from "../../lib/PreferencesContext";
 
 // Deliberately restrained — a subtle tint per stage, not a rainbow of CRM
 // pipeline colours.
@@ -58,6 +60,19 @@ export function ConfirmDialog({
   onCancel: () => void;
   onConfirm: () => void;
 }) {
+  const { accessibility } = usePreferences();
+
+  // "Confirmation Prompts" (Settings → Accessibility) — when off, skip the
+  // dialog and proceed immediately, exactly as if the user had clicked
+  // Confirm themselves. Real gating of the one shared confirm dialog this
+  // codebase has, not a per-module reimplementation.
+  useEffect(() => {
+    if (!accessibility.confirmPrompts) onConfirm();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!accessibility.confirmPrompts) return null;
+
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 px-4" role="dialog" aria-modal="true">
       <div className="w-full max-w-sm rounded-2xl border border-line bg-white p-6 shadow-2xl">

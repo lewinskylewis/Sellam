@@ -20,15 +20,15 @@ import {
   DEFAULT_SETTINGS,
   SETTINGS_CATEGORIES,
   SETTINGS_SEARCH_INDEX,
-  loadLocalSettings,
   mergeWithDefaults,
   pickPersisted,
   readRawLocalStorageBlob,
-  saveLocalSettings,
+  type LocalSettings,
   type SettingsCategoryId,
   type SettingsState,
 } from "../lib/settingsDefaults";
 import { errorMessage, fetchAdminSettingsRow, isMissingTableError, saveAdminSettingsRow } from "../lib/adminSettings";
+import { usePreferences } from "../lib/PreferencesContext";
 import GeneralSection from "../components/settings/sections/GeneralSection";
 import NotificationsSection from "../components/settings/sections/NotificationsSection";
 import EmailSection from "../components/settings/sections/EmailSection";
@@ -60,7 +60,7 @@ const CATEGORY_DESCRIPTIONS: Record<SettingsCategoryId, string> = {
   website: "Global defaults for how the public website presents itself.",
   propertyDefaults: "Starting defaults used when creating or editing a property.",
   enquiryLead: "Default behaviour for new enquiries, leads, and viewings.",
-  appearance: "Theme, accent colour, density, and sidebar style. Stored on this device only.",
+  appearance: "Mode, background, density, radius, and sidebar style. Stored on this device only.",
   accessibility: "Font size, motion, contrast, and confirmation preferences. Stored on this device only.",
   privacy: "Activity retention and visibility, plus data controls.",
   security: "Password, two-factor authentication, and active sessions.",
@@ -80,7 +80,7 @@ function deepEqual(a: unknown, b: unknown) {
 // to Supabase once, becoming authoritative from then on. This never runs
 // again once the row has real content, so it can't repeatedly clobber
 // server settings with a stale local copy.
-async function loadSettings(): Promise<SettingsState> {
+async function loadSettings(local: LocalSettings): Promise<SettingsState> {
   const row = await fetchAdminSettingsRow();
   const persistedRaw = row?.settings;
   const hasPersisted = persistedRaw && typeof persistedRaw === "object" && Object.keys(persistedRaw).length > 0;
@@ -94,12 +94,15 @@ async function loadSettings(): Promise<SettingsState> {
         return merged;
       })();
 
-  const local = loadLocalSettings();
+  // appearance/accessibility come from PreferencesContext (the single
+  // source of truth for local-only settings — see PreferencesContext.tsx),
+  // not a separate localStorage read here.
   return { ...persisted, ...local } as SettingsState;
 }
 
 export default function Settings() {
   const navigate = useNavigate();
+  const { appearance, accessibility, setPreferences, previewPreferences } = usePreferences();
   const [saved, setSaved] = useState<SettingsState>(DEFAULT_SETTINGS);
   const [draft, setDraft] = useState<SettingsState>(DEFAULT_SETTINGS);
   const [loading, setLoading] = useState(true);
@@ -118,12 +121,14 @@ export default function Settings() {
   const dirty = useMemo(() => !deepEqual(saved, draft), [saved, draft]);
   const dirtyRef = useRef(dirty);
   dirtyRef.current = dirty;
+  const savedRef = useRef(saved);
+  savedRef.current = saved;
 
   function runLoad() {
     const token = ++loadToken.current;
     setLoading(true);
     setLoadError(null);
-    loadSettings()
+    loadSettings({ appearance, accessibility })
       .then((state) => {
         if (loadToken.current !== token) return;
         setSaved(state);
@@ -185,6 +190,31 @@ export default function Settings() {
     return () => clearTimeout(t);
   }, [toast]);
 
+  // Live-apply Appearance/Accessibility as the user edits them — the real
+  // page (not a separate preview card) shows the effect immediately, so
+  // there's something to actually judge before deciding to Save. Nothing is
+  // persisted here; Discard (and "leave without saving") both call
+  // setDraft(saved), which this effect picks up and reverts live. Guarded
+  // on `!loading` so the brief default-state draft before the real settings
+  // finish loading never flashes over the already-correct theme
+  // PreferencesProvider applied at app start.
+  useEffect(() => {
+    if (loading) return;
+    previewPreferences({ appearance: draft.appearance, accessibility: draft.accessibility });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, draft.appearance, draft.accessibility]);
+
+  // Leaving the Settings page entirely (route change) with an unsaved
+  // preview still active must not leave the live document showing a
+  // never-saved preference — revert to whatever's actually persisted.
+  useEffect(() => {
+    return () => {
+      const last = savedRef.current;
+      previewPreferences({ appearance: last.appearance, accessibility: last.accessibility });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function updateCategory<K extends keyof SettingsState>(key: K, next: SettingsState[K]) {
     setDraft((prev) => ({ ...prev, [key]: next }));
   }
@@ -195,7 +225,10 @@ export default function Settings() {
     setSaveError(null);
     try {
       await saveAdminSettingsRow(pickPersisted(draft));
-      saveLocalSettings({ appearance: draft.appearance, accessibility: draft.accessibility });
+      // Persists locally AND immediately re-applies to the live document —
+      // no refresh needed for Mode/Density/Radius/Background/etc. to take
+      // effect outside Settings.
+      setPreferences({ appearance: draft.appearance, accessibility: draft.accessibility });
       setSaved(draft);
       setToast("Changes saved successfully.");
     } catch (err) {
@@ -374,7 +407,7 @@ export default function Settings() {
                     const resetLocal = { appearance: DEFAULT_SETTINGS.appearance, accessibility: DEFAULT_SETTINGS.accessibility };
                     setDraft((prev) => ({ ...prev, ...resetLocal }));
                     setSaved((prev) => ({ ...prev, ...resetLocal }));
-                    saveLocalSettings(resetLocal);
+                    setPreferences(resetLocal); // persists AND re-applies live, immediately
                     setToast("Local dashboard preferences reset to defaults.");
                   }}
                 />

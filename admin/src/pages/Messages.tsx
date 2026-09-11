@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { ComponentType } from "react";
 import Avatar from "../components/Avatar";
 import { useAuth } from "../lib/auth";
+import { usePreferences } from "../lib/PreferencesContext";
 import {
   ArchiveIcon,
   CloseIcon,
@@ -130,6 +131,7 @@ function AttachmentPill({ filename, storagePath }: { filename: string; storagePa
 
 export default function Messages() {
   const { session } = useAuth();
+  const { accessibility } = usePreferences();
   const accessToken = session?.access_token ?? null;
 
   const [conversations, setConversations] = useState<EmailConversation[] | null>(null);
@@ -465,7 +467,7 @@ export default function Messages() {
                 <div className="flex shrink-0 items-center gap-1">
                   <button
                     type="button"
-                    title={selected.is_starred ? "Unstar" : "Star"}
+                    title={accessibility.tooltips ? (selected.is_starred ? "Unstar" : "Star") : undefined}
                     onClick={() => toggleStar(selected)}
                     className="rounded-lg p-2 text-ink-soft hover:bg-paper hover:text-ink"
                   >
@@ -473,7 +475,7 @@ export default function Messages() {
                   </button>
                   <button
                     type="button"
-                    title="Mark as unread"
+                    title={accessibility.tooltips ? "Mark as unread" : undefined}
                     onClick={() => toggleUnread(selected)}
                     className="rounded-lg p-2 text-ink-soft hover:bg-paper hover:text-ink"
                   >
@@ -481,7 +483,7 @@ export default function Messages() {
                   </button>
                   <button
                     type="button"
-                    title={selected.is_archived ? "Unarchive" : "Archive"}
+                    title={accessibility.tooltips ? (selected.is_archived ? "Unarchive" : "Archive") : undefined}
                     onClick={() => toggleArchive(selected)}
                     className="rounded-lg p-2 text-ink-soft hover:bg-paper hover:text-ink"
                   >

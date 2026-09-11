@@ -112,7 +112,10 @@ export type SettingsState = {
   };
   appearance: {
     mode: "light" | "dark" | "system";
-    accent: string;
+    // Sellam's brand colors are fixed in the CSS design system — this is
+    // deliberately not a color picker. null = use the built-in dashboard
+    // background (public/dashboard-bg.jpg); otherwise a Storage public URL.
+    backgroundUrl: string | null;
     density: "comfortable" | "compact";
     radius: "sharp" | "soft" | "round";
     sidebarStyle: "expanded" | "collapsed";
@@ -243,7 +246,7 @@ export const DEFAULT_SETTINGS: SettingsState = {
   },
   appearance: {
     mode: "system",
-    accent: "#0f766e",
+    backgroundUrl: null,
     density: "comfortable",
     radius: "soft",
     sidebarStyle: "expanded",
@@ -360,7 +363,7 @@ export const SETTINGS_SEARCH_INDEX: SearchableField[] = [
   { category: "enquiryLead", label: "Follow-up reminder default" },
   { category: "enquiryLead", label: "Default viewing duration" },
   { category: "appearance", label: "Light / dark mode" },
-  { category: "appearance", label: "Accent colour" },
+  { category: "appearance", label: "Dashboard background" },
   { category: "appearance", label: "Interface density" },
   { category: "appearance", label: "Border radius" },
   { category: "appearance", label: "Sidebar style" },

@@ -11,6 +11,38 @@
       rel="stylesheet"
     />
     <title>Sellam Admin</title>
+    <script>
+      // Applies the persisted theme/density/etc. before React mounts, so
+      // there's no flash of the wrong theme on load. Mirrors exactly what
+      // PreferencesContext.tsx applies on mount — same storage key, same
+      // attribute names — this is just the pre-paint version of that.
+      (function () {
+        try {
+          var raw = localStorage.getItem("sellam-admin-settings-v1");
+          var parsed = raw ? JSON.parse(raw) : {};
+          var appearance = (parsed && parsed.appearance) || {};
+          var accessibility = (parsed && parsed.accessibility) || {};
+          var mode = appearance.mode || "system";
+          var theme =
+            mode === "system"
+              ? window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light"
+              : mode;
+          var root = document.documentElement;
+          root.setAttribute("data-theme", theme);
+          root.setAttribute("data-density", appearance.density || "comfortable");
+          root.setAttribute("data-radius", appearance.radius || "soft");
+          root.setAttribute("data-font-size", accessibility.fontSize || "medium");
+          var reducedMotion = accessibility.reducedMotion || (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+          root.setAttribute("data-reduced-motion", String(!!reducedMotion));
+          root.setAttribute("data-high-contrast", String(!!accessibility.highContrast));
+          root.style.setProperty("--dashboard-bg-image", appearance.backgroundUrl ? 'url("' + appearance.backgroundUrl + '")' : 'url("/dashboard-bg.jpg")');
+        } catch {
+          // best-effort — falls through to CSS defaults (light theme)
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

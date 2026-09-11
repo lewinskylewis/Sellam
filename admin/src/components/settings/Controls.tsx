@@ -97,11 +97,11 @@ export function RadioCards<T extends string>({
           type="button"
           onClick={() => onChange(o.value)}
           className={`rounded-lg border px-3.5 py-2 text-left text-sm transition-colors ${
-            value === o.value ? "border-brand bg-brand/5 text-brand" : "border-line text-ink hover:border-ink-soft"
+            value === o.value ? "bg-brand border-brand text-white" : "border-line text-ink hover:border-ink-soft"
           }`}
         >
           <span className="block font-medium">{o.label}</span>
-          {o.description && <span className="block text-xs text-ink-soft">{o.description}</span>}
+          {o.description && <span className={`block text-xs ${value === o.value ? "text-white/75" : "text-ink-soft"}`}>{o.description}</span>}
         </button>
       ))}
     </div>

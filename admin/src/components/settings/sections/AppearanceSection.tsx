@@ -1,16 +1,78 @@
+import { useRef, useState } from "react";
 import { Field, RadioCards, Toggle } from "../Controls";
 import { DesktopIcon, MoonIcon, SunIcon } from "../../icons";
 import type { SettingsState } from "../../../lib/settingsDefaults";
+import { MAX_BACKGROUND_BYTES, uploadSiteAsset, validateSiteAssetFile } from "../../../lib/siteAssetsStorage";
 
 type Appearance = SettingsState["appearance"];
 
-const ACCENTS = ["#0f766e", "#1d4ed8", "#b91c1c", "#a16207", "#7c3aed", "#0f172a"];
-const RADIUS_PX: Record<Appearance["radius"], string> = { sharp: "4px", soft: "12px", round: "20px" };
+const DEFAULT_BACKGROUND_PREVIEW = "/dashboard-bg.jpg";
+
+function BackgroundControl({ value, onChange }: { value: Appearance; onChange: (next: Appearance) => void }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleFile(file: File | undefined) {
+    if (!file) return;
+    setError(null);
+    const validationError = validateSiteAssetFile(file, MAX_BACKGROUND_BYTES);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+    setUploading(true);
+    try {
+      const { publicUrl } = await uploadSiteAsset("background", file);
+      onChange({ ...value, backgroundUrl: publicUrl });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed.");
+    } finally {
+      setUploading(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  }
+
+  return (
+    <Field label="Background" description="The dashboard's background image, behind every module. You'll see it change immediately — click Save changes to keep it, or Discard to revert.">
+      <div className="flex items-start gap-3">
+        <div
+          className="h-20 w-32 shrink-0 rounded-lg border border-line bg-cover bg-center"
+          style={{ backgroundImage: `url("${value.backgroundUrl || DEFAULT_BACKGROUND_PREVIEW}")` }}
+        />
+        <div>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              disabled={uploading}
+              onClick={() => inputRef.current?.click()}
+              className="rounded-lg border border-line px-3 py-1.5 text-sm font-medium text-ink hover:border-brand hover:text-brand disabled:opacity-60"
+            >
+              {uploading ? "Uploading…" : value.backgroundUrl ? "Replace background" : "Upload background"}
+            </button>
+            {value.backgroundUrl && (
+              <button
+                type="button"
+                disabled={uploading}
+                onClick={() => onChange({ ...value, backgroundUrl: null })}
+                className="rounded-lg border border-line px-3 py-1.5 text-sm font-medium text-ink-soft hover:border-red-400 hover:text-red-600 disabled:opacity-60"
+              >
+                Remove background
+              </button>
+            )}
+          </div>
+          <p className="mt-1.5 text-xs text-ink-soft">{value.backgroundUrl ? "Custom background selected." : "Using the default Sellam dashboard background."}</p>
+          {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+        </div>
+        <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleFile(e.target.files?.[0])} />
+      </div>
+    </Field>
+  );
+}
 
 export default function AppearanceSection({ value, onChange }: { value: Appearance; onChange: (next: Appearance) => void }) {
   return (
-    <div className="grid grid-cols-1 gap-8 xl:grid-cols-[1fr_320px]">
-      <div className="divide-y divide-line">
+    <div className="divide-y divide-line">
         <section>
           <h4 className="mb-1 text-sm font-semibold text-ink">Appearance</h4>
           <Field label="Mode">
@@ -29,7 +91,7 @@ export default function AppearanceSection({ value, onChange }: { value: Appearan
                     type="button"
                     onClick={() => onChange({ ...value, mode: opt.value })}
                     className={`flex items-center gap-2 rounded-lg border px-3.5 py-2 text-sm font-medium transition-colors ${
-                      value.mode === opt.value ? "border-brand bg-brand/5 text-brand" : "border-line text-ink hover:border-ink-soft"
+                      value.mode === opt.value ? "bg-brand border-brand text-white" : "border-line text-ink hover:border-ink-soft"
                     }`}
                   >
                     <Icon className="h-4 w-4" />
@@ -39,24 +101,11 @@ export default function AppearanceSection({ value, onChange }: { value: Appearan
               })}
             </div>
           </Field>
+          <BackgroundControl value={value} onChange={onChange} />
         </section>
 
         <section className="pt-6">
           <h4 className="mb-1 text-sm font-semibold text-ink">Theme</h4>
-          <Field label="Accent colour">
-            <div className="flex gap-2">
-              {ACCENTS.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  aria-label={c}
-                  onClick={() => onChange({ ...value, accent: c })}
-                  style={{ backgroundColor: c }}
-                  className={`h-8 w-8 rounded-full transition-transform ${value.accent === c ? "scale-110 ring-2 ring-offset-2 ring-ink" : "hover:scale-105"}`}
-                />
-              ))}
-            </div>
-          </Field>
           <Field label="Interface density">
             <RadioCards
               value={value.density}
@@ -92,37 +141,10 @@ export default function AppearanceSection({ value, onChange }: { value: Appearan
               ]}
             />
           </Field>
-          <Field label="Remember last sidebar state">
+          <Field label="Remember last sidebar state" description="When off, the sidebar always starts at the Sidebar style default above.">
             <Toggle checked={value.rememberSidebar} onChange={(v) => onChange({ ...value, rememberSidebar: v })} />
           </Field>
         </section>
-      </div>
-
-      <div className="xl:sticky xl:top-6 xl:self-start">
-        <p className="mb-2 text-xs font-medium tracking-wide text-ink-soft uppercase">Live preview</p>
-        <div
-          className={`overflow-hidden border shadow-[0_8px_30px_rgba(15,23,42,0.1)] ${value.mode === "dark" ? "border-white/10 bg-ink" : "border-line bg-white"}`}
-          style={{ borderRadius: RADIUS_PX[value.radius] }}
-        >
-          <div className="flex items-center gap-2 px-4 py-3" style={{ backgroundColor: value.accent }}>
-            <div className="h-2.5 w-2.5 rounded-full bg-white/70" />
-            <div className={`h-2 flex-1 rounded-full bg-white/40 ${value.sidebarStyle === "collapsed" ? "max-w-[40px]" : "max-w-[90px]"}`} />
-          </div>
-          <div className={value.density === "compact" ? "space-y-1.5 p-3" : "space-y-2.5 p-4"}>
-            {[80, 60, 70].map((w, i) => (
-              <div key={i} className={`h-2.5 rounded-full ${value.mode === "dark" ? "bg-white/15" : "bg-paper"}`} style={{ width: `${w}%`, borderRadius: RADIUS_PX[value.radius] }} />
-            ))}
-            <div className="pt-1">
-              <span
-                className="inline-block px-3 py-1.5 text-xs font-medium text-white"
-                style={{ backgroundColor: value.accent, borderRadius: RADIUS_PX[value.radius] }}
-              >
-                Sample button
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

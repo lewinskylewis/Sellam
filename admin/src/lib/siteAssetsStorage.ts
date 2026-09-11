@@ -8,6 +8,7 @@ export const SITE_ASSETS_BUCKET = "site-assets";
 
 export const MAX_LOGO_BYTES = 4 * 1024 * 1024; // 4MB
 export const MAX_FAVICON_BYTES = 1 * 1024 * 1024; // 1MB
+export const MAX_BACKGROUND_BYTES = 8 * 1024 * 1024; // 8MB — matches hero-images' cap for a full-bleed photo
 const ACCEPTED_PREFIX = "image/";
 
 export function validateSiteAssetFile(file: File, maxBytes: number): string | null {
@@ -31,9 +32,9 @@ function sanitizeBaseName(name: string) {
 
 export type UploadResult = { path: string; publicUrl: string };
 
-// Stored under {kind}/{unique}-{filename} (kind = "logo" | "favicon") so
-// replacing one never collides with or disturbs the other.
-export async function uploadSiteAsset(kind: "logo" | "favicon", file: File): Promise<UploadResult> {
+// Stored under {kind}/{unique}-{filename} (kind = "logo" | "favicon" |
+// "background") so replacing one never collides with or disturbs another.
+export async function uploadSiteAsset(kind: "logo" | "favicon" | "background", file: File): Promise<UploadResult> {
   const unique = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   const path = `${kind}/${unique}-${sanitizeBaseName(file.name)}`;
 

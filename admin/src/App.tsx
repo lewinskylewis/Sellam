@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./lib/auth";
+import { PreferencesProvider } from "./lib/PreferencesContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardLayout from "./components/DashboardLayout";
 import Login from "./pages/Login";
@@ -20,6 +21,7 @@ import Testimonials from "./pages/website/Testimonials";
 
 export default function App() {
   return (
+    <PreferencesProvider>
     <AuthProvider>
       <BrowserRouter>
         <Routes>
@@ -197,5 +199,6 @@ export default function App() {
         </Routes>
       </BrowserRouter>
     </AuthProvider>
+    </PreferencesProvider>
   );
 }

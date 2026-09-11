@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ComponentType } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { displayName, useAuth } from "../lib/auth";
+import { usePreferences } from "../lib/PreferencesContext";
 import Avatar from "./Avatar";
 import {
   ChatIcon,
@@ -29,8 +30,29 @@ const NAV_ITEMS: { label: string; to: string; enabled: boolean; icon: ComponentT
 
 export default function Sidebar({ open, onToggle }: { open: boolean; onToggle: () => void }) {
   const { session, signOut } = useAuth();
+  const { accessibility } = usePreferences();
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const name = displayName(session);
+
+  // Lightweight, real keyboard navigation: Alt+1..8 jumps straight to each
+  // nav item — not a large shortcut system, just enough to make the
+  // "Keyboard navigation hints" setting mean something concrete. Hints
+  // (the little Alt+N badges) only render when the setting is on; the
+  // shortcuts themselves stay active either way, same as a browser's own
+  // always-on accelerator keys.
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (!e.altKey || e.ctrlKey || e.metaKey) return;
+      const index = Number(e.key) - 1;
+      const item = NAV_ITEMS[index];
+      if (!item || !item.enabled) return;
+      e.preventDefault();
+      navigate(item.to);
+    }
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [navigate]);
 
   return (
     <>
@@ -48,13 +70,12 @@ export default function Sidebar({ open, onToggle }: { open: boolean; onToggle: (
         }`}
       >
         <div className={`flex items-center py-7 ${open ? "justify-between px-6" : "justify-center px-2 md:px-0"}`}>
-          {open && (
-            <span className="font-display text-2xl tracking-[0.08em] text-white uppercase">Sellam</span>
-          )}
+          {open && <img src="/sellam-logo.png" alt="Sellam" className="h-7 w-auto" />}
           <button
             type="button"
             onClick={onToggle}
             aria-label={open ? "Collapse sidebar" : "Expand sidebar"}
+            title={accessibility.tooltips ? (open ? "Collapse sidebar" : "Expand sidebar") : undefined}
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white"
           >
             <MenuIcon className="h-5 w-5" />
@@ -62,7 +83,7 @@ export default function Sidebar({ open, onToggle }: { open: boolean; onToggle: (
         </div>
 
         <nav className="flex-1 space-y-1 px-4">
-          {NAV_ITEMS.map((item) => {
+          {NAV_ITEMS.map((item, i) => {
             const Icon = item.icon;
             const content = (
               <span className={`flex items-center gap-3 ${open ? "" : "md:justify-center"}`}>
@@ -71,14 +92,23 @@ export default function Sidebar({ open, onToggle }: { open: boolean; onToggle: (
               </span>
             );
 
+            // Collapsed: hovering shows the item's name (native title
+            // tooltip), since the label text itself is hidden. Expanded:
+            // the label is already visible, so hovering instead surfaces
+            // the Alt+N shortcut as a tooltip rather than a permanently
+            // visible badge — the two never show at the same time, so they
+            // can't collide with each other.
+            const hoverTitle = !open ? (accessibility.tooltips ? item.label : undefined) : accessibility.keyboardNav ? `Alt+${i + 1}` : undefined;
+
             return item.enabled ? (
               <NavLink
                 key={item.to}
                 to={item.to}
                 end={item.to === "/"}
-                title={open ? undefined : item.label}
+                title={hoverTitle}
+                style={{ paddingTop: "var(--density-nav-py)", paddingBottom: "var(--density-nav-py)" }}
                 className={({ isActive }) =>
-                  `block rounded-xl px-4 py-3 text-[15px] font-medium transition-colors ${
+                  `block rounded-xl px-4 text-[15px] font-medium transition-colors ${
                     isActive ? "bg-white/95 text-brand" : "text-white/75 hover:bg-white/10 hover:text-white"
                   }`
                 }
@@ -89,7 +119,8 @@ export default function Sidebar({ open, onToggle }: { open: boolean; onToggle: (
               <div
                 key={item.to}
                 title="Coming in a future phase"
-                className="cursor-not-allowed rounded-xl px-4 py-3 text-[15px] font-medium text-white/40"
+                style={{ paddingTop: "var(--density-nav-py)", paddingBottom: "var(--density-nav-py)" }}
+                className="cursor-not-allowed rounded-xl px-4 text-[15px] font-medium text-white/40"
               >
                 {content}
               </div>

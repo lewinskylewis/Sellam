@@ -28,23 +28,212 @@
   --color-status-amber-text: #b45309;
 }
 
+/* ============================================================================
+   THEME — light is the reference design (unchanged); dark is the same
+   tokens re-pointed at dark equivalents. Applied via [data-theme] on <html>,
+   set by admin/index.html's pre-paint script (no flash) and kept live by
+   PreferencesContext.tsx (lib/preferences.ts + lib/PreferencesContext.tsx).
+   Brand colors (--color-brand*, --color-accent, --color-link, status-*) are
+   deliberately NOT overridden here — Sellam's identity stays fixed in both
+   modes, only structural surface/text/border tokens change.
+   ========================================================================== */
+
+:root {
+  /* Aliases for the token families the theme actually needs, named to match
+     what they represent — most already point at an existing token; only
+     --color-surface-elevated is new (solid modal/dropdown/input surfaces,
+     distinct from --color-surface's slightly-translucent card material). */
+  --color-surface-elevated: #ffffff;
+  --color-table-bg: var(--color-surface);
+  --color-table-hover: var(--color-paper);
+  --color-modal-bg: var(--color-surface-elevated);
+  --color-input-bg: var(--color-surface-elevated);
+  --color-input-border: var(--color-line);
+  --color-tooltip-bg: var(--color-ink);
+  --color-tooltip-text: #ffffff;
+  --dashboard-bg-image: url("/dashboard-bg.jpg");
+}
+
+:root[data-theme="dark"] {
+  --color-ink: #eef1f6;
+  --color-ink-soft: #9aa7bb;
+  --color-paper: #0c1322;
+  --color-surface: rgba(23, 30, 46, 0.88);
+  --color-surface-elevated: #1a2332;
+  --color-line: rgba(255, 255, 255, 0.12);
+  --color-table-hover: rgba(255, 255, 255, 0.04);
+  --color-tooltip-bg: #f4f6fa;
+  --color-tooltip-text: #142033;
+}
+
+/* Solid white cards/modals/dropdowns/table headers throughout every module
+   use the plain Tailwind `bg-white` utility (not a theme token) — this is
+   the one targeted, centralized override that re-themes all of them without
+   touching each component file. Never matches opacity variants like
+   `bg-white/70` or `bg-white/95` (Tailwind generates those as distinct
+   classes), so on-brand decorative overlays (sidebar active state, avatar
+   dots) are untouched. */
+:root[data-theme="dark"] .bg-white {
+  background-color: var(--color-surface-elevated) !important;
+}
+
+/* Native form controls (input/select/textarea) across every module set
+   `bg-white` + `text-ink` + `border-line` by convention, already covered
+   above for background — this adds the remaining text-color/placeholder
+   polish so typed text and captions stay legible on the dark surface. */
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] textarea {
+  color: var(--color-ink);
+}
+:root[data-theme="dark"] input::placeholder,
+:root[data-theme="dark"] textarea::placeholder {
+  color: var(--color-ink-soft);
+  opacity: 1;
+}
+
+/* Status/badge pills (Enquiries, Leads, Properties, etc.) use raw Tailwind
+   palette classes (bg-emerald-50, bg-red-50, ...) rather than theme tokens,
+   so they need their own dark-mode re-tint to stay legible instead of
+   washing out on a dark card. Hue is preserved, only lightness/opacity
+   changes — text-*-700/800 already reads fine on these. */
+:root[data-theme="dark"] [class*="bg-emerald-50"] { background-color: rgba(16, 185, 129, 0.16) !important; }
+:root[data-theme="dark"] [class*="bg-red-50"] { background-color: rgba(248, 113, 113, 0.16) !important; }
+:root[data-theme="dark"] [class*="bg-rose-50"] { background-color: rgba(251, 113, 133, 0.16) !important; }
+:root[data-theme="dark"] [class*="bg-amber-50"] { background-color: rgba(251, 191, 36, 0.16) !important; }
+:root[data-theme="dark"] [class*="bg-sky-50"] { background-color: rgba(56, 189, 248, 0.16) !important; }
+:root[data-theme="dark"] [class*="bg-violet-50"] { background-color: rgba(167, 139, 250, 0.16) !important; }
+:root[data-theme="dark"] [class*="bg-teal-50"] { background-color: rgba(45, 212, 191, 0.16) !important; }
+:root[data-theme="dark"] [class*="bg-orange-50"] { background-color: rgba(251, 146, 60, 0.16) !important; }
+
+/* ============================================================================
+   DENSITY — [data-density] on <html>. Scoped to what's safely centralizable
+   without touching every component's hand-authored padding: the main
+   content column, the sidebar's own nav items (both owned directly by
+   DashboardLayout.tsx/Sidebar.tsx), and every <table> cell app-wide (all
+   built as plain <td>/<th>, high enough selector specificity below to win
+   over each module's own Tailwind padding utility).
+   ========================================================================== */
+
+:root {
+  --density-content-py: 2.5rem;
+  --density-content-px: 2.5rem;
+  --density-nav-py: 0.75rem;
+  --density-table-cell-py: 0.625rem;
+}
+:root[data-density="compact"] {
+  --density-content-py: 1.25rem;
+  --density-content-px: 1.75rem;
+  --density-nav-py: 0.5rem;
+  --density-table-cell-py: 0.3rem;
+}
+
+html[data-density="compact"] td,
+html[data-density="compact"] th {
+  padding-top: var(--density-table-cell-py) !important;
+  padding-bottom: var(--density-table-cell-py) !important;
+}
+
+/* ============================================================================
+   CORNER RADIUS — [data-radius] on <html>, overriding the same CSS
+   variables Tailwind's rounded-lg/xl/2xl/3xl utilities already consume at
+   runtime, so every existing usage across the whole dashboard follows with
+   zero component changes. "soft" is Tailwind's own default scale (already
+   in effect), so it needs no override block.
+   ========================================================================== */
+
+:root[data-radius="sharp"] {
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.375rem;
+  --radius-2xl: 0.5rem;
+  --radius-3xl: 0.75rem;
+}
+:root[data-radius="round"] {
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.375rem;
+  --radius-3xl: 2rem;
+}
+
+/* ============================================================================
+   FONT SIZE — [data-font-size] on <html>. Every Tailwind text-size, height
+   and width utility compiles to rem units, so scaling the root font-size
+   scales
+   dashboard typography (and, proportionally, icon sizing) together without
+   touching individual components — intentional: icons stay in proportion
+   to the text they sit beside rather than a fixed pixel size next to
+   suddenly-larger text.
+   ========================================================================== */
+
+html[data-font-size="small"] { font-size: 14px; }
+html[data-font-size="medium"] { font-size: 16px; }
+html[data-font-size="large"] { font-size: 18px; }
+
+/* ============================================================================
+   REDUCED MOTION — [data-reduced-motion="true"] on <html>, set either by
+   the dashboard's own Accessibility toggle or a live OS-level
+   prefers-reduced-motion change (see PreferencesContext.tsx). Standard
+   blanket suppression rather than auditing every transition/animation
+   individually — same technique prefers-reduced-motion itself uses.
+   ========================================================================== */
+
+html[data-reduced-motion="true"] *,
+html[data-reduced-motion="true"] *::before,
+html[data-reduced-motion="true"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+html[data-reduced-motion="true"] .surface-glass:hover {
+  transform: none;
+}
+
+/* ============================================================================
+   HIGH CONTRAST — [data-high-contrast="true"] on <html>. Deepens borders
+   and secondary/muted text rather than a wholesale palette swap, so it
+   reads as "the same dashboard, sharper" rather than a separate mode.
+   ========================================================================== */
+
+html[data-high-contrast="true"] {
+  --color-line: rgba(100, 116, 139, 0.4);
+  --color-ink-soft: #384252;
+}
+html[data-theme="dark"][data-high-contrast="true"] {
+  --color-line: rgba(255, 255, 255, 0.28);
+  --color-ink-soft: #c3cbd8;
+}
+html[data-high-contrast="true"] :focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
 body {
   min-height: 100vh;
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  /* The provided background photo, washed with a diagonal blue gradient
-     scrim — light in the upper-left, heavier toward the bottom-right —
-     instead of a flat overlay. Much lighter than before so the photo reads
-     through clearly; dense UI still sits on its own opaque surface. */
+  /* The selected background (Settings → Appearance → Background, default
+     public/dashboard-bg.jpg — see --dashboard-bg-image above), washed with
+     a diagonal blue gradient scrim — light in the upper-left, heavier
+     toward the bottom-right — instead of a flat overlay. Much lighter than
+     a flat overlay so the photo reads through clearly; dense UI still sits
+     on its own opaque surface. */
   background-image:
     linear-gradient(135deg, rgba(31, 58, 99, 0.1) 0%, rgba(31, 58, 99, 0.22) 45%, rgba(21, 33, 58, 0.38) 100%),
-    url("/dashboard-bg.jpg");
+    var(--dashboard-bg-image);
   background-color: #e9edf6;
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+}
+
+:root[data-theme="dark"] body {
+  background-image:
+    linear-gradient(135deg, rgba(4, 8, 18, 0.55) 0%, rgba(4, 8, 18, 0.72) 45%, rgba(2, 5, 12, 0.86) 100%),
+    var(--dashboard-bg-image);
+  background-color: #0c1322;
 }
 
 /* Restrained, premium blur on the default (dense-content) surface. */
